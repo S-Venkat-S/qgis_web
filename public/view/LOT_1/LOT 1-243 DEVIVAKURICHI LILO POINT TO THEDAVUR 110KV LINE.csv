@@ -1,0 +1,14 @@
+Tower No,Tower Type & Supspension/Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earthwire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+43 lilo,T,26,,,3.21,205,,11.50103,78.68731,GOOD,GOOD,,,,lilo to thammampatti,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.68731 11.50103, 78.68775 11.50023)"
+1,T,24,43 lilo - 01,100.71501385715762,3.83,207,"3⁰1'45"" LT",11.50023,78.68775,GOOD,GOOD,"LT LINE CROSSING 2, 22KV LINE CROSSING-2",,,AGRICULTURE LAND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.68775 11.50023, 78.68908 11.49809)"
+2,T,24,01- 02,277.7630711827843,0.18,204,"5⁰48'20"" LT",11.49809,78.68908,GOOD,GOOD,,"SAND ROAD CROSSING 1, TAR ROAD CROSSING 1",THRONE FOREST,AGRICULTURE LAND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.68908 11.49809, 78.68925 11.49787)"
+03(TP),T,24, 02- 03,30.60976868774063,,204,"0⁰7'31"" RT",11.49787,78.68925,GOOD,NO,,,,AGRICULTURE LAND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.68925 11.49787, 78.68945 11.49761)"
+04(TP),T,24, 03- 04,36.11513116681023,0.22,204,"1⁰31'13"" LT",11.49761,78.68945,GOOD,GOOD,400KV LINE CROSSING(NYV-SLM)  (T.No: 248-249 THIS LINE UNDERGOING 12M HEIGHT,,THRONE FOREST,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.68945 11.49761, 78.68984 11.49713)"
+5,T,26, 04- 05,68.06815147260646,0.29,203,"15⁰53'59"" RT",11.49713,78.68984,GOOD,GOOD,"22 LINE CROSSING, WIRE CABLE CROSSING 1",COMPOUND WALL CROSSING-3,,AGRICULTURE LAND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.68984 11.49713, 78.69039 11.49584)"
+6,T,28, 05-06,154.8604697732522,2.32,203,"51⁰2'15"" LT",11.49584,78.69039,GOOD,GOOD,LT LINE CROSSING 1,FENCING CROSSING 1,,AGRICULTURE LAND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.69039 11.49584, 78.69158 11.4955)"
+7,T,26,06-07,135.22000602013037,,203,"20⁰59'9"" LT",11.4955,78.69158,GOOD,NO,,,,TOWER IN THE SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.69158 11.4955, 78.69182 11.49552)"
+THEDAVUR GANTRY ,t,20, 07-T GANTRY,26.287633637924845,,202,,11.49552,78.69182,GOOD,GOOD,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL SPAN LENGTH,,,,=SUM(E8:E15),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

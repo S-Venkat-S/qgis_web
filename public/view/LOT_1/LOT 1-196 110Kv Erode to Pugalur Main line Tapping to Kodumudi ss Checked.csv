@@ -1,0 +1,9 @@
+Tower No,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+122,T,26,,,7.9,149,,11.051918,77.881577,Good,Good,,,Plain,paddy,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.881577 11.051918, 77.883382 11.050927)"
+122A,T,26,122 to 122A ,225.83256064532148,7.4,154,"22°57'1"" LT",11.050927,77.883382,Good,Good,,,Plain,Tapping to 110 kv Kodumudi SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.883382 11.050927, 77.88496 11.05076)"
+122B,T,26,122A to 123,173.55662209606447,3.5,158,"17°33'37"" LT",11.05076,77.88496,Good,Good,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.88496 11.05076, 77.88546 11.05086)"
+Kodumudi Gantry,T,20,122 B to gantry,55.78919578890623,0.86,,,11.05086,77.88546,Good,Good,,,,In side the 110 kv kodumudi SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL SPAN LENGTH ,,,,=SUM(E8:E10),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

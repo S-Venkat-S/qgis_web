@@ -1,0 +1,8 @@
+SL.NO,TOWER NO,Tower Suspension/ Tension,DIVATIONN OF  ANGLE ('),TOWER TYPE,TOWER HEIGHT (Mtrs),SPAN BETWEEN TOWER LENGTH (Mtrs),SPAN LENGTH (Mtrs),FOOTING RESIDENCE OF TOWER (OHMS),GROUND ELEVATION,Latitude,Longitude,"CONDITION OF TOWER (Missing parts, broken etc)",CONDITION OF EARTH WIRE (Missing Broken etc;),CROSSING OBJECTS,,CONDITION OF AREA ( Plain/Hills/Forest/Water logged),REMARKS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,Gantry (N.Subbaiyapuram),,,,,Gantry (N.Subbaiyapuram) -T1,,,79,9.2620643,77.90274,GOOD,AVAILABLE,,,,N.SUBBAIYA PURAM SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.90274 9.2620643, 77.90249 9.2620795)"
+2,2,T,"04°51'02""RT",KC,24.94,T1-T2,28.25600000121929,2.63,79,9.2620795,77.90249,GOOD,NOT AVAILABLE,,,WATER LOGGED AREA,"DC LINE ,N.SUBBAIYAPURAM GANTRY -T1  EARTH IS NOT AVAILABLE ,INSIDE SS, WATER LOGGED AREA",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.90249 9.2620795, 77.90048 9.2625017)"
+3,3,T,,KC,24,T2-T3,220.97300000910303,2.47,81,9.2625017,77.90048,GOOD,AVAILABLE,,,WATER LOGGED AREA,"LILO,DC LINE ,WATER LOGGED AREA",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,=SUM(H7:H8)/1000,KM,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

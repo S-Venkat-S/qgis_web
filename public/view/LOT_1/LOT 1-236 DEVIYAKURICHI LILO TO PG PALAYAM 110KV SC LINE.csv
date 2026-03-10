@@ -1,0 +1,17 @@
+Tower No,Tower Type & Supspension/Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span length             (As per tower schedule) ,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earthwire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+PG PALAYAM GANTRY,T,20,,,,,303,,11.64781,78.45972,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.45972 11.64781, 78.45959 11.64741)"
+11,T,24,GANTRY-11,46,46.488554699025364,2.38,303,"1⁰50'1"" LT",11.64741,78.45959,GOOD,GOOD,"LT LINE CROSSING,33KV LINE CROSSING",,,SUB STATION INSIDE THE TOWER,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.45959 11.64741, 78.45884 11.64482)"
+10,T,24,11-10,300,298.1120445968242,1.61,304,"0⁰15'52"" RT",11.64482,78.45884,GOOD,GOOD,LT LINE CROSSING, ROAD CROSSING,,AGRICULTURE AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.45884 11.64482, 78.45818 11.64258)"
+9,T,28,10-9,259,258.1695915249693,3.87,296,"38⁰15'48"" LT",11.64258,78.45818,GOOD,GOOD,, ROAD CROSSING,,AGRICULTURE AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.45818 11.64258, 78.45913 11.64027)"
+8,S,26,9-8,277,275.88245788735156,7.06,295,,11.64027,78.45913,GOOD,GOOD,, ROAD CROSSING,,AGRICULTURE AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.45913 11.64027, 78.46013 11.63795)"
+7,T,28,8-7,279,278.99640732809536,3.09,291,"36⁰9'45"" RT",11.63795,78.46013,GOOD,GOOD,33KV LINE CROSSING, ROAD CROSSING,,AGRICULTURE AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.46013 11.63795, 78.45968 11.63605)"
+6,S,26,7-6,217,215.94787860708246,0.97,286,,11.63605,78.45968,GOOD,GOOD,, ROAD CROSSING,,FARMER AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.45968 11.63605, 78.45924 11.63391)"
+5,S,26,6-5,243,241.67189418548298,1.76,283,"35⁰25'50"" LT",11.63391,78.45924,GOOD,GOOD,, ROAD CROSSING,CANNAL CROSSING,FARMER AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.45924 11.63391, 78.4603 11.63156)"
+4,S,26,5-4,286,284.6526051589998,3.63,282,"49⁰51'12"" RT",11.63156,78.4603,GOOD,GOOD,,,,FARMER AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.4603 11.63156, 78.45936 11.62965)"
+3,T,28,4-3,236,234.96505165510214,7.76,283,"35⁰16'51"" LT",11.62965,78.45936,GOOD,GOOD,"LT LINE CROSSING,33KV LINE CROSSING",,,FARMER AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.45936 11.62965, 78.45958 11.62834)"
+2,T,28,3-2,147,146.96462107903164,10.53,283,"39⁰14'14"" RT",11.62834,78.45958,GOOD,GOOD,,,CANNAL CROSSING,FARMER AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.45958 11.62834, 78.45926 11.62779)"
+TAPPING POINT 1,T,20,2-1(T POINT),70,70.17634523692593,6.56,287,,11.62779,78.45926,GOOD,GOOD,, ROAD CROSSING,,FARMER AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+SPAN LENGTH ,,,,=SUM(E8:E18),=SUM(F8:F18),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

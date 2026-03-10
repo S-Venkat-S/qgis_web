@@ -1,0 +1,15 @@
+Tower No,Tower Type & Supspension/Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earthwire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+DEVIYAKURICHI GANTRY,T,20,,,,191,,11.58337,78.72415,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.72415 11.58337, 78.72411 11.58308)"
+1,T,28,GANTRY-1,32.38654540970902,0.3,190,"48⁰18'56"" LT ",11.58308,78.72411,GOOD,GOOD,,,,SUB STATION INSIDE THE TOWER,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.72411 11.58308, 78.72477 11.58232)"
+2,T,28,1-2,110.71797273716916,7.93,187,"51⁰15'20"" LT",11.58232,78.72477,GOOD,GOOD,,RAILWAY CROSSING,,AGRICULTURE AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.72477 11.58232, 78.72636 11.58237)"
+3,S,26,2-3,173.56805825102003,1.28,186,,11.58237,78.72636,GOOD,GOOD,LT LINE CROSSING,,,FARMER AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.72636 11.58237, 78.72883 11.58237)"
+4,T,24,3-4,269.4934599203927,13.28,186,"2⁰22'35"" LT",11.58237,78.72883,GOOD,GOOD,,SAND ROAD CROSSING,,FARMER AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.72883 11.58237, 78.73103 11.58246)"
+5,T,24,4-5,240.24076971851315,2.75,185,"14⁰50'33"" RT",11.58246,78.73103,GOOD,GOOD,"LT LINE CROSSING,33KV LINE CROSSING",,,FARMER AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.73103 11.58246, 78.73392 11.58183)"
+6,T,26,5-6,322.9323051565962,0.42,184,"23⁰6'17"" LT",11.58183,78.73392,GOOD,GOOD,"LT LINE CROSSING,33KV LINE CROSSING","SAND ROAD CROSSING,TAR ROAD CROSSING",,FARMER AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.73392 11.58183, 78.73581 11.58218)"
+7 TAPPING POINT,T,28,6-7(T.POINT),209.81650242656818,4.05,182,"93⁰21'46"" LT",11.58218,78.73581,GOOD,GOOD,33KV LINE CROSSING,TAR ROAD CROSSING,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.73581 11.58218, 78.73559 11.58305)"
+8,T,26,7-8,99.2198999775465,3.11,183,"16⁰45'11"" RT",11.58305,78.73559,GOOD,GOOD,,SAND ROAD CROSSING,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.73559 11.58305, 78.73561 11.58346)"
+THALAIVASAL GANTRY,T,20,8-GANTRY,45.422335659972155,,183,,11.58346,78.73561,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL SPAN LENGTH ,,,,=SUM(E7:E15),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

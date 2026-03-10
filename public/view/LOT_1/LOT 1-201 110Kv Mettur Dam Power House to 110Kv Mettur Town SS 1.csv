@@ -1,0 +1,11 @@
+Tower No,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span length             (As per tower schedule) ,Span Length (Mtrs),,Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+110Kv MDPH,Gantry,,,,,,,203,,11.799640899,77.810138026,,No Earth Wire,,,Plain,110Kv Mettur Dam Power House (MDPH),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.810138026 11.799640899, 77.80963 11.79951)"
+2,T,28,1 to 2,,64.66114735074608,,15,198,"37°00'53"" RT",11.79951,77.80963,GOOD,GOOD,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.80963 11.79951, 77.80664 11.79808)"
+3,T,28,2 to 3,,362.4999947751568,,16,201,"76°33'23"" RT",11.79808,77.80664,GOOD,GOOD,,River,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.80664 11.79808, 77.80565 11.79927)"
+4,T,24,3 to 4 ,,170.3335545442745,,17,193,"0°37'44"" RT",11.79927,77.80565,GOOD,GOOD,"33Kv-2, 22Kv-1",,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.80565 11.79927, 77.80408 11.8012)"
+5,T,24,4 to 5,,273.8075200685079,,17,202,"4°7'41"" RT",11.8012,77.80408,GOOD,No Earth Wire,,Tar Road,Plain,Multi Circuit - Tapping to Kolathur Line,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.80408 11.8012, 77.80392 11.80137)"
+110KV Mettur Town SS,Gantry,,5 to Gantry,,25.665029933264762,,,203,,11.80137,77.80392,GOOD,No Earth Wire,,,,110KV Mettur Town SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL SPAN LENGTH ,,,,,=SUM(F8:F12),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

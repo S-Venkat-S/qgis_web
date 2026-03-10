@@ -1,0 +1,9 @@
+S.No,Tower No.,Tower Suspension / Tension,TOWER MODEL,Tower Type ,Tower Height (m),Span Between Tower No.,Span Length (m),Footing Resistance of Tower ( Ohms),Ground Elevation(m),"Deviation Angle 
+Degrees",Latitude,Longitude,"Condition of  Tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/  Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,372/1 LILO LAKSHMANAPATTY,T,KCR,DB+0,,,,5.81,235,,10.4871613159775,77.9296856001019,Good,Good,,,Plain,LILO LAKSHMANAPATTY,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.9296856001019 10.4871613159775, 77.9294485598802 10.4871906526386)"
+2,2,T,KCR,DC+0,,379 LILO THADIKOMBU-1,37,5.09,252,25°23'42''RT,10.4871906526386,77.9294485598802,Good,Good,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.9294485598802 10.4871906526386, 77.9293033853173 10.4872822668403)"
+3,GANTRY,T,,BAY,,1-2,29,NIL,243,,10.4872822668403,77.9293033853173,Good,NO E/W,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,TOTAL (m),=SUM(H6:H8),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

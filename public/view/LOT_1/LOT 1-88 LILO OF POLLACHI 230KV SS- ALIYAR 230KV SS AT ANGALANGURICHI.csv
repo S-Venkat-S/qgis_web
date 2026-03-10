@@ -1,0 +1,9 @@
+Tower No,Tower Type  (T/S),Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation/ M,Horizontal Angle(˚),Longitude,Latitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Ground Earth Available,Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+T.NO-1 ANGALANGURICHI LILO (T.NO-39),DC,T,26,,,5.92,289,"24°26'42.57""",77.00091666666667,10.53586111111111,GOOD,GOOD,NO,,,PLAIN LAND,NEED 3WAY JUNCTION BOX.2 EARTH WIRE ONE IS CONTINUE TO OUR T.NO-2 ANOTHER EARTH WIRE CONNECT TO ALIYAR POLLACHI TOWER,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.00091666666667 10.53586111111111, 77.0 10.536777777777777)"
+T.NO-2,DD,T,28,1--2,142.8355697996826,4.67,290,"38°26'20.04""",77.0,10.536777777777777,GOOD,GOOD,NO,,,PLAIN LAND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.0 10.536777777777777, 76.99713888888888 10.53711111111111)"
+T.NO-3,DC,T,26,2--3,315.06348566598444,2.96,298,"23°3'55.66""",76.99713888888888,10.53711111111111,GOOD,GOOD,YES,,,INSIDE SUBSTATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.99713888888888 10.53711111111111, 76.99688888888889 10.537027777777778)"
+GANTRY,GANTRY,GANTRY,20,3-GANTRY,28.160255680657446,,301,,76.99688888888889,10.537027777777778,GOOD,MISSING,NO,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,=SUM(F8:F10),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

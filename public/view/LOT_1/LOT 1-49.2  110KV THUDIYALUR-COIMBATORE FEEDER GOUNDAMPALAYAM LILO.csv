@@ -1,0 +1,10 @@
+S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Longitude,Latitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,T.NO 19 LILO GOUNDAM PALAYAM,T,DD,28,,,4.32,437,"78°17'13""",76.94830555555556,11.034805555555556,GOOD,GOOD,LT,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.94830555555556 11.034805555555556, 76.94838888888889 11.034805555555556)"
+2,T.NO 19A,T,DB,26,19-19A,9.055385138137417,4.86,440,"8°2'28""",76.94838888888889,11.034805555555556,GOOD,GOOD,,MUDROAD,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.94838888888889 11.034805555555556, 76.94875 11.034916666666666)"
+3,GT 110KV GOUNDAM PALAYAM SS,T,GT,15,19A-GT,40.26164427839479,,445,,76.94875,11.034916666666666,GOOD,MISSING,"LT,HT",TAARROAD,PLAIN,110KV GOUNDAMPALAYAM SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,=SUM(G6:G8),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note : 1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

@@ -1,0 +1,10 @@
+S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),,Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,Gantry (Surliyar SS),Gantry,HPOLE,12,,,,,455,,9.621527777777779,77.27152777777778,GOOD,,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.27152777777778 9.621527777777779, 77.27163888888889 9.621333333333334)"
+2,1,T,SC,22,Gantry1,25.23676376587739,0.82,"=IF(H7>15,0)",454,"9°44'4"" R",9.621333333333334,77.27163888888889,GOOD,NO E/W,,,PLAIN,Rail pole,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.27163888888889 9.621333333333334, 77.27208333333333 9.620361111111112)"
+3,2,T,SC,22,12,118.19171978225505,3.01,"=IF(H8>15,0)",457,"64°27'28"" L",9.620361111111112,77.27208333333333,GOOD,Available,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.27208333333333 9.620361111111112, 77.27241666666667 9.620333333333333)"
+4,Gantry (Vanathiparai SS),Gantry,HPOLE,12,2Gantry ,36.01692652585924,,"=IF(H9>15,0)",,,9.620333333333333,77.27241666666667,GOOD,NO E/W,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,=SUM(G7:G9),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note : 1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

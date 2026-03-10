@@ -1,0 +1,8 @@
+S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),,Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,VT 65,T,DC,26,,,0.51,"=IF(H6>15,0)",17.37487,,9.65913888888889,78.86666666666666,GOOD,NO E/W,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.86666666666666 9.65913888888889, 78.86630555555556 9.659444444444444)"
+2,Gantry,Gantry,Gantry,12,VT 65-Gantry,51.600566123681006,,,7.621574,,9.659444444444444,78.86630555555556,GOOD,NO E/W,LT,,Plain,Lamp post,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TOTAL,,,,,=SUM(G6:G7),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,307.136,254.19,=(F10-G10),,"=F12&""°""&G12&""'""&ROUND(H12,0)&""""""""",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,DD,MM,SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,"=ROUNDDOWN(H10,0)","=ROUNDDOWN((H10-F12)*60,0)","=ROUND((H10-F12-G12/60)*3600,2)",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

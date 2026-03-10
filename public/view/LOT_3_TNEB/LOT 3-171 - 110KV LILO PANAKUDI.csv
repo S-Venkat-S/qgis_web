@@ -1,0 +1,8 @@
+S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,LILO,T,DC,26,,,6.35,63,,8.308878,77.576403,GOOD,,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.576403 8.308878, 77.576471 8.309201)"
+2,GANTRY AT 110KV PANAKUDI,H POLE,H POLE,15,"=CONCATENATE(B6,"" : "",B7)",40,5.3,62,,8.309201,77.576471,GOOD,NO E/W,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,=SUM(G6:G7),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note : 1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

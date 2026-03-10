@@ -1,0 +1,13 @@
+S. No ,Tower No, Supspension/Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1, 238A (Lilo),T,26,,,13.16,248,,11.43534,77.3606,GOOD,GOOD,LT/11KV,,,AGRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.3606 11.43534, 77.36157 11.4371)"
+2,1,T,24,238A-01,221.695401001764,5.36,236,"0⁰3'13"" RT",11.4371,77.36157,GOOD,GOOD,,TAAR,,AGRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.36157 11.4371, 77.36273 11.4392)"
+3,2,T,26,01-02,264.659140199694,3.34,232,"18⁰53'14"" RT",11.4392,77.36273,GOOD,GOOD,LT,,,AGRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.36273 11.4392, 77.36441 11.44072)"
+4,3,T,28,02-03,248.860185130838,8.8,233,"42⁰19'43"" LT",11.44072,77.36441,GOOD,GOOD,LT,SAND/ TAAR,,AGRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.36441 11.44072, 77.36463 11.44313)"
+5,4,T,24,03-04,267.781450555519,2.68,240,"1⁰6'32"" RT",11.44313,77.36463,GOOD,GOOD,FENCING,SAND,,AGRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.36463 11.44313, 77.36482 11.44484)"
+6,5,T,28,04-05,190.370249149162,3.27,238,"81⁰58'19"" RT",11.44484,77.36482,GOOD,GOOD,SUBSTATION BOUDNARY WALL CROSS,,HOUSING AREA,AGRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.36482 11.44484, 77.36613 11.44488)"
+7,6,T,28,05-06,143.076866792172,0.2,239,"68⁰29'50"" LT",11.44488,77.36613,GOOD,NO,SUBSTAION IN SIDE THE TOWER,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.36613 11.44488, 77.36617 11.44499)"
+8,ALUKULI GANTRY,T,20,06-GANTRY,12.9326458482397,,238,,11.44499,77.36617,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL SPAN LENGTH,,,,,=SUM(F8:F14),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

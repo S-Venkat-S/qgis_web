@@ -1,0 +1,8 @@
+S. No ,Tower No,Supspension/Tension,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,T.NO 69 ALANKULAM LILO,T,DC,26,,,1.68,123,,9.3796385731548,77.6740563288331,GOOD,,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.6740563288331 9.3796385731548, 77.6741555705666 9.3795384094119)"
+21,Gantry ( 110KV ALANKULAM SS ),H-Pole,GT,15,69 - Gantry,25,,144,,9.3795384094119,77.6741555705666,GOOD,NO E/W,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,=SUM(G6:G7),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note : 1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

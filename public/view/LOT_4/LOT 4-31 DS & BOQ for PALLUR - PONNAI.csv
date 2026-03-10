@@ -1,0 +1,13 @@
+S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,GT 110KV PALLUR,GANTRY,GANTRY,15,,,,116,,12.961872,79.677022,Good,,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.677022 12.961872, 79.677169 12.961909)"
+2,TAPPING-87,T,DC,26,GT-87,16.4924225024706,9.4,104,80°2'52''RT,12.961909,79.677169,Good,No Earth Wire,LT,Mud Road,Plain,Already Available Joint Box,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.677169 12.961909, 79.67707 12.963265)"
+3,T.NO-86,T,DC,26,87-86,150.332963783729,10.5,100,23°59'25''LT,12.963265,79.67707,Good,24Fiber,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.67707 12.963265, 79.677778 12.96523)"
+4,T.NO-85,S,DC,28,86-85,230.592714542329,10.91,101,,12.96523,79.677778,Good,24Fiber,"LT,11kv,33kv",,Plain,Bushes,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.677778 12.96523, 79.678416 12.966698)"
+5,T.NO-84,T,DC,26,85-84,176.476627347646,12.41,101,7°24'3''RT,12.966698,79.678416,Good,24Fiber,,,Plain,Bushes,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.678416 12.966698, 79.679022 12.968799)"
+6,T.NO-83,S,DC,28,84-83,241.480848101873,10.94,103,,12.968799,79.679022,Good,24Fiber,,Mud Road,Plain,Bushes,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.679022 12.968799, 79.679782 12.97146)"
+7,T.NO-82,S,DC,28,83-82,305.764615349782,8.12,100,,12.97146,79.679782,Good,24Fiber,,,Cultivation,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.679782 12.97146, 79.680352 12.973669)"
+8,LILO-1,T,DC,26,82-lilo(1),252.001984119173,9.21,102,,12.973669,79.680352,Good,24Fiber,,,Plain,Bushes /Need 3way joint box,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,=SUM(G6:G13),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

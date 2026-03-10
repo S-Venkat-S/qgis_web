@@ -1,0 +1,14 @@
+S. No ,Tower No,Type,Supspension/ Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts, broken, etc)","Condition of Earht wire (Missing, Broken etc)",GROUND EARTH AVAILABLE,Crossing Objects,,Condition of Area (Plain/Hilly/ Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,T.NO-1 LILO 110KV THIRUTHANGAL,,T,29,,,2.79,105,,9.48816984,77.79240136,GOOD,GOOD,NO,LT,MUDROAD,CULTIVATION,"NEED 3WAY JUNCTION BOX.2 EARTH WIRE ON THIS TOWER.ONE EARTH WIRE CONTINUE TO OUR T.NO-2,ANOTHER ONE CONNECT TO ANUPANGULAM-T.KALLUPATTI T.NO-47",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.79240136 9.48816984, 77.79309298 9.48592373)"
+2,T.NO-2,DC,T,26,1-2,259.97692205270835,HEAVY BUSHES,106,"21°47'44.19""",9.48592373,77.79309298,GOOD,GOOD,NO,,TAAR ROAD,PLAINLAND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.79309298 9.48592373, 77.79293195 9.48401871)"
+3,T.NO-3,DB,T,24,2-3,211.6057655169159,3.67,107,"12°36'44.27""",9.48401871,77.79293195,GOOD,GOOD,NO,"LT,11KV","MUDROAD,TAAR ROAD",PLAINLAND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.79293195 9.48401871, 77.79327582 9.48153145)"
+4,T.NO-4,DB,T,27,3-4,277.89386463180506,3.81,108,"7°22'16.67""",9.48153145,77.79327582,GOOD,GOOD,NO,LT,,CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.79327582 9.48153145, 77.79328923 9.47981476)"
+5,T.NO-5,DC,T,26,4-5,190.02368273454758,4.4,109,"28°29'51.66""",9.47981476,77.79328923,GOOD,GOOD,NO,LT,,CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.79328923 9.47981476, 77.79211583 9.47762871)"
+6,T.NO-6,DC,T,26,5-6,274.1860682091634,5.2,110,"17°9'4.07""",9.47762871,77.79211583,GOOD,GOOD,NO,LT,TAARROAD,PLAINLAND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.79211583 9.47762871, 77.79007024 9.47561222)"
+7,T.NO-7,DD,T,28,6-7,316.7869946825469,7.66,112,"37°23'30.62""",9.47561222,77.79007024,GOOD,GOOD,YES,,,INSIDE SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.79007024 9.47561222, 77.79003158 9.47533245)"
+8,GANTRY 110KV THIRUTHANGAL,GANTRY,GANTRY,20,7-GANTRY,31.25699921617557,,112,,9.47533245,77.79003158,GOOD,MISSING,NO,,,SUBSTATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,TOTAL,=SUM(G7:G13),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+"NOTES:(0˚-2˚ A-TYPE , 2˚-15˚ B-TYPE, 15˚-30˚C-TYPE,            30˚< D-TYPE)                                          ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

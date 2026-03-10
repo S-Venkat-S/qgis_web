@@ -1,0 +1,10 @@
+S. No ,Tower No,Supspension/Tension,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Longitude,Latitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earth wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,T.NO 7/4 LILO MOSUR 110KV ,T,DD,28,,,4.15,82,"64°27'23""",79.69725,13.096694444444445,GOOD,GOOD,,,PLAIN,MOSUR 110KV LILO NEED 3WAY JUNCTION BOX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.69725 13.096694444444445, 79.69555555555556 13.096111111111112)"
+2,T.NO 3,S,DA,26,4-3,196.143536915779,4.95,84,,79.69555555555556,13.096111111111112,GOOD,GOOD,110 KV,,PLAIN,MOSUR-PALLUR,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.69555555555556 13.096111111111112, 79.69361111111111 13.095444444444444)"
+3,T.NO 2,T,DD,28,3-2,223.625245648377,5.08,83,"36°54'31""",79.69361111111111,13.095444444444444,GOOD,GOOD,,ROAD,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.69361111111111 13.095444444444444, 79.69258333333333 13.093972222222224)"
+4,T.NO 1,T,DC,26,2-1,198.770068513918,3.18,83,"16°28'26""",79.69258333333333,13.093972222222224,GOOD,MISSING,"LI-1 , HT-1 , 110 KV",ROAD,PLAIN,MOSUR-SRIPERUMPUDUR,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.69258333333333 13.093972222222224, 79.69233333333334 13.093222222222224)"
+5,GT MOSUR 110KV SS,T,GANTRY,15,1-GT,88.2811548961172,,83,,79.69233333333334,13.093222222222224,GOOD,MISSING,,,PLAIN,110KV MOSUR SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,TOTAL,707M,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

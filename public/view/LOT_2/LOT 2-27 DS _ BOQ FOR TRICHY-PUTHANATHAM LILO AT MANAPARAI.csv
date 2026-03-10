@@ -1,0 +1,11 @@
+S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,LILO : 255,S,DC,26,,,0.93,160.633743,,10.6375,78.4323888888889,GOOD,,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.4323888888889 10.6375, 78.4323888888889 10.637333333333332)"
+2,Gantry (Manaparai SS),Gantry,H-POLE,12,255-Gantry,19.081062015795247,,161.618973,,10.637333333333332,78.4323888888889,GOOD,NO E/W,,,PLAIN,Cement Pole,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,=SUM(G7:G7),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note : 1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+For M/s. SPTL;,,,,,,,,,,,,,,,For TANTRANSCO,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

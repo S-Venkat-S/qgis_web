@@ -1,0 +1,12 @@
+S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,LILO : 133A,T,DC,26,,,5.94,37.9453389999999,,10.555805555555557,79.26766666666667,GOOD,,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.26766666666667 10.555805555555557, 79.26613888888889 10.554444444444446)"
+2,133 B,S,DA,26,133A - 133B,224.003820136305,4.13,38.114006,"0°51'11"" R",10.554444444444446,79.26613888888889,GOOD,Available,,,AGRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.26613888888889 10.554444444444446, 79.26447222222222 10.553)"
+3,133 C,S,DA,26,133B - 133C,242.436079588265,3.83,37.940071,"1°41'40"" L",10.553,79.26447222222222,GOOD,Available,,CANAL,AGRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.26447222222222 10.553, 79.26283333333333 10.5515)"
+4,133 D,T,DC,26,133C -133D,242.561436574796,3.55,36.4978789999999,"44°49'27"" L",10.5515,79.26283333333333,GOOD,Available,LT,ROAD,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.26283333333333 10.5515, 79.26283333333333 10.551194444444445)"
+5,Gantry (NT Kudi SS),Gantry,H-POLE,12,133D - Gantry,39,,38.166294,,10.551194444444445,79.26283333333333,GOOD,NO E/W,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,=SUM(G6:G10),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note : 1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

@@ -1,0 +1,10 @@
+S. No ,Tower No,Supspension/Tension,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Longitude,Latitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,T.NO 45 LILO KADUVETTI PALAYAM,T,DC,26,,,3.83,375,,77.138,11.174583333333333,GOOD,GOOD,,,PLAIN,KADUVETTIPALAYAM LILO NEED JUNCTION BOX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.138 11.174583333333333, 77.13655555555556 11.173277777777777)"
+2,T.NO 2,T,DB,24,45-2,215.07673049402624,2.96,380,"7°55'38""",77.13655555555556,11.173277777777777,GOOD,GOOD,"LT,HT",TAAR ROAD,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.13655555555556 11.173277777777777, 77.13511111111112 11.172277777777778)"
+3,T.NO 3,T,DB,24,2-3,190.8821626030049,4.5,375,"1°22'35""",77.13511111111112,11.172277777777778,GOOD,GOOD,"LT,2nosHT",TAAR ROAD,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.13511111111112 11.172277777777778, 77.13372222222223 11.171277777777776)"
+4,T.NO 4,T,DD,28,3-4,188.0026595556563,4.76,374,"75°54'51""",77.13372222222223,11.171277777777776,GOOD,GOOD,LT,TAAR ROAD,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.13372222222223 11.171277777777776, 77.13394444444445 11.17075)"
+5,GT KADUVETTI PALAYAM 110kv SS,T,GT,20,4-GT,62.76941930590086,,374,,77.13394444444445,11.17075,GOOD,MISSING,,,PLAIN,110KV KADUVETTIPALAYAM SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,TOTAL ,=SUM(G8:G11),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

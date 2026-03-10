@@ -1,0 +1,10 @@
+S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,LILO : 62,T,DC,26,,,4.11,140.522522,,9.937305555555556,78.17252777777779,GOOD,Available,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.17252777777779 9.937305555555556, 78.17072222222222 9.937305555555556)"
+2, 62/1,S,DA,26,62- 62/1,197.4276682066053,2.03,136.838103999999,"1°4'52"" L",9.937305555555556,78.17072222222222,GOOD,Available,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.17072222222222 9.937305555555556, 78.16897222222222 9.937277777777778)"
+3, 62/2,T,DC,26, 62/1- 62/2,192.85053248265945,7.49,137.232238999999,"87°54'12"" L",9.937277777777778,78.16897222222222,GOOD,Available,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.16897222222222 9.937277777777778, 78.16894444444445 9.937083333333334)"
+4,Gantry (IT park),Gantry,H-POLE,12, 62/2-Gantry,25,,137.494353999999,,9.937083333333334,78.16894444444445,GOOD,NO E/W,110 KV,,SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,=SUM(G6:G9),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note : 1 . Shut down will be required in where earth wier are missing ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

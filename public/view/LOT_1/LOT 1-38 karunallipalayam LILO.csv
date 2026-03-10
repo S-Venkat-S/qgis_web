@@ -1,0 +1,10 @@
+S. No ,Tower No,Supspension/Tension,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Longitude,Latitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,T.NO 57/1 KURUNELLIPALAYAM LILO,T,DC,26,,,4.67,332,,77.06422222222221,10.800694444444446,GOOD,GOOD,,,PLAIN,KURUNELLIPALAYAM LILO NEED JUNCTION BOX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.06422222222221 10.800694444444446, 77.06566666666666 10.800444444444445)"
+2,T.NO 2,T,DB,24,57/1-2,162.2621335986927,4.74,334,"13°2'48""",77.06566666666666,10.800444444444445,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.06566666666666 10.800444444444445, 77.06716666666667 10.800527777777779)"
+3,T.NO 3,T,DD,28,2-3,165.3027525481654,4.17,335,"88°30'24""",77.06716666666667,10.800527777777779,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.06716666666667 10.800527777777779, 77.06716666666667 10.801055555555557)"
+4,T.NO 4,T,DB,24,3-4,58.034472514187634,6.67,334,"6°46'16""",77.06716666666667,10.801055555555557,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.06716666666667 10.801055555555557, 77.06713888888889 10.801277777777779)"
+5,GANTRY KURUNELLIPALAYAM,T,GANTRY,20,4-GANTRY,26.30589287593181,,336,,77.06713888888889,10.801277777777779,GOOD,MISSING,,,PLAIN,110KV KURUNELLIPALAYAM SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,TOTAL ,=SUM(G9:G12),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

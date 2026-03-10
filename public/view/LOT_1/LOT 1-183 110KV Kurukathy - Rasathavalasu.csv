@@ -1,0 +1,8 @@
+Tower No,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+346/23 LILO,T,26,,,3.8,277,,10.99501039,77.69914142,GOOD,GOOD,,,"Plain ,Dry land ",Take off tower Erode  Ingur 110kv line existing OPGW is available ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.69914142 10.99501039, 77.69945685 10.99518138)"
+345,T,24,346 to 345,246.00546043780724,4.45,278,"5°40'17"" RT",10.99518138,77.69945685,GOOD,GOOD,,,plain ,110 kv line crossing under line ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.69945685 10.99518138, 77.7013013 10.9938084)"
+344,T,28,345 to 344,289.8001415552629,5.14,278,"33°21'59"" LT",10.9938084,77.7013013,GOOD,GOOD,110 KV line crossing ,Tar Road ,plain ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.7013013 10.9938084, 77.7011618 10.9934366)"
+343,S,26,344 to 343 ,229.65172229807618,6.5,276,,10.9934366,77.7011618,GOOD,GOOD,,,plain ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

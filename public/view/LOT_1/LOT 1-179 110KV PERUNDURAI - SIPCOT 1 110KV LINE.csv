@@ -1,0 +1,8 @@
+Tower No,Tower Type  (T/S),Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation/ M,Horizontal Angle(˚),Longitude,Latitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",GROUND EARTH AVAILABLE,Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom,,,,,,,,,,,,,,
+GANTRY 110KV SIPCOT 1,GANTRY,GANTRY,20,,,GANTRY,309,,77.55445698,11.2550344,GOOD,,NO,,,SUBSTATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.55445698 11.2550344, 77.55442761 11.2548178)",,,,,,,,,,,,,,
+T.NO-196/2,DC,T,26,GANTRY-196/2,24.186773244895647,6.4,307,"22°54'20.77""",77.55442761,11.2548178,GOOD,MISSING,YES,,,INSIDE SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.55442761 11.2548178, 77.55465824 11.25398455)",,,,,,,,,,,,,,
+T.NO-196/1 LILO 110KV SIPCOT-1,DD,T,28,196/2-196/1,95.60334722173695,1.27,304,"90°0'41.94""",77.55465824,11.25398455,GOOD,GOOD,NO,11KV,TAAR ROAD,INSIDE SIPCOT,NEED 3 WAY JUNCTION BOX.2 EARTH WIRE ON THIS TOWER.1 EARTH WIRE CONTINUE TO OUR LINE ANOTHER EARTH WIRE CONNECTED FROM INGUR T.NO-197,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,TOTAL,=SUM(F7:F8),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

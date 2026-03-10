@@ -1,0 +1,9 @@
+S.No,Tower No.,Tower Suspension / Tension,Tower Type (DC /SC ),Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly / Forest / Water Logged),Remarks,joint_box,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,LILO -  364/1,T,DC,32,,,,42,,11.0842799674719,79.4424020312726,GOOD,,,,PLAIN,,2W,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.4424020312726 11.0842799674719, 79.444165918976 11.0847953706979)"
+2,TN - 364/2,T,DC,32,"=CONCATENATE(B6,"" : "",B7)",203.963407302906,-,45,57°28'52''RT,11.0847953706979,79.444165918976,GOOD,AVAILABLE,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.444165918976 11.0847953706979, 79.4447819888591 11.0842741839587)"
+3,GANTRY AT THIRUPANATHAL SS,T,DC,15,"=CONCATENATE(B7,"" : "",B8)",91.6203354709843,-,41,,11.0842741839587,79.4447819888591,GOOD,AVAILABLE,,,PLAIN,,2W,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,=SUM(G6:G8),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note :  1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

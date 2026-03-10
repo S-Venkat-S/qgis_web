@@ -1,0 +1,12 @@
+S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire ( Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,108,Tension,DD+0,28,-,-,3.99,337,-,12.825191666666667,78.698025,GOOD,-,-,-,Plain,LILO Tower,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.698025 12.825191666666667, 78.69896666666666 12.824702777777777)"
+2,1,Tension,DD+0,28,"=CONCATENATE(B6,""-"",B7)",117,4.35,336,"32°19'51.25""RT",12.824702777777777,78.69896666666666,GOOD,GOOD,-,-,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.69896666666666 12.824702777777777, 78.69965 12.823425)"
+3,2,Tension,DD+0,28,"=CONCATENATE(B7,""-"",B8)",163,7.12,334,"35°56'9.13""LT",12.823425,78.69965,GOOD,GOOD,"Two LT, 11kv",Road,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.69965 12.823425, 78.70227777777778 12.822219444444444)"
+4,3,Suspension,DA+0,26,"=CONCATENATE(B8,""-"",B9)",317,5.1,330,-,12.822219444444444,78.70227777777778,GOOD,GOOD,"11kv, LT",-,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.70227777777778 12.822219444444444, 78.70476388888889 12.82103888888889)"
+5,4,Tension,DC+0,26,"=CONCATENATE(B9,""-"",B10)",304,3.9,326,"21°34'33.52""LT",12.82103888888889,78.70476388888889,GOOD,GOOD,800kv HVDC,CTR,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.70476388888889 12.82103888888889, 78.70761111111112 12.820875)"
+6,5,Tension,DD+0,28,"=CONCATENATE(B10,""-"",B11)",315,4.3,322,"9°34'36.76""LT",12.820875,78.70761111111112,GOOD,GOOD,"Three 11kv, Two LT",-,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.70761111111112 12.820875, 78.70806388888889 12.820933333333333)"
+7,Chinnavarikkam Gantry,,Gantry,15,"=CONCATENATE(B11,""-"",B12)",56,-,322,-,12.820933333333333,78.70806388888889,GOOD,NO E/W,-,-,Plain,No Peak Available,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,=SUM(G7:G12),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

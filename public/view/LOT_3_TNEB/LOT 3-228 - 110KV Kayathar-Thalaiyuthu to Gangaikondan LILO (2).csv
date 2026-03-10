@@ -1,0 +1,8 @@
+SL.NO,TOWER NO,TOWER S / T,DEVIATION OF  ANGLE ,TOWER TYPE,TOWER HEIGHT (Mtrs),SPAN BETWEEN TOWER ,SPAN LENGTH (Mtrs),EARTH FOOTING RESISTANCE OF TOWER (OHMS),GROUND ELEVATION,Latitude,Longitude,CONDITION OF EARTH WIRE (Missing Broken etc;),CROSSING DETAILS,,CONDITION OF AREA(Plain/Hills/Forest/Water logged),REMARKS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,Gantry (Gangaikondan ss),,,16,,Gantry,,,56,8.845309441166936,77.77124211890145,AVAILABLE,,,,Gangaikondan gantry,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.77124211890145 8.845309441166936, 77.77093638 8.845431143)"
+2,1,T,"85°09'20""RT",KC,24,Gantry-T1,35.49531690228462,2.63,56,8.845431143,77.77093638,AVAILABLE,,,PLAIN LAND,"dc line, plain land",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.77093638 8.845431143, 77.76964054 8.846226235)"
+3,2( Lilo Kayathar-Thalayuthu-Gangaikondan)),T,,KC,24,T1-T2,167.615629811176,2.47,55,8.846226235,77.76964054,AVAILABLE,11KV LINE,CART TRACK,PLAIN LAND,"MD tower LILO,  11kv line , cart track , plain  land",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,=SUM(H7:H8)/1000,KM,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

@@ -1,0 +1,11 @@
+,Tower No,Type,Supspension/ Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts, broken, etc)","Condition of Earht wire (Missing, Broken etc)",GROUND EARTH AVAILABLE,Crossing Objects,,Condition of Area (Plain/Hilly/ Forest/Water Logged),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,GANTRY 110KV VIKRAMASINGAPURAM,GANTRY,GANTRY,20,,,,85,,8.71991829,77.37385279,GOOD,,NO,,,SUBSTATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.37385279 8.71991829, 77.3741009 8.72036863)"
+2,T.NO-3,DD,T,28,GANTRY-3,56.824290580701486,15.08,86,"110°38'7.61""",8.72036863,77.3741009,GOOD,MISSING,YES,"33KV, 11KV",TAAR ROAD,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.3741009 8.72036863, 77.37336578 8.72047264)"
+3,T.NO-2,DB,T,24,3--2,81.74350127074322,4.84,83,"2°19'18.22""",8.72047264,77.37336578,GOOD,GOOD,NO,LT,TAAR ROAD,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.37336578 8.72047264, 77.37250338 8.72055937)"
+4,T.NO-1 LILO 110KV VIKRAMASINGAPURAM ,DD,T,34,2-1,95.42536350467836,15.78,89,"47°57'53.35""",8.72055937,77.37250338,GOOD,GOOD,NO,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.37250338 8.72055937, 77.3719461 8.72005674)"
+5,T.NO-10 ,DB,T,30,1-10,82.80700453464067,7,83,,8.72005674,77.3719461,GOOD,GOOD,NO,,"RIVER, MUDROAD",CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,TOTAL,=SUM(G7:G10),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+"NOTES:(0˚-2˚ A-TYPE , 2˚-15˚ B-TYPE, 15˚-30˚C-TYPE,            30˚< D-TYPE)                                          ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

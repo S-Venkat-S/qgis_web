@@ -1,0 +1,9 @@
+S.No,Tower No.,Tower Suspension / Tension,Tower Type (DC /SC ),Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+,,,,,,,,,,10.5488511,79.3574496,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.3574496 10.5488511, 79.3585868 10.5503887)"
+,,,,,,,,,,10.5503887,79.3585868,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.3585868 10.5503887, 79.3600126 10.5523211)"
+,,,,,,,,,,10.5523211,79.3600126,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.3600126 10.5523211, 79.361461 10.5542926)"
+,,,,,,,,,,10.5542926,79.361461,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.361461 10.5542926, 79.3623964 10.5565329)"
+,,,,,,,,,,10.5565329,79.3623964,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

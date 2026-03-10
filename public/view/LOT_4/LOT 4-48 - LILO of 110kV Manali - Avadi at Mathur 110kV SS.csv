@@ -1,0 +1,11 @@
+S.No,Tower No.,Tower Suspension / Tension,Tower Type (DC /SC ),Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude,Longitude,JB Location,Earthing Location,Erection Status,Erection Remarks,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,GANTRY AT MATHUR,H-POLE,H-POLE,15,,,,12,,13.1744254566729,80.2473788894712,2W,,,,GOOD,,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(80.2473788894712 13.1744254566729, 80.2473036199808 13.1748271174728)"
+2,TN - 1,T,DC,28,"=CONCATENATE(B6,"" : "",B7)",48.16515738608333,-,7,5°34'49''LT,13.1748271174728,80.2473036199808,,,,,GOOD,NO E/W,11KV,ROAD,WATER LOGGED,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(80.2473036199808 13.1748271174728, 80.247145704925 13.1766199227422)"
+3,TN - 2,T,DC,28,"=CONCATENATE(B7,"" : "",B8)",202.01579600431413,-,7,11°30'42''RT,13.1766199227422,80.247145704925,,,,,GOOD,AVAILABLE,,,PLAIN,BUSHES,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(80.247145704925 13.1766199227422, 80.2467996161431 13.177784923464)"
+4,TN - 3,T,DC,28,"=CONCATENATE(B8,"" : "",B9)",137.19348045543632,-,7,36°41'28''RT,13.177784923464,80.2467996161431,,,,,GOOD,AVAILABLE,11KV - 2N,NH,PLAIN,INSIDE OF COMPOND,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(80.2467996161431 13.177784923464, 80.2450462896376 13.1790948472917)"
+5,LILO : TN - 4,T,DC,28,"=CONCATENATE(B9,"" : "",B10)",241.94124257568183,-,7,,13.1790948472917,80.2450462896376,3W,,,,GOOD,AVAILABLE,230KV ABOVE XING,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,=SUM(G6:G10),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note :  1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

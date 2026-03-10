@@ -6,6 +6,9 @@ import Convert from './pages/Convert';
 import Docs from './pages/Docs';
 import Download from './pages/Download';
 import Live from './pages/Live';
+import SingleFileView from './pages/live/SingleFileView';
+import MultiFileView from './pages/live/MultiFileView';
+import CSVEditor from './pages/live/CSVEditor';
 
 function App() {
   return (
@@ -20,10 +23,12 @@ function App() {
             <Route path="/docs" element={<Docs />} />
             <Route path="/convert" element={<Convert />} />
 
-            {/* New Simplified Routes */}
+            {/* New Specialized Map Routes */}
             <Route path="/download" element={<Download />} />
             <Route path="/live" element={<Live />} />
-            <Route path="/live/:lotId/:fileName" element={<Live />} />
+            <Route path="/live/:lotId/:fileName" element={<SingleFileView />} />
+            <Route path="/live/edit/:lotId/:fileName" element={<CSVEditor />} />
+            <Route path="/live/lot/:lotIds" element={<MultiFileView />} />
 
             {/* Fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />

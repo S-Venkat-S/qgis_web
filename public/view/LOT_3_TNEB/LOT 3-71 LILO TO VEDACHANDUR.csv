@@ -1,0 +1,8 @@
+S.No,Tower No.,Tower Suspension / Tension,TOWER MODEL,Tower Type ,Tower Height (m),Span Between Tower No.,Span Length (m),Footing Resistance of Tower ( Ohms),Ground Elevation(m),"Deviation Angle 
+Degrees",Latitude,Longitude,"Condition of  Tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/  Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,356 VEDACHANDUR ,KC,T,DB+0,22,,,8.01,225.553344726562,10°55'34''LT,10.5238280352205,77.9286563023924,Good,Good,,,,LILO VEDACHANDUR,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.9286563023924 10.5238280352205, 77.9284258000552 10.5239380896091)"
+2,Vedachandur Gantry,,T,BAY,12,"=B6&""-""&B7",55,NIL,228,,10.5239380896091,77.9284258000552,Good,NO E/W,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,TOTAL (m),=SUM(H6:H7),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

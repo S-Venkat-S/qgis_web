@@ -1,0 +1,10 @@
+Tower No,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),,Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)",JB Location,Earthing Location,"Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+154/A,S,26,,,5.4,197,,,11.39908,77.67802,Good,Yes,,Good,230kv line crossing ,,Plain Area,tower no 382 to 381 tapping old surya palayam ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.67802 11.39908, 77.67807 11.39876)"
+154A/1,T,28,154 A to 154 A/1,35.8393287713482,4,197,"61°31'25"" RT",,11.39876,77.67807,Good,,,Good,,,plain area,Tapping to old Suryapalayam WTP,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.67807 11.39876, 77.67719 11.3981)"
+154A/2,T,28,154 A/1 to 154 A/2,120.71959840293249,0.9,199,"63°1'18"" LT",,11.3981,77.67719,Good,,,Good,,,plain area,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.67719 11.3981, 77.67714 11.39791)"
+Gantry,,26,154A/2 to Gantry,21.72846447110959,0.9,199,,,11.39791,77.67714,Good,,,Good,,,plain area,in side the old surya palayam ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.67714 11.39791, 77.67721 11.397991)"
+Old Surya palayam Gantry,,26,Gantry to Gantry,11.782569381763611,,199,,,11.397991,77.67721,Good,Yes,,Good,,,plain area, Old Suryampalayam SS ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL SPAN LENGTH ,,,,=SUM(E7:E11),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

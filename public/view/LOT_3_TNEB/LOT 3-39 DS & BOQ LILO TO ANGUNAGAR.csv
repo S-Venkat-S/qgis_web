@@ -1,0 +1,10 @@
+S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length (m),Footing Resistance of Tower ( Ohms),,Ground Elevation(m),Deviation Angle,Latitude,Longitude,"Condition of  Tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/  Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,52 LILO ANGUNAGAR,S,DA+0,24,,,4.51,"=IF(H6>15,0)",264.005737304687,,10.378974918446588,77.9567521810359,Good,Good,,,Plain,LILO SEMPATTI TO TRICHY UPTO AYYALUR  LINE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.9567521810359 10.378974918446588, 77.956994 10.378852)"
+2,1,T,DP 1,12,LILO T.NO 52 -1,35,NIL,"=IF(H7>15,0)",259.920166015625,27°51'45''RT,10.378852,77.956994,Good,NO E/W,,,Plain,NEAR BY NH,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.956994 10.378852, 77.956645 10.379198)"
+3,2,T,DP 2,12,T.NO 1-2,60,NIL,"=IF(H8>15,0)",258,79°36'46''LT,10.379198,77.956645,Good,NO E/W,,,Plain,NEAR BY NH,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.956645 10.379198, 77.956785 10.379434)"
+4,3,T,DB+0,22,T.NO 2-3,38,2.52,"=IF(H9>15,0)",261,8°4'43''RT,10.379434,77.956785,Good,Good,,,Plain,NEAR BY NH,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.956785 10.379434, 77.95692 10.379602)"
+5,GANTRY ANGUNAGAR,T,BAY,12,T.NO 3-GANTRY,25,NIL,,258,,10.379602,77.95692,Good,NO E/W,,,Plain,GANTRY ANGUNAGAR,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,TOTOL M,,=SUM(G6:G10),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

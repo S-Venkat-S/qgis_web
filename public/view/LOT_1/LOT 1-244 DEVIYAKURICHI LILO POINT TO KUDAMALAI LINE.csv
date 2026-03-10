@@ -1,0 +1,8 @@
+Tower No,Tower Type & Supspension/Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earthwire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+91 LILO POINT),T,26,,,1.32,251,,11.46337,78.58395,GOOD,GOOD,,,,lilo to thammmampatti,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.58395 11.46337, 78.58384 11.4641)"
+1,T,28,DKT-91LILO to DK-01,81.67590136754025,3.04,249,"99⁰17'53"" LT",11.4641,78.58384,GOOD,NO,FENCING CROSSING,,,AGRICULTURE LAND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.58384 11.4641, 78.58365 11.46404)"
+KUDAMALAI GANTRY,T,20,DK-01 to KOODAMALAI GANTRY,21.777995229636872,,249,,11.46404,78.58365,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL SPAN LENGTH,,,,=SUM(E8:E9),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

@@ -1,0 +1,9 @@
+Tower No,Tower Type & Supspension/Tenion,Tower Type ,Tower Hight (Mtrs),Span Between Tower No.,Span length             (As per tower schedule) ,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,,,,,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earthwire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+GANTRY (PUDANSANTHAI 230KV ),T,DB,24,,,,,183,,11.31839,78.17628,2W,,,,GOOD,NO,,TAR ROAD CROSSING,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.17628 11.31839, 78.17625 11.31871)"
+1,T,DD,28,GANTRY-01,,36,,229,"43°34'42""(RT)",11.31871,78.17625,,,,,GOOD,GOOD,,,,"TOWER INSIDE THE SUS-STATION 230KV, FENCING CROSSING",,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.17625 11.31871, 78.17709 11.31976)"
+2,T,DC,26,1-2,,148,,236,"16°21'41""(RT)",11.31976,78.17709,,,,,GOOD,GOOD,,,,TOWER INSIDE SS 110KV,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.17709 11.31976, 78.17719 11.31983)"
+GANTRY (PUDANSANTHAI 110KV ),T,DB,24,02-GANTRY,,13,,236,,11.31983,78.17719,2W,,,,GOOD,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Total Length,,,,,,=SUM(G7:G9),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
