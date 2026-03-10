@@ -1,0 +1,40 @@
+Subject: Handing Over: OPGW Survey Web Application
+
+Dear Team,
+
+Please find the details regarding the newly developed OPGW Survey Web Application. This tool is designed to streamline the processing, visualization, and distribution of survey data for the Sterlite OPGW Project.
+
+**Application URL:** [Insert Link Here]
+
+### Key Features:
+
+**1. Survey Viewer**
+   - **Interactive Map:** View survey points mapped directly on Google Maps (Hybrid Satellite view) from uploaded CSV files.
+   - **Visualization:** 
+     - Survey points are displayed as red markers with static "Tower No." labels.
+     - The transmission line path is drawn in yellow.
+     - **Span Distances:** The distance between each tower is automatically calculated and displayed in meters.
+     - **Survey Abstract:** Instantly view the "Total Number of Points" and "Total Route Length" for any selected file.
+   - **File Navigation:** Browse existing survey files arranged by LOT (LOT 1, LOT 2, etc.).
+   - **Deep Linking:** Share direct links to specific survey file maps with the team.
+
+**2. Coordinate Conversion Tool**
+   - Automates the conversion of raw survey data (Excel/CSV) into QGIS-ready formats.
+   - Handles coordinate transformation (DMS to Decimal Degrees).
+   - Identifies and reports errors during processing (e.g., missing coordinates).
+   - Allows bulk downloading of processed files as a ZIP archive.
+
+**3. Documentation & Guides**
+   - A comprehensive "Docs" section included within the app.
+   - Step-by-step guides on setting up QGIS, adding Google Maps layers, and styling survey data.
+   - Includes screenshots to assist new engineers.
+
+**4. Downloads**
+   - A centralized location to download the latest raw survey files to be viewed in QGIS software for all LOTs.
+   - Files show a "Last Updated" date so users know if they have the latest version.
+
+Please let me know if you need any further walkthroughs or if you have questions regarding the usage.
+
+Best regards,
+
+[Your Name]
