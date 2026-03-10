@@ -144,8 +144,8 @@ export default function Live() {
         setRefreshTrigger(prev => prev + 1);
     };
 
-    const viewSingleFile = (lotId, fileName) => navigate(`/live/${lotId}/${fileName}`);
-    const editSingleFile = (lotId, fileName) => navigate(`/live/edit/${lotId}/${fileName}`);
+    const viewSingleFile = (lotId, fileName) => window.open(`/live/${lotId}/${fileName}`, '_blank');
+    const editSingleFile = (lotId, fileName) => window.open(`/live/edit/${lotId}/${fileName}`, '_blank');
     const viewLot = (lotId) => navigate(`/live/lot/${lotId}`);
     const viewAllLots = () => navigate('/live/lot/all');
 
@@ -187,10 +187,10 @@ export default function Live() {
                                 </div>
                             </div>
                             <div className="flex gap-2">
-                                <button onClick={() => navigate('/live/edit/root/All Sub Station.csv')} className="px-4 py-2 bg-white text-amber-700 text-[10px] font-black uppercase tracking-widest rounded-lg border border-amber-200 hover:bg-amber-600 hover:text-white transition-all shadow-sm">
+                                <button onClick={() => window.open('/live/edit/root/All Sub Station.csv', '_blank')} className="px-4 py-2 bg-white text-amber-700 text-[10px] font-black uppercase tracking-widest rounded-lg border border-amber-200 hover:bg-amber-600 hover:text-white transition-all shadow-sm">
                                     Edit Records
                                 </button>
-                                <button onClick={() => navigate('/live/root/All Sub Station.csv')} className="px-4 py-2 bg-amber-600 text-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-md hover:bg-amber-700 transition-all">
+                                <button onClick={() => window.open('/live/root/All Sub Station.csv', '_blank')} className="px-4 py-2 bg-amber-600 text-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-md hover:bg-amber-700 transition-all">
                                     View Map
                                 </button>
                             </div>

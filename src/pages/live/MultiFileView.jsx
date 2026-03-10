@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Polyline, CircleMarker, Popup, Tooltip } from 
 import L from 'leaflet';
 import Papa from 'papaparse';
 import 'leaflet/dist/leaflet.css';
-import { updatedLots, ChangeView, ZoomHandler, OPACITY_KEY, DEFAULT_OPACITY, SHOW_MAP_KEY, DEFAULT_SHOW_MAP, SHOW_SS_LABELS_KEY, DEFAULT_SS_LABELS, SHOW_LINE_LABELS_KEY, DEFAULT_LINE_LABELS, exportQGISProject } from './MapUtils';
+import { updatedLots, ChangeView, ZoomHandler, CopyCoordsHandler, OPACITY_KEY, DEFAULT_OPACITY, SHOW_MAP_KEY, DEFAULT_SHOW_MAP, SHOW_SS_LABELS_KEY, DEFAULT_SS_LABELS, SHOW_LINE_LABELS_KEY, DEFAULT_LINE_LABELS, exportQGISProject } from './MapUtils';
 import SubStationLayer from './SubStationLayer';
 
 const MultiFileView = () => {
@@ -42,8 +42,9 @@ const MultiFileView = () => {
     });
 
     useEffect(() => {
+        document.title = selectedLotIds.length > 0 ? `Map: ${selectedLotIds.map(id => id.toUpperCase()).join(', ')}` : "Multi-Lot Map";
         localStorage.setItem(OPACITY_KEY, mapOpacity);
-    }, [mapOpacity]);
+    }, [mapOpacity, selectedLotIds]);
 
     useEffect(() => {
         localStorage.setItem(SHOW_MAP_KEY, JSON.stringify(showMap));
@@ -302,6 +303,7 @@ const MultiFileView = () => {
                 <MapContainer center={[11.0, 77.0]} zoom={13} bounds={bounds} className="h-full w-full">
                     <ChangeView bounds={bounds} />
                     <ZoomHandler onZoom={setZoomLevel} />
+                    <CopyCoordsHandler />
                     {showMap && (
                         <TileLayer
                             url="http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"

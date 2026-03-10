@@ -26,7 +26,71 @@ After conversion, the downloaded csv file can be loaded in QGIS by using the "Ad
 4. If there's any error in the file, it will be shown in the download list. Kindly correct the error and upload the file again.
 ![Convert Page](/docs/convert_page.png)
 
-## QGIS
+## Survey Dashboard
+
+### **What is the Survey Dashboard?**
+The [Live Dashboard](/live) provides a real-time overview of all survey lots and files stored on the server. It automatically calculates key metrics like total KM length and number of towers for every file.
+
+### **Managing Large Datasets (1000+ Files)**
+The dashboard is optimized for large projects:
+- **Lazy Loading**: Statistics (KM/Towers) are only calculated when you expand a Lot folder.
+- **Local Caching**: Calculated stats are saved in your browser. When you return later, they load instantly without re-downloading files.
+- **Progress Tracking**: A progress bar shows the percentage of files analyzed in real-time.
+
+### **How do I refresh data from the server?**
+If a file is updated on the server, the dashboard might show old cached stats.
+- **Lot Refresh**: Click the 🔄 button next to a Lot's sort menu to force a re-scan of just those files.
+- **Global Purge**: Click the 🗑️ icon next to "Network Overview" to clear all local cache and start fresh.
+
+### **Sorting and Searching**
+You can sort files within each Lot by:
+- **Name**: Alphabetical order.
+- **KM (High-Low)**: Longest survey lines first.
+- **Towers**: Most tower points first.
+- **Date (Recent)**: Most recently updated files first.
+Use the **Global Search** bar at the top to filter files across all lots by name.
+
+## Advanced Map Features
+
+### **Interactive Map Controls**
+- **Layer Toggles**: In the top-right corner of the map, you can toggle **MAP** (Satellite), **TOWERS** (Point markers), **DIST** (Span lengths), and **STATIONS** (Sub-station markers).
+- **Opacity Slider**: Adjust the background satellite map transparency to make survey lines stand out.
+- **Right-Click to Copy**: Right-click anywhere on the map to show a **"Copy Lat, Lng"** button. This copies the exact coordinates of that spot to your clipboard.
+
+### **Multi-Tab Workflow**
+The dashboard now supports multi-tasking:
+- Clicking **"View Map"** or **"Edit CSV"** opens the file in a **new browser tab**.
+- Tab titles are automatically updated to the **Filename**, so you can easily switch between multiple open surveys.
+
+### **Global Assets (Sub-Stations)**
+The **"All Sub Station.csv"** file is accessible at the top of the dashboard. This global layer can be edited to update station names/locations across the entire map network.
+
+## Inbuilt CSV Editor
+
+### **Using the Editor**
+The editor allows you to fix survey data directly in your browser without needing Excel.
+- **Smart Paste**: Copy cells from Excel or Google Sheets and paste them directly into the editor. It will automatically create new rows/columns if needed.
+- **Manual Resizing**: Drag the edges of column headers to resize them for better visibility.
+- **Diff Highlighting**: Any cell you modify will turn **Amber**, making it easy to track your local changes.
+- **Keyboard Shortcuts**: Press **Enter** to move to the next row while typing.
+
+### **Session & Saving**
+- **Warning**: Edits made in the editor are **local to your browser session**. If you refresh the page or close the tab, unsaved changes will be lost.
+- **Saving**: Click the **Download** button to save your edited file back to your computer. You can then re-upload it to the server using the deployment tools.
+
+## Deployment (Technical Reference)
+
+### **Optimized Uploading**
+The deployment process uses an **Optimized Parallel Uploader** (`upload_optimized.js`):
+- **10 Parallel Connections**: Uploads 10 files at a time to maximize speed.
+- **Smart Sync**: Automatically compares local and remote file sizes/timestamps. It only uploads files that have actually changed, skipping the rest.
+- **Prebuild Indexing**: Every time you build the project, it automatically updates the `index.txt` files used by the dashboard.
+
+### **Deployment Commands**
+- `npm run build:deploy`: Full build, re-index, and smart-sync all files.
+- `npm run deploy:fast`: Skips the heavy `view/` CSV data and only updates the browser application code.
+
+## QGIS Integration
 
 ### **Downloading QGIS**
 1. Navigate to the [QGIS website](https://www.qgis.org/en/site/forusers/download.html).
@@ -37,62 +101,14 @@ After conversion, the downloaded csv file can be loaded in QGIS by using the "Ad
 5. Make sure the Project Properties CRS (_Coordinate Reference System_) is set to **EPSG:4326 - WGS 84**.
 ![Project Properties](/docs/crs.png)
 
-### **Uploading of CSV file in QGIS as Delimited Text Layer**
+### **One-Click QGIS Export**
+In any Map View, click **"Export QGIS"** to download a `.qgs` project file. Open this file in QGIS to see your survey lines pre-styled and ready for mapping.
+
+### **Manual CSV Loading in QGIS**
 1. Open QGIS and click on the **Layer -> Add Layer -> Add Delimited Text Layer** or **Ctrl + Shift + T**.
 ![Add Delimited Text Layer](/docs/add_delimited_text_layer.png)
-2. Click on the **Browse** ![Add Delimited Text Layer](/docs/browser.png) button and select the CSV file you want to upload.
-3. In the Geometry Definition, 
+2. In the Geometry Definition:
     - select **Well Known Text (WKT)**.
     - Set Geometry Field as **line_geom**.
-    - Set Geometry Type as **LineString** or **Detect**.
     - Set Geometry CRS as **EPSG:32644 - WGS 84 / UTM zone 44N**.
-4. Click on the **Add** button.
-![Add Delimited Text Layer](/docs/delimited_text_layer.png)
-
-### **Uploading of CSV file in QGIS as Add Vector Layer**
-1. Open QGIS and click on the **Layer -> Add Layer -> Add Vector Layer** or **Ctrl + Shift + V**.
-2. Selecting files,
-    - In the Source Type, select **File** and choose multiple files.
-    - Or change the Source Type to **Directory** and select the directory containing the CSV files.
-3. Click on the **Browse** in Source ![Add Delimited Text Layer](/docs/browser.png) button and select the CSV file you want to upload.
-3. In the Options, 
-    - Set GEOM_POSSIBLE_NAMES to **line_geom**.
-    - Leave the other options as default.
-4. Click on the **Add** button.
-![Vector Layer](/docs/vector_layer.png)
-
-### **Layer Options in QGIS**
-1. After adding the layer, it will be visible in the Layers panel.
-![Layer Panel](/docs/layers.png)
-2. Right click on the layer and select **Zoom to Layer(s)** to view the layer in the map canvas.
-![Zoom to Layer](/docs/zoom_to_layer.png)
-3. Right click on the layer and select **Properties** to view the layer properties.
-![Layer Properties](/docs/layer_properties.png)
-4. In the Properties window,
-    - In the **General** tab, you can see the layer information.
-    - In the **Symbology** tab, you can change the layer symbology.
-    - In the **Labels** tab, you can add labels to the layer. You can use @layer_name to display the layer name. 
-    - More expressions / formulas related docs can be found in the [QGIS Expressions](https://docs.qgis.org/3.40/en/docs/user_manual/expressions/index.html).
-    - More option regarding the label, symbology, etc can be found in the [QGIS Labeling](https://docs.qgis.org/3.40/en/docs/training_manual/vector_classification/label_tool.html).
-    ![Layer Label](/docs/layer_label.png)
-5. Copying layer style
-    - Right click on the layer and select **Styles -> Copy Style -> All Style Catergories**.
-    - Select the layers you want to copy the style to.
-    - Right click on the selected layers and select **Paste Style**.
-    ![Copy Paste Style](/docs/copy_styles.png)
-6. Grouping, Moving and Hiding layers
-    - Drag and drop the layers to group them, move them up or down, or hide them.
-    ![Layer Grouping](/docs/layer_grouping.png)
-
-### **Export / Printing Map**
-1. For Exporting / Printing Map, refer to the [QGIS Print Composer](https://docs.qgis.org/3.40/en/docs/user_manual/print_composer/overview_composer.html).
-
-### **Adding of Google Maps in QGIS**
-1. Click **Plugins -> Manage and Install Plugins**.
-![Add Plugin](/docs/add_plugins.png)
-2. In the search bar, type "QuickMapServices" and click on the "Install Plugin" button.
-![QuickMapServices](/docs/quickmapservices.png)
-3. After installation, click on the **Web -> QuickMapServices -> Search NextGIS on QMS**.
-![Search NextGIS on QMS](/docs/search_qms.png)
-4. In the search bar, type "Google Maps" and click on the "Add" button in the **Google Maps**.
-![Add Google Maps](/docs/google_maps.png)
+3. Click on the **Add** button.

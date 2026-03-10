@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMap, useMapEvents } from 'react-leaflet';
 
 export const updatedLots = [
@@ -25,6 +25,54 @@ export const ZoomHandler = ({ onZoom }) => {
     zoomend: () => onZoom(map.getZoom())
   });
   return null;
+};
+
+// Right-click to copy coordinates handler
+export const CopyCoordsHandler = () => {
+  const [pos, setPos] = useState(null);
+  const [copied, setCopied] = useState(false);
+
+  useMapEvents({
+    contextmenu: (e) => {
+      setPos({ x: e.originalEvent.pageX, y: e.originalEvent.pageY, lat: e.latlng.lat, lng: e.latlng.lng });
+      setCopied(false);
+    },
+    click: () => setPos(null),
+    movestart: () => setPos(null)
+  });
+
+  const handleCopy = () => {
+    if (!pos) return;
+    const text = `${pos.lat.toFixed(6)}, ${pos.lng.toFixed(6)}`;
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setPos(null), 1000);
+  };
+
+  if (!pos) return null;
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        left: pos.x,
+        top: pos.y,
+        zIndex: 10000,
+        background: 'white',
+        padding: '4px',
+        borderRadius: '8px',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+        border: '1px solid #e2e8f0'
+      }}
+    >
+      <button
+        onClick={handleCopy}
+        className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-md transition-all whitespace-nowrap shadow-sm ${copied ? 'bg-green-600 text-white' : 'bg-primary-blue text-white hover:bg-blue-700'}`}
+      >
+        {copied ? '✓ COPIED!' : `COPY: ${pos.lat.toFixed(6)}, ${pos.lng.toFixed(6)}`}
+      </button>
+    </div>
+  );
 };
 
 export const OPACITY_KEY = 'mapOpacity';

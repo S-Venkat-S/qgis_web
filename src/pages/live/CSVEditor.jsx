@@ -17,6 +17,10 @@ const CSVEditor = () => {
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
+        document.title = curFileName ? `Edit: ${curFileName}` : "CSV Editor";
+    }, [curFileName]);
+
+    useEffect(() => {
         let lot = updatedLots.find(l => l.id === lotId);
 
         // Handle root level files (like All Sub Station.csv)

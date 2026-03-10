@@ -5,10 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node index-view-files.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "node upload.js",
+    "deploy": "node upload_optimized.js",
+    "deploy:fast": "node upload_optimized.js --fast",
     "build:deploy": "npm run build && npm run deploy"
   },
   "dependencies": {
