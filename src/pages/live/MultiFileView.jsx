@@ -20,6 +20,7 @@ const MultiFileView = () => {
     const [multiMapData, setMultiMapData] = useState({});
     const [lotFiles, setLotFiles] = useState({});
     const [loadingProgress, setLoadingProgress] = useState(0);
+    const [exportProgress, setExportProgress] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [bounds, setBounds] = useState(null);
     const [zoomLevel, setZoomLevel] = useState(13);
@@ -181,7 +182,7 @@ const MultiFileView = () => {
         return results.slice(0, 50); // Limit results for performance
     }, [searchQuery, multiMapData]);
 
-    const handleExport = () => {
+    const handleExport = async () => {
         const layers = [];
         selectedLotIds.forEach(lid => {
             const lData = multiMapData[lid] || {};
@@ -191,7 +192,14 @@ const MultiFileView = () => {
             });
         });
         if (layers.length > 0) {
-            exportQGISProject(layers, "MultiLot_Survey");
+            setExportProgress(0);
+            try {
+                await exportQGISProject(layers, "MultiLot_Survey", setExportProgress);
+            } catch (e) {
+                console.error("Export error:", e);
+            } finally {
+                setExportProgress(null);
+            }
         }
     };
 
@@ -276,14 +284,30 @@ const MultiFileView = () => {
                         </div>
                     </div>
 
-                    <button
-                        onClick={handleExport}
-                        disabled={Object.keys(multiMapData).length === 0}
-                        className="px-4 py-1.5 bg-green-600 hover:bg-green-700 disabled:bg-gray-200 disabled:text-gray-400 text-white rounded-full text-[10px] font-bold transition-all shadow-sm flex items-center gap-2 uppercase tracking-tight"
-                    >
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                        Export QGIS
-                    </button>
+                    <div className="flex flex-col relative group">
+                        <button
+                            onClick={handleExport}
+                            disabled={Object.keys(multiMapData).length === 0 || exportProgress !== null}
+                            className={`px-4 py-1.5 ${exportProgress !== null ? 'bg-amber-500' : 'bg-green-600 hover:bg-green-700'} disabled:bg-gray-200 disabled:text-gray-400 text-white rounded-full text-[10px] font-bold transition-all shadow-sm flex items-center gap-2 uppercase tracking-tight`}
+                        >
+                            {exportProgress !== null ? (
+                                <>
+                                    <div className="animate-spin w-3 h-3 border-2 border-white rounded-full border-t-transparent" />
+                                    Exporting... {exportProgress}%
+                                </>
+                            ) : (
+                                <>
+                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                                    Export QGIS
+                                </>
+                            )}
+                        </button>
+                        {exportProgress !== null && (
+                            <div className="absolute -bottom-2 left-0 w-full h-1 bg-gray-100 rounded-full overflow-hidden">
+                                <div className="h-full bg-amber-600 transition-all duration-200" style={{ width: `${exportProgress}%` }}></div>
+                            </div>
+                        )}
+                    </div>
                     <div className="flex flex-col items-end">
                         <span className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter mb-0.5">Map Opacity</span>
                         <input
@@ -330,9 +354,6 @@ const MultiFileView = () => {
                                             color={color}
                                             weight={zoomLevel >= 15 ? 4 : 2}
                                             opacity={1}
-                                            eventHandlers={{
-                                                click: () => zoomToFile(lid, fName, pts)
-                                            }}
                                         >
                                             {showLineLabels && (
                                                 <Tooltip sticky permanent direction="center">

@@ -11,6 +11,7 @@ const SingleFileView = () => {
     const { lotId, fileName } = useParams();
     const navigate = useNavigate();
 
+    const [exportProgress, setExportProgress] = useState(null);
     const [points, setPoints] = useState([]);
     const [loading, setLoading] = useState(true);
     const [bounds, setBounds] = useState(null);
@@ -85,10 +86,17 @@ const SingleFileView = () => {
         });
     }, [lotId, fileName]);
 
-    const handleExport = () => {
+    const handleExport = async () => {
         if (points.length === 0) return;
+        setExportProgress(0);
         const color = lotId === 'lot1' ? '#6366F1' : lotId === 'lot2' ? '#34D399' : lotId === 'lot3' ? '#FBBF24' : '#F87171';
-        exportQGISProject([{ id: fileName, name: fileName, pts: points, color }], fileName.split('.')[0]);
+        try {
+            await exportQGISProject([{ id: fileName, name: fileName, pts: points, color }], fileName.split('.')[0], setExportProgress);
+        } catch (e) {
+            console.error("Export error:", e);
+        } finally {
+            setExportProgress(null);
+        }
     };
 
     const handleBack = () => navigate('/live');
@@ -145,14 +153,30 @@ const SingleFileView = () => {
                         </div>
                     </div>
 
-                    <button
-                        onClick={handleExport}
-                        disabled={points.length === 0}
-                        className="px-4 py-1.5 bg-green-600 hover:bg-green-700 disabled:bg-gray-200 disabled:text-gray-400 text-white rounded-full text-[10px] font-bold transition-all shadow-sm flex items-center gap-2 uppercase tracking-tight"
-                    >
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                        Export QGIS
-                    </button>
+                    <div className="flex flex-col relative group">
+                        <button
+                            onClick={handleExport}
+                            disabled={points.length === 0 || exportProgress !== null}
+                            className={`px-4 py-1.5 ${exportProgress !== null ? 'bg-amber-500' : 'bg-green-600 hover:bg-green-700'} disabled:bg-gray-200 disabled:text-gray-400 text-white rounded-full text-[10px] font-bold transition-all shadow-sm flex items-center gap-2 uppercase tracking-tight`}
+                        >
+                            {exportProgress !== null ? (
+                                <>
+                                    <div className="animate-spin w-3 h-3 border-2 border-white rounded-full border-t-transparent" />
+                                    Exporting... {exportProgress}%
+                                </>
+                            ) : (
+                                <>
+                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                                    Export QGIS
+                                </>
+                            )}
+                        </button>
+                        {exportProgress !== null && (
+                            <div className="absolute -bottom-2 left-0 w-full h-1 bg-gray-100 rounded-full overflow-hidden">
+                                <div className="h-full bg-amber-600 transition-all duration-200" style={{ width: `${exportProgress}%` }}></div>
+                            </div>
+                        )}
+                    </div>
                     <div className="flex flex-col items-end">
                         <span className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter mb-0.5">Map Opacity</span>
                         <input
