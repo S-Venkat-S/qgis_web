@@ -3,6 +3,9 @@ import * as dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import archiver from 'archiver';
+import fetch from 'node-fetch';
+import crypto from 'crypto';
 
 dotenv.config();
 
@@ -10,29 +13,49 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // CONFIG
-const MAX_CONCURRENT_CLIENTS = 10;
-const SKIP_DATA_FOLDER = process.argv.includes('--fast') || process.argv.includes('--app-only');
+const IS_FAST_MODE = process.argv.includes('--fast') || process.argv.includes('--app-only');
 
-async function getFiles(dir, allFiles = []) {
-    const files = fs.readdirSync(dir);
-    for (const file of files) {
-        const name = path.join(dir, file);
-        if (fs.statSync(name).isDirectory()) {
-            // Check if we should skip the view/data folder
-            if (SKIP_DATA_FOLDER && (file === 'view' || file === 'LOT_1' || file === 'LOT_2' || file === 'LOT_3' || file === 'LOT_4')) {
-                console.log(`Skipping data folder: ${name}`);
-                continue;
+async function zipDirectory(sourceDir, outPath, skipFolders = []) {
+    const archive = archiver('zip', { zlib: { level: 9 } });
+    const stream = fs.createWriteStream(outPath);
+
+    return new Promise((resolve, reject) => {
+        archive
+            .on('error', err => reject(err))
+            .on('warning', err => console.warn(err))
+            .pipe(stream);
+
+        // Add each item in sourceDir
+        const items = fs.readdirSync(sourceDir);
+        for (const item of items) {
+            const itemPath = path.join(sourceDir, item);
+            const isDir = fs.statSync(itemPath).isDirectory();
+
+            if (isDir) {
+                if (skipFolders.includes(item)) {
+                    console.log(`⚡ Skipping [${item}] as per fast mode...`);
+                    continue;
+                }
+                archive.directory(itemPath, item);
+            } else {
+                archive.file(itemPath, { name: item });
             }
-            await getFiles(name, allFiles);
-        } else {
-            allFiles.push(name);
         }
-    }
-    return allFiles;
+
+        stream.on('close', () => resolve());
+        archive.finalize();
+    });
 }
 
 async function deploy() {
-    console.log("🚀 Starting Optimized Deployment...");
+    console.log(`🚀 Starting ${IS_FAST_MODE ? '[Fast Mode] ' : ''}ZIP Deployment...`);
+
+    // Check FTP credentials
+    if (!process.env.FTP_HOST || !process.env.FTP_USER || !process.env.FTP_PASSWORD) {
+        console.error('❌ Error: FTP credentials not found in .env');
+        process.exit(1);
+    }
+
     const config = {
         host: process.env.FTP_HOST,
         user: process.env.FTP_USER,
@@ -42,106 +65,81 @@ async function deploy() {
     };
 
     const localRootDir = path.join(__dirname, 'dist');
+    const zipName = 'deploy.zip';
+    const zipFilePath = path.join(__dirname, zipName);
     const remoteRootDir = process.env.FTP_REMOTE_DIR || '/';
+    const unzipPhpName = 'unzip_script.php';
+    const localUnzipPhpPath = path.join(__dirname, 'unzip.php');
 
-    if (!config.host || !config.user || !config.password) {
-        console.error('Error: FTP credentials not found. Please check your .env file.');
+    // Generate a one-time security token
+    const deployToken = crypto.randomBytes(32).toString('hex');
+    console.log(`🔑 Generated security token for session.`);
+
+    if (!fs.existsSync(localRootDir)) {
+        console.error('❌ Error: dist folder not found. Run npm run build first!');
         process.exit(1);
     }
 
-    const allLocalFiles = await getFiles(localRootDir);
-    console.log(`📦 Found ${allLocalFiles.length} files to upload.`);
-
-    if (SKIP_DATA_FOLDER) {
-        console.log("⚡ [Fast Mode] Skipping heavy data files (CSVs in view/)");
+    // 1. Zipping
+    try {
+        const skipFolders = IS_FAST_MODE ? ['view', 'LOT_1', 'LOT_2', 'LOT_3', 'LOT_4'] : [];
+        process.stdout.write("🤐 Creating deployment package... ");
+        await zipDirectory(localRootDir, zipFilePath, skipFolders);
+        const zipSize = (fs.statSync(zipFilePath).size / (1024 * 1024)).toFixed(2);
+        console.log(`Done! (${zipSize} MB)`);
+    } catch (err) {
+        console.error('\n❌ Zipping failed:', err);
+        process.exit(1);
     }
 
-    const fileQueue = [...allLocalFiles];
-    const clients = [];
-    const activeClientsCount = Math.min(MAX_CONCURRENT_CLIENTS, fileQueue.length);
-
-    console.log(`🔌 Opening ${activeClientsCount} concurrent connections...`);
-
-    const remoteDirCache = new Map(); // Map<dirPath, Map<fileName, remoteFile>>
-
-    // Helper to get remote file listing for a directory (cached)
-    const getRemoteFiles = async (client, remoteDir) => {
-        if (remoteDirCache.has(remoteDir)) return remoteDirCache.get(remoteDir);
-
-        try {
-            const list = await client.list(remoteDir);
-            const fileMap = new Map();
-            list.forEach(f => fileMap.set(f.name, f));
-            remoteDirCache.set(remoteDir, fileMap);
-            return fileMap;
-        } catch (err) {
-            // If dir doesn't exist, return empty map
-            return new Map();
-        }
-    };
-
-    // Helper to upload a single file using a specific client
-    const uploadFile = async (client, localPath) => {
-        const relativePath = path.relative(localRootDir, localPath);
-        const remotePath = path.join(remoteRootDir, relativePath).replace(/\\/g, '/');
-        const remoteDir = path.dirname(remotePath).replace(/\\/g, '/');
-        const fileName = path.basename(remotePath);
-
-        const stats = fs.statSync(localPath);
-        const remoteFiles = await getRemoteFiles(client, remoteDir);
-        const remoteFile = remoteFiles.get(fileName);
-
-        if (remoteFile) {
-            const sizeMatches = remoteFile.size === stats.size;
-            // FTP times are often slightly off, so we allow a small threshold (e.g. 2s)
-            const timeDiff = Math.abs(remoteFile.modifiedAt.getTime() - stats.mtime.getTime());
-            const timeMatches = timeDiff < 2000;
-
-            if (sizeMatches && timeMatches) {
-                // Skip upload
-                return;
-            }
-        }
-
-        try {
-            await client.ensureDir(remoteDir);
-            await client.uploadFrom(localPath, fileName);
-            console.log(`✅ Uploaded: ${relativePath}`);
-        } catch (err) {
-            console.error(`❌ Failed to upload ${relativePath}:`, err.message);
-            fileQueue.push(localPath);
-        }
-    };
-
-    // Worker function for each client
-    const worker = async () => {
-        const client = new ftp.Client();
-        // client.ftp.verbose = true;
-        await client.access(config);
-        clients.push(client);
-
-        while (fileQueue.length > 0) {
-            const file = fileQueue.shift();
-            if (!file) break;
-            await uploadFile(client, file);
-        }
-    };
-
-    const startTime = Date.now();
-
+    // 2. FTP Upload
+    const client = new ftp.Client();
     try {
-        // Start workers
-        const workers = Array.from({ length: activeClientsCount }).map(() => worker());
-        await Promise.all(workers);
+        await client.access(config);
+        console.log("🔌 Connected to FTP.");
 
-        const duration = ((Date.now() - startTime) / 1000).toFixed(1);
-        console.log(`\n✨ Deployment complete in ${duration}s!`);
-    } catch (err) {
-        console.error('\n💥 Deployment failed:', err);
-    } finally {
-        for (const client of clients) {
-            client.close();
+        process.stdout.write("📤 Uploading zip and extracter... ");
+        await client.uploadFrom(zipFilePath, path.join(remoteRootDir, zipName));
+
+        // Prepare localized unzip script with the token
+        let phpContent = fs.readFileSync(localUnzipPhpPath, 'utf8');
+        phpContent = phpContent.replace('{{DEPLOY_TOKEN}}', deployToken);
+        const tempPhpPath = path.join(__dirname, 'unzip_temp.php');
+        fs.writeFileSync(tempPhpPath, phpContent);
+
+        await client.uploadFrom(tempPhpPath, path.join(remoteRootDir, unzipPhpName));
+        console.log("Done!");
+        client.close();
+        if (fs.existsSync(tempPhpPath)) fs.unlinkSync(tempPhpPath);
+
+        // 3. Extraction via HTTP
+        console.log("⚡ Executing remote extraction...");
+        const baseUrl = process.env.APP_URL || `http://${config.host}`;
+        const triggerUrl = `${baseUrl}/${unzipPhpName}?key=${deployToken}&t=${Date.now()}`;
+
+        const response = await fetch(triggerUrl);
+        const text = await response.text();
+
+        let result;
+        try {
+            result = JSON.parse(text);
+        } catch (e) {
+            console.error("\n❌ Server Error (Raw response):", text);
+            process.exit(1);
         }
+
+        if (result.status === 'success') {
+            console.log(`\n✨ Perfect: ${result.message}`);
+        } else {
+            console.error(`\n💥 Extraction Error: ${result.message}`);
+        }
+
+    } catch (err) {
+        console.error('\n❌ FTP/Network Error:', err.message);
+    } finally {
+        if (!client.closed) client.close();
+        if (fs.existsSync(zipFilePath)) fs.unlinkSync(zipFilePath);
+        console.log("🧹 Local temporary zip removed.");
     }
 }
 
