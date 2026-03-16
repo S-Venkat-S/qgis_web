@@ -1,0 +1,3 @@
+S.No,Station,Latitude,Longitude,line_geom
+1,Kayathar,8.88864,77.77083,
+2,Thennapatti,8.906912,77.868977,"LINESTRING(77.77083 8.88864, 77.868977 8.906912)"

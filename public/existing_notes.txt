@@ -1,0 +1,25 @@
+TTPS - Koodankulam (TTN Auto - LILO) - Completed
+TTPS - 400 Kayathar (Thennampatti LILO) - Completed
+TTN Auto - 230 Kayathar - Completed
+400 Kayathar - Tirunelveli EDC (Removed) - Completed
+Palayamkottai - Tirunelveli EDC (ADSS) - Completed
+Thennampatti - 765 Virudhunagar (9.448716, 77.9999612) (400 Kayathar LILO) - 48 - Completed
+400 Kayathar - Pasumalai (Removed) - Completed
+230 Kayathar - 400 Kayathar - Completed
+230 Kayathar - 3-316 (LILO Point) (400 Kayathar LILO)
+400 Kayathar - Anuppankulam (Removed) - Completed
+Anuppankulam - Pasumalai (Removed) - Completed
+Existing connectivity to 110 Ottapidaram, should be updated as 400 Ottapidaram - Completed
+400 Thennampatti - 400 Ottapidaram LILO - Completed
+400 Ottapidaram LILO - Udangudi - Completed
+Industrial Estate SS - RCE Maduarai (ADSS) - Completed
+110 Pasumalai - 230 Pasumalai - Completed
+110 Sempatti - 230 Sempatti (LoA No: 49)
+110 Renganathapuram - 230 Renganathapuram (LoA No: 50)
+Pasumalai to Trichy - (LILO Alagarkoil, Munndipatti, Alundur, Samayanallur) - Completed
+Thappakundu - Anaikadavu - Completed
+400 Karaikudi - 400 Kamudhi - Completed
+400 Karaikudi - Pugalur - Vellalaviduthi - Completed
+400 Karaikudi - 400 Kayathar - Completed
+230 Karaikudi - 230 Kavanur 
+230 Karaikudi - NT Kudi

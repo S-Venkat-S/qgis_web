@@ -6,20 +6,7 @@ import reactLogo from '../assets/react.svg';
 function Header() {
     const location = useLocation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [activeDropdown, setActiveDropdown] = useState(null); // 'download', 'live', or null
-
     const isActive = (path) => location.pathname === path;
-    const isSectionActive = (basePath) => location.pathname.startsWith(basePath);
-
-    const toggleDropdown = (name) => {
-        if (activeDropdown === name) {
-            setActiveDropdown(null);
-        } else {
-            setActiveDropdown(name);
-        }
-    };
-
-    const closeDropdowns = () => setActiveDropdown(null);
 
     // Helper to handle mouse leave/enter for desktop hover effect if preferred, 
     // but click is often more accessible. Let's stick to click for consistency or hover for desktop.
@@ -65,12 +52,6 @@ function Header() {
                             Convert
                         </Link>
 
-                        <Link
-                            to="/download"
-                            className={`text-gray-700 hover:text-primary-blue font-medium transition-colors ${isActive('/download') ? 'text-primary-blue' : ''}`}
-                        >
-                            Download
-                        </Link>
 
                         <Link
                             to="/live"
@@ -116,13 +97,6 @@ function Header() {
                             onClick={() => setIsMobileMenuOpen(false)}
                         >
                             Convert
-                        </Link>
-                        <Link
-                            to="/download"
-                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-blue hover:bg-gray-50"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                            Download
                         </Link>
                         <Link
                             to="/live"

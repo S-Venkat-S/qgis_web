@@ -1,0 +1,3 @@
+S.No,Station,Latitude,Longitude,line_geom
+1,Aliyar Nagar,10.455302,77.007272,
+2,Sarkarpathy,10.468292,76.856124,"LINESTRING(77.007272 10.455302, 76.856124 10.468292)"

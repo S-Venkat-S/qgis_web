@@ -1,0 +1,174 @@
+sl,name
+1,NCTPS I - NCTPS II- Alamathy
+2,Alamathy - Sunguvarchatram
+3,Thiruvalam - Alamathy
+4,Sriperumpudur - SPKOIL
+5,SPKOIL - Villupuram
+6,Suguvarchatram- Nokia
+7,LILO portion of SIPCOT  IN SVC - NOKIA
+8,NCTPS Stage II - Athipattu
+9,LILO portion of Oragadam  in  SPR - Sp Koil
+10,Nokia - Sriperumpudur
+11,230 KADAPERI - Kalivanthapattu
+12,230 KADAPERI - Porur
+13,230 KADAPERI - Traction
+15,Manali-ETPS
+16,Manali - Korattur
+17,S.P.Koil- OMEGA
+18,Manali- Tondiarpet
+19,Tondiarpet - Vyasarpadi
+20,Vyasarpadi - Basin Bridge
+21,Basin bridge - Pulianthope
+22,Basin bridge - Tondiarpet
+23,Basin bridge - Vyasarpadi
+24,Basin bridge - TNEB HQ
+25,Vyasarpadi - Vyasarapdi
+26,Basin bridge - Pulianthope
+27,Pulianthope - BBGTPH
+28,CMRL Central - Pulianthope
+29,Mosur -Kancheepuram
+30,Sriperumpudur - Mosur (for thiruvalam link)
+31,Mosur - Thiruvalam
+32,Thiruvalam - Vellore RCE office
+33,Taramani - KITS PARK SS
+34,KITS PARK SS - Sholinganallur
+35,Siruseri - Sholinganallur
+36,KITS PARK SS - Sholinganallur
+37,Korattur - Ambattur
+38,Ambattur - Thirumangalam
+39,Guindy SS - Porur
+40,Guindy SS - Mambalam
+41,RA Puram - Mambalam
+42,Alandur GIS - Guindy SS
+43,Guindy SS - Guindy SS
+44,Alandur GIS - Airport
+45,Pallavaram - Airport
+46,Porur GIS - Chinmaya Nagar
+47,Guindy SS - Koyambedu
+48,Ambattur - TVKDU
+49,Koyambedu (AIS) - Koyambedu CMRL (GIS)
+50,Koyambedu CMRL (GIS) - Metrozone
+51,Koyambedu CMRL (GIS) - Chinmayanagar
+52,Metrozone - Thirumangalam
+53,S.P.Koil - Chengalpet
+54,NCTPS STAGE II - Vallur
+55,NCTPS STAGE 1 - NCTPS STAGE 3
+56,MANALI (GIS) - Pulianthope GIS
+57,ENNORE - KATHIVAKKAM TRACTION
+58,MANALI (GIS)- NCTPS STAGE 2
+59,ThiruvalamKV- Thiruvalam
+60,Koyambedu CMRL - Koyambedu AIS
+61,Kilpauk - TNEB HQ
+62,Neyveli Auto - NNTPS
+63,Neyveli Auto - Neyveli TS II
+64,Neyveli - Eachangadu
+65,Ulundurpet - Neyveli TS II
+66,Villupuram - Neyveli TS I
+67,Villupuram - Villupuram RCE office
+68,Trichy -Jambunathapuram
+69,LILO of Trichy - Madurai at Alandur
+70,LILO portion of  Alundur - Alagarkoil at TNPL
+71,Sankarapuram - Thiruvannamalai
+72,Sankarapuram - Ulundurpet
+73,Neyveli -Kadalangudy
+74,VILLUPURAM -SP kovil
+75,Cuddalore -Ulundurpet
+76,Cuddalore -NLC -TS2
+77,Cuddalore -Veerapuram
+78,ALAGAPURAM (RS) -PUGALUR
+79,Alagapuram (RS)-Kalivanthapattu
+80,Thanjavur-Tiruvarur
+81,Thanjavur-Alundur
+82,Thuvakudy -Vellalavidhuthi
+83,Pudukkottai -Vellalavidhuthi
+84,Mondipatty-Vellalavidhuthi( 3km yet to be laid at Mondipatty
+85,Trichy -perambalur
+86,Lilo of mondipatty -Vellalavidhuthi at Pudukkottai
+87,LILO Of Trichy - Perambalur   at Jampunathapuram
+88,LILO of Alundur -Thanjavur  at thuvakudy
+89,LILO of Mondipatty -Vellalavidhuthi at Thuvakudy
+90,Trichy kv -Erode kv
+91,Alundur - Paramathi PGCIL
+92,Pasumalai - K.Pudur RCE office
+94,400 Kamudhi - 400 Karaikudi
+95,Kamudhi - Thiruchuli
+96,Kamudhi - Kavanoor
+97,Kavanoor - Karaikudi
+98,Kayathar - Kanarpatti
+99,Kanarpatti - Abishegapatti
+100,230 Kayathar - Thennampatti
+101,TTPS - 400 Kayathar | Thennampatti
+102,230 Kayathar - TTN Auto
+103,Palayamkottai - Tirunelveli RCE
+104,TTPS - Kudankulam NPS | TTN Auto
+105,Veeranam - Abhishekapatti
+106,400 Kayathar - 400 Karaikkudi
+107,Virudhunagar 765 - Thennampatti | 400 Kayathar
+108,TTN Auto - Tuticorin RCE
+109,Veeranam - Kodikurichi
+110,Ottapidaram - Kamudhi
+111,Ottapidaram - Meelavittan
+112,Pasumalai - CHECKKANURANI
+113,Pasumalai - 230 Trichy | Samayanallur | Alagarkoil | Mondipatty | Alundur
+114,Thappagundu - Anaikadavu
+115,400 Karaikudi - Pugalur | Vellalavidhuthi
+116,400 Ottapidaram - (8.9201668839999, 78.0607148632407)
+119,SLDC Erode - Ingur
+120,SLDC Erode - Trichy
+121,Tapping point of Erode - Trichy to Pugalur & SE/Karur Office
+122,SLDC Erode - Salem
+123,Ingur - Arasur PGCIL
+124,Ingur -Thingalore
+125,LILO of Ingur -Thingalore to Erode GIS
+126,Palladam - Kurukathi
+127,Myvadi- Pugalur (upto Loc-81)-Pugalur
+128,LILO of Myvadi - Pugalur to Kurukathi
+129,Pugalur -Karaikudi
+130,Pugalur -Alagapuram
+131,MTPS III - Karamadai - Arasur
+132,LILO of MTPS - Arasur to Gobi
+133,Gobi -SE/Gobi office (Old & New)
+134,Kundah PH1-Kundah PH2
+135,Kundah PH2 -Kundah PH 3
+136,Kundah PH3- Kundah PH4
+137,Kundah PH1-Kundah PH5
+138,Kundah PH5- Kundah PH 6- Ooty-Sandynallah
+139,Kundah PH 6-Sandynallah
+140,PUSHEP - Karamadai
+141,Sandynallah - PUSHEPH-Singara PH
+142,Singara - Moyar
+143,Singarapet - Thirupathur
+144,Salem - Singarapet
+145,Shoolagiri - Udanapalli-Karimangalam-Palavadi-Mettur
+146,Shoolagiri - Thirupatthur-Vinnamangalam
+147,MTPS II - MTPS I - Salem -KR Thoppur Stores
+148,Palavadi - Pochampalli-Thiruvalam
+149,Palavadi - MTPS III
+150,Palavadi - Rasipalayam 1&2
+151,Palavadi - Rasipalayam 3&4
+152,Palavadi - Udanapalli
+153,Shoolagiri - Gurubarapally - Singarapet
+154,Salem - Salem
+155,Deviakurichi - Valayapatti | PUDANSANTHAI
+156,Anaikadavu - Rasipalayam
+157,Thappagundu - Anaikadavu
+158,Udumalpet - Aliyar
+159,Aliyar - Kadamparai
+160,Myvadi -Udumalpet
+161,Udumalpet - Udumalpet kV
+162,Aliyar-Iyyarpady-SholayarI
+163,SholayarI-SholayarII
+164,Iyyarpadi- Valparai Quarters Exchange
+165,Aliyar Nagar- Navamalai
+166,Aliyar Nagar-Sarkarpathy
+167,Anappadi- Prambikulam
+168,Aliyar Nagar-Attakatty. Iyyarpadi
+169,Valparai Town-Chinchona
+170,Valparai Town-Mudis
+171,Mudis-Sholayar nagar
+172,Gobi- Karuvalur - Arasur
+173,Peelamedu-Racecourse
+175,230 Kayathar - 400 Kayathar
+176,Udangudi Thermal - 400 Ottapidaram
+177,K.Pudur RCE office - Industrial Estate SS
+178,110 Pasumalai - 230 Pasumalai

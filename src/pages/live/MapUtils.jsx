@@ -1,12 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import { useMap, useMapEvents } from 'react-leaflet';
+import Papa from 'papaparse';
 import JSZip from 'jszip';
+
+export const parseCoords = (input) => {
+  // Matches "12.34, 56.78", "12.34 56.78", etc.
+  const regex = /(-?\d+\.?\d*)\s*[,|:\s]\s*(-?\d+\.?\d*)/;
+  const match = input.match(regex);
+  if (match) {
+    const v1 = parseFloat(match[1]);
+    const v2 = parseFloat(match[2]);
+    
+    // Heuristic for region: If one value is > 60, it's likely Longitude (India is ~68-98E, 8-37N)
+    let lat, lng;
+    if (Math.abs(v1) > Math.abs(v2) && Math.abs(v1) > 40) {
+        lng = v1; lat = v2;
+    } else {
+        lat = v1; lng = v2;
+    }
+
+    if (!isNaN(lat) && !isNaN(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180) {
+      return { lat, lng };
+    }
+  }
+  return null;
+};
+
+export const getCoordinateFromParams = (searchParams) => {
+    const lat = searchParams.get('lat') || searchParams.get('latitude');
+    const lng = searchParams.get('lng') || searchParams.get('longitude');
+    if (lat && lng) {
+        return { lat: parseFloat(lat), lng: parseFloat(lng) };
+    }
+
+    const combined = searchParams.get('coords') || searchParams.get('coord') || searchParams.get('c');
+    if (combined) {
+        return parseCoords(combined);
+    }
+    return null;
+};
 
 export const updatedLots = [
   { id: 'lot1', name: 'LOT 1', basePath: '/view/LOT_1/' },
   { id: 'lot2', name: 'LOT 2', basePath: '/view/LOT_2/' },
   { id: 'lot3', name: 'LOT 3', basePath: '/view/LOT_3_TNEB/' },
-  { id: 'lot4', name: 'LOT 4', basePath: '/view/LOT_4/' }
+  { id: 'lot4', name: 'LOT 4', basePath: '/view/LOT_4/' },
+  { id: 'existing', name: 'Existing', basePath: '/view/EXISTING/' },
+  { id: 'root', name: 'Global Assets', basePath: '/view/' }
 ];
 
 // Helper to fit map bounds dynamically
@@ -114,183 +154,217 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
   const zipFileName = `${projectName}_${timestamp}.zip`;
 
-  // Group layers by their lot ID (e.g., 'lot1', 'lot2')
-  const lotGroups = {};
-  layers.forEach((layer) => {
-    const { id, name, color } = layer;
-    const lotId = id.split('_')[0]; // "lot1"
-
-    if (!lotGroups[lotId]) {
-      lotGroups[lotId] = { id: lotId, layers: [] };
-    }
-    lotGroups[lotId].layers.push(layer);
-  });
+  // Fetch config to mirror symbology
+  let config = null;
+  try {
+      const resp = await fetch('/substation_config.json');
+      if (resp.ok) config = await resp.json();
+  } catch (e) { console.warn("Symbology config not found, using fallbacks."); }
 
   const zip = new JSZip();
-
   const mapLayersXml = [];
-  const layerTreeXml = [];
-
+  
+  // Tree Nodes
+  const lotGroups = {}; 
   let progressCounter = 0;
-  const totalSteps = layers.length + 3; // +3 for sub station, xml gen, and zip generation
+  const totalLayers = layers.length;
+  const totalSteps = totalLayers * 2 + 5;
 
-  for (const lotId of Object.keys(lotGroups)) {
-    const group = lotGroups[lotId];
+  const dataFolder = zip.folder("data");
 
-    // Create a folder in zip for this lot
-    const folder = zip.folder(lotId);
+  for (const layer of layers) {
+    const { id, name, color } = layer;
+    const lotId = id.split('_')[0];
+    const lotDef = updatedLots.find(l => l.id === lotId) || { name: lotId.toUpperCase(), id: lotId };
+    
+    if (!lotGroups[lotId]) {
+      lotGroups[lotId] = { 
+        name: lotDef.name, 
+        pathNodes: [], 
+        pointNodes: [] 
+      };
+    }
 
-    // Get the base path for fetching the original CSV
-    const lotDef = updatedLots.find(l => l.id === lotId);
-    if (!lotDef) continue;
-
-    // 1 group in QGIS tree per lot
-    layerTreeXml.push(`    <layer-tree-group checked="Qt::Checked" expanded="1" name="${escapeXml(lotId.toUpperCase())}">`);
-    layerTreeXml.push(`      <customproperties/>`);
-
-    for (const layer of group.layers) {
-      const { id, name, color } = layer;
-
-      // Fetch the original CSV
-      try {
-        const fetchUrl = `${lotDef.basePath}${name}`;
+    // Use ID for unique filenames to avoid collisions
+    const safeBaseName = id.replace(/[^a-z0-9_-]/gi, '_');
+    
+    try {
+      const fetchUrl = lotDef.basePath ? `${lotDef.basePath}${name}` : null;
+      if (fetchUrl) {
         const res = await fetch(fetchUrl);
         if (res.ok) {
           const fileData = await res.text();
-          folder.file(name, fileData); // save inside matching lot folder
-        } else {
-          console.warn("Could not fetch file:", fetchUrl);
-          continue; // file not available, skip layer
+          dataFolder.file(`${safeBaseName}_raw.csv`, fileData);
         }
-      } catch (e) {
-        console.warn("Failed to fetch:", name, e);
-        continue;
       }
+    } catch (e) {}
 
-      const safeId = escapeXml(`${id}`);
+    // ─── 1. LINE LAYER (Path) ──────────────────────────────────────────
+    const lineLayerId = `${safeBaseName}_line`;
+    const lineWkt = `LINESTRING(${layer.pts.map(p => `${p.lng} ${p.lat}`).join(', ')})`;
+    const lineCsvName = `${safeBaseName}_path.csv`;
+    const lineLabel = name.split(' ')[1] || name.split(' ')[0];
+    
+    dataFolder.file(lineCsvName, `id,WKT,label\n"${id}","${lineWkt}","${lineLabel}"`);
 
-      // Calculate WKT payload exactly as earlier robust version
-      const safeLayerName = name.replace(/"/g, '""');
-      const wkt = `LINESTRING(${layer.pts.map(p => `${p.lng} ${p.lat}`).join(', ')})`;
-      const qgisCsvFileName = `${name.replace(/\.[^/.]+$/, "")}_qgis.csv`;
-
-      // Calculate custom label matching browser view logic
-      const customLabel = name.split(' ')[1] || name.split(' ')[0];
-      const safeCustomLabel = customLabel.replace(/"/g, '""');
-
-      // Save this WKT-driven CSV alongside the raw file for QGIS use
-      const qgisDataRow = `id,name,label,color,points_count,WKT\n"${safeId}","${safeLayerName}","${safeCustomLabel}","${color}","${layer.pts.length}","${wkt}"`;
-      folder.file(qgisCsvFileName, qgisDataRow);
-
-      const encName = escapeXml(qgisCsvFileName);
-
-      // Create Map Layer XML targeting this specific WKT file
-      mapLayersXml.push(`
+    mapLayersXml.push(`
     <maplayer simplifyAlgorithm="0" type="vector" geometry="Line">
-      <id>${safeId}</id>
-      <datasource>file:./${lotId}/${encName}?type=csv&amp;wktField=WKT</datasource>
-      <layername>${escapeXml(name)}</layername>
+      <id>${escapeXml(lineLayerId)}</id>
+      <datasource>file:./data/${lineCsvName}?type=csv&amp;wktField=WKT</datasource>
+      <layername>${escapeXml(name)} (Path)</layername>
       <provider encoding="UTF-8">delimitedtext</provider>
-      <renderer-v2 forceraster="0" symbollevels="0" type="singleSymbol" enableorderby="0">
+      <renderer-v2 forceraster="0" type="singleSymbol">
         <symbols>
           <symbol alpha="1" type="line" name="0">
             <layer pass="0" class="SimpleLine" locked="0">
               <prop k="line_color" v="${color}"/>
-              <prop k="line_width" v="0.6"/>
-              <prop k="line_style" v="solid"/>
-              <prop k="capstyle" v="square"/>
-              <prop k="joinstyle" v="bevel"/>
+              <prop k="line_width" v="0.7"/>
+              <prop k="joinstyle" v="round"/>
             </layer>
           </symbol>
         </symbols>
       </renderer-v2>
       <labeling type="simple">
         <settings calloutType="simple">
-          <text-style fontPointSize="8" textColor="${hexToRgb(color)}" fontSize="8" fontWeight="75" fontName="Arial" fieldName="label">
-            <text-buffer bufferSize="1.2" bufferDraw="1" bufferColor="255,255,255,255"/>
+          <text-style fontPointSize="8" fontName="Arial" fieldName="label" fontWeight="75" textColor="${hexToRgb(color)}">
+            <text-buffer bufferSize="1" bufferDraw="1" bufferColor="255,255,255,255"/>
           </text-style>
-          <placement placement="2" dist="1" repeatDistance="0" priority="5" offsetType="0" xOffset="0" yOffset="0"/>
+          <placement placement="2" dist="1.5" placementFlags="9"/>
         </settings>
       </labeling>
     </maplayer>`);
 
-      layerTreeXml.push(`      <layer-tree-layer id="${safeId}" name="${escapeXml(name)}" checked="Qt::Checked" expanded="1" providerKey="delimitedtext" source="file:./${lotId}/${encName}?type=csv&amp;wktField=WKT"/>`);
+    // ─── 2. TOWERS LAYER (Points) ───────────────────────────────────────
+    const pointLayerId = `${safeBaseName}_towers`;
+    const pointCsvName = `${safeBaseName}_towers.csv`;
+    const pointRows = ["tower_no,lat,lng,WKT"];
+    layer.pts.forEach(p => {
+        // Include even if towerNo is missing to avoid "Data source error" for empty CSVs
+        pointRows.push(`"${p.towerNo || ''}",${p.lat},${p.lng},"POINT(${p.lng} ${p.lat})"`);
+    });
+    dataFolder.file(pointCsvName, pointRows.join("\n"));
 
-      progressCounter++;
-      if (onProgress) {
-        onProgress(Math.round((progressCounter / totalSteps) * 100));
-      }
-    }
+    mapLayersXml.push(`
+    <maplayer simplifyAlgorithm="0" type="vector" geometry="Point">
+      <id>${escapeXml(pointLayerId)}</id>
+      <datasource>file:./data/${pointCsvName}?type=csv&amp;wktField=WKT</datasource>
+      <layername>${escapeXml(name)} (Towers)</layername>
+      <provider encoding="UTF-8">delimitedtext</provider>
+      <renderer-v2 type="singleSymbol">
+        <symbols>
+          <symbol alpha="1" type="marker" name="0">
+            <layer pass="0" class="SimpleMarker" locked="0">
+              <prop k="name" v="circle"/>
+              <prop k="color" v="255,0,0,255"/>
+              <prop k="outline_color" v="255,255,255,255"/>
+              <prop k="size" v="1.8"/>
+            </layer>
+          </symbol>
+        </symbols>
+      </renderer-v2>
+      <labeling type="simple">
+        <settings calloutType="simple">
+          <text-style fontPointSize="7" fontName="Arial" fieldName="tower_no" textColor="50,50,50,255">
+            <text-buffer bufferSize="0.8" bufferDraw="1" bufferColor="255,255,255,255"/>
+          </text-style>
+          <placement placement="0" dist="1.5" quadOffset="2"/>
+        </settings>
+      </labeling>
+    </maplayer>`);
 
-    layerTreeXml.push(`    </layer-tree-group>`);
+    lotGroups[lotId].pathNodes.push(`      <layer-tree-layer id="${escapeXml(lineLayerId)}" name="${escapeXml(name)} (Path)" checked="Qt::Checked" expanded="0" providerKey="delimitedtext" source="file:./data/${escapeXml(lineCsvName)}?type=csv&amp;wktField=WKT"/>`);
+    lotGroups[lotId].pointNodes.push(`      <layer-tree-layer id="${escapeXml(pointLayerId)}" name="${escapeXml(name)} (Towers)" checked="Qt::Checked" expanded="0" providerKey="delimitedtext" source="file:./data/${escapeXml(pointCsvName)}?type=csv&amp;wktField=WKT"/>`);
+
+    progressCounter++;
+    if (onProgress) onProgress(Math.round((progressCounter / totalSteps) * 100));
   }
 
-  // Fetch "All Sub Station.csv" dynamically
+  // ─── 3. SUBSTATIONS ──────────────────────────────────────────────────
   try {
     const subStationRes = await fetch('/view/All%20Sub%20Station.csv');
     if (subStationRes.ok) {
       const subStationText = await subStationRes.text();
-      zip.file("All_Sub_Station.csv", subStationText);
+      dataFolder.file("All_Sub_Station.csv", subStationText);
+
+      const rules = [];
+      const symbols = [];
+      let ruleIdx = 0;
+
+      // Type Rules (HO, GENERATION)
+      if (config && config.types) {
+          Object.keys(config.types).forEach(typeKey => {
+              const conf = config.types[typeKey];
+              const qgisShape = typeKey === 'HO' ? 'star' : 'hexagon';
+              const color = hexToRgb(conf.color);
+              const filter = `upper("ss_type") = '${typeKey.toUpperCase()}'`;
+              rules.unshift(`<rule filter="${escapeXml(filter)}" symbol="${ruleIdx}" label="${escapeXml(conf.name || typeKey)}"/>`);
+              symbols.push(`<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SimpleMarker"><prop k="name" v="${qgisShape}"/><prop k="color" v="${color}"/><prop k="size" v="${(conf.baseSize || 12) / 3}"/></layer></symbol>`);
+              ruleIdx++;
+          });
+      }
+
+      // Voltage Rules
+      if (config && config.voltages) {
+          config.voltages.forEach((v, idx) => {
+              const qgisShape = v.shape === 'triangle' ? 'triangle' : v.shape === 'hexagon' ? 'hexagon' : v.shape === 'diamond' ? 'diamond' : v.shape === 'square' ? 'square' : 'circle';
+              const color = hexToRgb(v.color);
+              const filter = idx === 0 
+                ? `to_int(left("volt_ratio", strpos("volt_ratio", '/')-1)) >= ${v.class}` 
+                : `to_int(left("volt_ratio", strpos("volt_ratio", '/')-1)) >= ${v.class} AND to_int(left("volt_ratio", strpos("volt_ratio", '/')-1)) < ${config.voltages[idx-1].class}`;
+              
+              rules.push(`<rule filter="${escapeXml(filter)}" symbol="${ruleIdx}" label="${v.class}kV Substation"/>`);
+              symbols.push(`<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SimpleMarker"><prop k="name" v="${qgisShape}"/><prop k="color" v="${color}"/><prop k="outline_color" v="255,255,255,255"/><prop k="size" v="${(v.baseSize || 10) / 3}"/></layer></symbol>`);
+              ruleIdx++;
+          });
+      }
 
       mapLayersXml.push(`
-      <maplayer simplifyAlgorithm="0" type="vector" geometry="Point">
-        <id>all_sub_station</id>
-        <datasource>file:./All_Sub_Station.csv?type=csv&amp;wktField=wkt_geom</datasource>
-        <layername>All Sub Stations</layername>
-        <provider encoding="UTF-8">delimitedtext</provider>
-        <renderer-v2 type="singleSymbol" forceraster="0">
-          <symbols>
-            <symbol alpha="1" type="marker" name="0">
-              <layer pass="0" class="SimpleMarker" locked="0">
-                <prop k="name" v="circle"/>
-                <prop k="color" v="20,184,166,255"/>
-                <prop k="outline_color" v="255,255,255,255"/>
-                <prop k="outline_width" v="0.6"/>
-                <prop k="size" v="3.5"/>
-                <prop k="style" v="solid"/>
-              </layer>
-            </symbol>
-          </symbols>
-        </renderer-v2>
-        <labeling type="simple">
-          <settings calloutType="simple">
-            <text-style fontPointSize="9" textColor="20,184,166,255" fontSize="9" fontWeight="75" fontName="Arial" fieldName="ss_name">
-              <text-buffer bufferSize="1" bufferDraw="1" bufferColor="255,255,255,255"/>
-            </text-style>
-            <placement placement="0" dist="2" quadOffset="2" repeatDistance="0"/>
-          </settings>
-        </labeling>
-      </maplayer>`);
-
-      layerTreeXml.push(`<layer-tree-layer id="all_sub_station" name="All Sub Stations" checked="Qt::Checked" expanded="1" providerKey="delimitedtext" source="file:./All_Sub_Station.csv?type=csv&amp;wktField=wkt_geom"/>`);
+    <maplayer type="vector" geometry="Point">
+      <id>all_sub_station</id>
+      <datasource>file:./data/All_Sub_Station.csv?type=csv&amp;wktField=wkt_geom</datasource>
+      <layername>All Sub Stations</layername>
+      <provider encoding="UTF-8">delimitedtext</provider>
+      <renderer-v2 type="RuleRenderer">
+        <rules key="root">${rules.join('\n')}</rules>
+        <symbols>${symbols.join('\n')}</symbols>
+      </renderer-v2>
+      <labeling type="simple">
+        <settings calloutType="simple">
+          <text-style fontPointSize="9" fontName="Arial" fieldName="ss_name" fontWeight="75" textColor="30,30,80,255">
+            <text-buffer bufferSize="1.2" bufferDraw="1" bufferColor="255,255,255,255"/>
+          </text-style>
+          <placement placement="0" dist="2" quadOffset="2"/>
+        </settings>
+      </labeling>
+    </maplayer>`);
     }
-  } catch (error) {
-    console.warn("Could not fetch All Sub Station.csv for export.", error);
-  }
+  } catch (e) {}
 
-  progressCounter++;
-  if (onProgress) onProgress(Math.round((progressCounter / totalSteps) * 100));
+  const layerTreeXml = Object.values(lotGroups).map(group => `
+    <layer-tree-group name="${escapeXml(group.name)}" expanded="1">
+      <layer-tree-group name="SURVEY PATHS" expanded="0">
+          ${group.pathNodes.join('\n')}
+      </layer-tree-group>
+      <layer-tree-group name="TOWER POINTS" expanded="0">
+          ${group.pointNodes.join('\n')}
+      </layer-tree-group>
+    </layer-tree-group>`).join('\n');
 
   const xml = `<!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
 <qgis projectname="${escapeXml(projectName)}" version="3.22.0">
-  <homePath path=""/>
   <title>${escapeXml(projectName)}</title>
   <projectlayers>
     ${mapLayersXml.join('\n')}
   </projectlayers>
   <layer-tree-group>
     <customproperties/>
-    ${layerTreeXml.join('\n    ')}
+    <layer-tree-layer id="all_sub_station" name="All Sub Stations" checked="Qt::Checked" expanded="1" providerKey="delimitedtext" source="file:./data/All_Sub_Station.csv?type=csv&amp;wktField=wkt_geom"/>
+    ${layerTreeXml}
   </layer-tree-group>
 </qgis>`;
 
   zip.file(`${projectName}.qgs`, xml);
-
-  progressCounter++;
-  if (onProgress) onProgress(Math.round((progressCounter / totalSteps) * 100));
-
   const content = await zip.generateAsync({ type: "blob" });
-
   if (onProgress) onProgress(100);
 
   const url = URL.createObjectURL(content);

@@ -1,0 +1,3 @@
+S.No,Station,Latitude,Longitude,line_geom
+1,Thuvakudy,10.7553087,78.7993869,
+2,Vellalavidhuthi,10.50501,79.08099,"LINESTRING(78.7993869 10.7553087, 79.08099 10.50501)"

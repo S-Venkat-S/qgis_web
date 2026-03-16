@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "node index-view-files.js",
+    "prebuild": "node convert_existing_links.js && node index-view-files.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",

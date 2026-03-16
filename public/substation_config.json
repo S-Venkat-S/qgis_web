@@ -1,0 +1,63 @@
+{
+    "types": {
+        "HO": {
+            "name": "Head Office",
+            "shape": "<svg fill=\"#000000\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g><g id=\"SVGRepo_tracerCarrier\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></g><g id=\"SVGRepo_iconCarrier\"><path d=\"M21,8H16V3a1,1,0,0,0-1-1H9A1,1,0,0,0,8,3V8H3A1,1,0,0,0,2,9V22h9V19a1,1,0,0,1,2,0v3h9V9A1,1,0,0,0,21,8ZM6,20H4V18H6Zm0-4H4V14H6Zm0-4H4V10H6Zm7,3H11V13h2Zm0-4H11V9h2Zm0-4H11V5h2Zm7,13H18V18h2Zm0-4H18V14h2Zm0-4H18V10h2Z\"></path></g></svg>",
+            "color": "#db2777",
+            "priority": 100,
+            "minZoom": 0,
+            "baseSize": 13
+        },
+        "GENERATION": {
+            "name": "Generation",
+            "shape": "<svg fill=\"#000000\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><g id=\"SVGRepo_bgCarrier\" stroke-width=\"0\"></g><g id=\"SVGRepo_tracerCarrier\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></g><g id=\"SVGRepo_iconCarrier\"><path d=\"M13,9h6L8,22l3-10H5L10,2h7Z\"></path></g></svg>",
+            "color": "#6d28d9",
+            "priority": 90,
+            "minZoom": 8,
+            "baseSize": 12
+        }
+    },
+    "voltages": [
+        {
+            "class": 765,
+            "shape": "hexagon",
+            "color": "#6d28d9",
+            "minZoom": 0,
+            "baseSize": 14
+        },
+        {
+            "class": 400,
+            "shape": "diamond",
+            "color": "#b91c1c",
+            "minZoom": 0,
+            "baseSize": 12
+        },
+        {
+            "class": 230,
+            "shape": "square",
+            "color": "#c2410c",
+            "minZoom": 10,
+            "baseSize": 10
+        },
+        {
+            "class": 110,
+            "shape": "circle",
+            "color": "#1d4ed8",
+            "minZoom": 12,
+            "baseSize": 8
+        },
+        {
+            "class": 0,
+            "shape": "triangle",
+            "color": "#6b7280",
+            "minZoom": 14,
+            "baseSize": 7
+        }
+    ],
+    "default": {
+        "shape": "triangle",
+        "color": "#374151",
+        "minZoom": 14,
+        "baseSize": 7
+    }
+}

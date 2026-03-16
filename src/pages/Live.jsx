@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { updatedLots } from './live/MapUtils';
+import { updatedLots, parseCoords } from './live/MapUtils';
 import Papa from 'papaparse';
 
 const getDistance = (p1, p2) => {
@@ -24,6 +24,7 @@ export default function Live() {
     const [sortConfigs, setSortConfigs] = useState({}); // { lotId: 'name' | 'km' | 'towers' | 'date' }
     const [lotProgress, setLotProgress] = useState({}); // { lotId: percentage }
     const [refreshTrigger, setRefreshTrigger] = useState(0);
+    const [subStations, setSubStations] = useState([]);
 
     // Fetch Index files (Initial light load)
     useEffect(() => {
@@ -34,10 +35,31 @@ export default function Live() {
                     const files = text.split('\n')
                         .map(l => l.trim())
                         .filter(l => l.length > 0 && l.toLowerCase().endsWith('.csv'))
-                        .sort();
+                        .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
                     setLotFiles(prev => ({ ...prev, [lot.id]: files }));
                 })
                 .catch(err => console.error(`Error loading lot index ${lot.id}:`, err));
+        });
+
+        // Load Substations for search
+        Papa.parse('/view/All Sub Station.csv', {
+            download: true,
+            header: true,
+            skipEmptyLines: true,
+            complete: (results) => {
+                const parsed = results.data.map(row => {
+                    const wkt = row.wkt_geom || '';
+                    const match = wkt.match(/Point \(([^ ]+) ([^ ]+)\)/i);
+                    return match ? {
+                        name: row.ss_name || row.name || 'Unknown',
+                        lat: parseFloat(match[2]),
+                        lng: parseFloat(match[1]),
+                        type: 'substation',
+                        volt: row.volt_ratio
+                    } : null;
+                }).filter(s => s !== null);
+                setSubStations(parsed);
+            }
         });
 
         // Load cached stats from previous sessions
@@ -149,6 +171,32 @@ export default function Live() {
     const viewLot = (lotId) => navigate(`/live/lot/${lotId}`);
     const viewAllLots = () => navigate('/live/lot/all');
 
+    const handleCoordJump = (lat, lng) => {
+        // Special route or just open root map at that location
+        window.open(`/live/root/All Sub Station.csv?lat=${lat}&lng=${lng}`, '_blank');
+    };
+
+    const searchResults = React.useMemo(() => {
+        const query = searchQuery.trim();
+        if (!query) return [];
+        const results = [];
+
+        // 1. Coords
+        const coords = parseCoords(query);
+        if (coords) {
+            results.push({ type: 'coord', lat: coords.lat, lng: coords.lng, name: `JUMP TO: ${coords.lat.toFixed(5)}, ${coords.lng.toFixed(5)}` });
+        }
+
+        // 2. Substations
+        subStations.forEach(ss => {
+            if (ss.name.toLowerCase().includes(query.toLowerCase())) {
+                results.push({ type: 'ss', ...ss });
+            }
+        });
+
+        return results.slice(0, 20);
+    }, [searchQuery, subStations]);
+
     return (
         <div className="min-h-[calc(100vh-4rem)] bg-gray-50 flex flex-col items-center p-4 md:p-8">
             <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 md:p-8">
@@ -164,9 +212,54 @@ export default function Live() {
                             </button>
                         </div>
                     </div>
-                    <div className="relative w-full md:w-64">
-                        <input type="text" placeholder="Search by filename..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-200 rounded-lg outline-none focus:border-primary-blue focus:ring-4 focus:ring-primary-blue/5 transition-all bg-gray-50/30" />
+                    <div className="relative w-full md:w-80">
+                        <input
+                            type="text"
+                            placeholder="Search files, stations or coords..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-200 rounded-lg outline-none focus:border-primary-blue focus:ring-4 focus:ring-primary-blue/5 transition-all bg-gray-50/30"
+                        />
                         <svg className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+
+                        {searchResults.length > 0 && (
+                            <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-[100] animate-in fade-in slide-in-from-top-2 duration-200">
+                                <div className="p-3 bg-gray-50/50 border-b flex justify-between items-center">
+                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Global Matches</span>
+                                    <button onClick={() => setSearchQuery("")} className="text-[10px] font-bold text-primary-blue hover:underline">Clear</button>
+                                </div>
+                                <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
+                                    {searchResults.map((res, idx) => (
+                                        <div
+                                            key={idx}
+                                            onClick={() => {
+                                                if (res.type === 'ss' || res.type === 'coord') {
+                                                    handleCoordJump(res.lat, res.lng);
+                                                }
+                                                setSearchQuery("");
+                                            }}
+                                            className="p-3 hover:bg-primary-blue/5 cursor-pointer border-b border-gray-50 last:border-0 group transition-colors"
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${res.type === 'ss' ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'}`}>
+                                                    {res.type === 'ss' ? (
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                                                    ) : (
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    <div className="text-xs font-bold text-gray-800 group-hover:text-primary-blue transition-colors uppercase tracking-tight">{res.name}</div>
+                                                    <div className="text-[10px] text-gray-400 font-medium">
+                                                        {res.type === 'ss' ? `${res.volt || 'Substation'} • ${res.lat.toFixed(4)}, ${res.lng.toFixed(4)}` : 'Navigate to coordinates'}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -206,7 +299,7 @@ export default function Live() {
                             if (sortMode === 'km') return (statB?.length || 0) - (statA?.length || 0);
                             if (sortMode === 'towers') return (statB?.points || 0) - (statA?.points || 0);
                             if (sortMode === 'date') return new Date(statB?.date || 0) - new Date(statA?.date || 0);
-                            return a.localeCompare(b);
+                            return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
                         });
                         const isExpanded = expandedLot === lot.id;
 
@@ -304,12 +397,12 @@ export default function Live() {
                     })}
                 </div>
             </div>
-            <style jsx>{`
+            <style dangerouslySetInnerHTML={{ __html: `
                 .custom-scrollbar::-webkit-scrollbar { width: 6px; }
                 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
                 .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
                 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
-            `}</style>
+            `}} />
         </div>
     );
 }

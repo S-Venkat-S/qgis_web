@@ -1,0 +1,3 @@
+S.No,Station,Latitude,Longitude,line_geom
+1,Kayathar,8.88864,77.77083,
+2,Kanarpatti,8.8875,77.64599,"LINESTRING(77.77083 8.88864, 77.64599 8.8875)"

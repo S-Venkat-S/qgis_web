@@ -1,0 +1,3 @@
+S.No,Station,Latitude,Longitude,line_geom
+1,Veeranam,8.9526283,77.4927819,
+2,Kodikurichi,9.00135,77.3226,"LINESTRING(77.4927819 8.9526283, 77.3226 9.00135)"

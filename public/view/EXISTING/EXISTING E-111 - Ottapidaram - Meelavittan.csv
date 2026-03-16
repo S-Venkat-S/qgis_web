@@ -1,0 +1,3 @@
+S.No,Station,Latitude,Longitude,line_geom
+1,Ottapidaram,8.897308,78.050696,
+2,Meelavittan,8.814422,78.097665,"LINESTRING(78.050696 8.897308, 78.097665 8.814422)"

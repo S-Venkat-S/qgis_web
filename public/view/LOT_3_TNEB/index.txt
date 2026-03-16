@@ -14,7 +14,8 @@ LOT 3-111 DS & BOQ FOR SMLR-Mankiam(82) LILO AT ANAIYUR.csv
 LOT 3-112 DS & BOQ FOR  PASUMALAI - ARASADI.csv
 LOT 3-114 Kinnimangalam- Pasumalai 3 upto Thirumangalam (Kinnimangalam Jurisdiction)  - Survey Final report.csv
 LOT 3-115 Thirumangalam to Pasumalai LILO at Kappakur.csv
-LOT 3-116 Thirumangalam to Pasumalai 110kv.csv
+LOT 3-116A Thirumangalam to Pasumalai 110kv copy.csv
+LOT 3-116B Thirumangalam to Pasumalai 110kv.csv
 LOT 3-117 DS & BOQ FOR ALAGARKOIL -  NARASINGAMPATTY.csv
 LOT 3-118 DS & BOQ FOR NARASINGAMPATTY - MELUR.csv
 LOT 3-119 DS & BOQ FOR MELUR - THANIYAMANGALAM.csv
@@ -29,7 +30,7 @@ LOT 3-126 DS & BOQ FOR KARAKUDI - VALUTHUR LILO AT AMARAVATHI PUDUR.csv
 LOT 3-127 DS & BOQ FOR  KARAKUDI-VALUTHUR LILO AT POOSALAKUDI.csv
 LOT 3-128,134  DS & BOQ FOR VALUTHUR - THIRUVADANAI.csv
 LOT 3-129 LILO AT SALAIGRAMAM.csv
-LOT 3-13, 14 SURVEY REPORT OF PERIYAR - SURULIYAR.csv
+LOT 3-13,14 SURVEY REPORT OF PERIYAR - SURULIYAR.csv
 LOT 3-130 LILO AT R.S.MANGALAM.csv
 LOT 3-131 LILO AT ANANDAPUR.csv
 LOT 3-132 LILO AT UPPUR.csv
@@ -51,7 +52,8 @@ LOT 3-15 SURVEY REPORT OF LILO AT KG PATTY.csv
 LOT 3-150 DS & BOQ FOR VALUTHUR - PERUNKULAM.csv
 LOT 3-151 PERUNKULAM - MANDAPAM.csv
 LOT 3-152 DS & BOQ FOR VALUTHER - VGTPS.csv
-LOT 3-153 DS & BOQ FOR VGTPS - RS MADAI.csv
+LOT 3-153A DS & BOQ FOR VGTPS - RS MADAI copy.csv
+LOT 3-153B DS & BOQ FOR VGTPS - RS MADAI.csv
 LOT 3-154 - TIN SIPCOT 110KV TO TIN SIPCOT 230SS 110KV  Line.csv
 LOT 3-155 - Vagaikukam to Kombukarnatham 110kv Line.csv
 LOT 3-156 - TIN Auto ss To Vagaikulam Line.csv
@@ -91,8 +93,6 @@ LOT 3-187 - 110KV DC Meenachipuram-Nagarcoil Line.csv
 LOT 3-188 - 110kV Cheramangalam to  Nagercoil Line.csv
 LOT 3-189 - 110KV  Karungal - Chemponvilai  Liner1 15.01.2020.csv
 LOT 3-19 DS _ BOQ FOR LILO AT KANAVILAKKU.csv
-LOT 3-190 - SURVEY REPORT OF KODAYAR I - KODAYAR II.csv
-LOT 3-191 - SURVEY REPORT OF KODAYAR II - PECHIPARAI.csv
 LOT 3-192 - VEEYANOOR TIO THUCKALAY 110  KV DC LINE.csv
 LOT 3-193 - Marthadam - EP Kadai Line  final - 14.01.2020.csv
 LOT 3-194 - Kulzhithurai - Marthandam  Line.csv
@@ -116,9 +116,6 @@ LOT 3-21 DS & BOQ FOR LILO AT USILAMPATTY.csv
 LOT 3-210 - Arasadi to Ottapidaram lilo.csv
 LOT 3-211 - 110kV Eppothumvenran to Ottapidaram  Line.csv
 LOT 3-212 - Eppothumvenran to Vilathikulam  110kv  Line.csv
-LOT 3-213 - 110KV  ARUMUGANERI TO SRI MOOLAKARAI LILO LINE.csv
-LOT 3-213 - 110KV  PALAYANKOTTAI LILO TO SRI MOOLAKARAI LILO LINE.csv
-LOT 3-214 - 110KV Kayathar - Arumuganeri LILO at Srimoolakarai - 2nd Survey.csv
 LOT 3-215.K - Kayathar Papanasam Final TS ( Signed .csv
 LOT 3-215.KK - Kayathar - Papanasam (KKDI Lines).csv
 LOT 3-216 - Kayathar-papanasam To Rastha LILO (1) (1).csv

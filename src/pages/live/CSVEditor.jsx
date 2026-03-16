@@ -371,11 +371,11 @@ const CSVEditor = () => {
                 </div>
             </div>
 
-            <style jsx>{`
+            <style dangerouslySetInnerHTML={{ __html: `
                 input:focus {
                     background: white !important;
                 }
-            `}</style>
+            `}} />
         </div>
     );
 };
