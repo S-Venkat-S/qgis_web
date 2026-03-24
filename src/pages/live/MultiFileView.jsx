@@ -13,7 +13,9 @@ const MultiFileView = () => {
     const [searchParams] = useSearchParams();
 
     const initialSelectedIds = useMemo(() => {
-        if (!lotIds || lotIds === 'all') return updatedLots.map(l => l.id);
+        if (!lotIds) return [];
+        if (lotIds === 'all') return updatedLots.map(l => l.id);
+        if (lotIds === 'custom') return ['custom'];
         return lotIds.split(',').filter(id => updatedLots.find(l => l.id === id));
     }, [lotIds]);
 
@@ -69,8 +71,9 @@ const MultiFileView = () => {
                 .then(text => {
                     const files = text.split('\n')
                         .map(l => l.trim())
+                        .map(l => l.endsWith('.') ? l.slice(0, -1) : l)
                         .filter(l => l.length > 0 && l.toLowerCase().endsWith('.csv'))
-                        .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+                        .sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' }));
                     setLotFiles(prev => ({ ...prev, [lot.id]: files }));
                 });
         });
@@ -84,12 +87,12 @@ const MultiFileView = () => {
                 const parsed = results.data.map(row => {
                     const wkt = row.wkt_geom || '';
                     const match = wkt.match(/Point\s?\(([^ ]+) ([^ ]+)\)/i);
-                    return match ? { 
-                        name: row.ss_name || row.name || 'Unknown', 
-                        lat: parseFloat(match[2]), 
-                        lng: parseFloat(match[1]), 
-                        type: row.ss_type || 'substation', 
-                        volt: row.volt_ratio 
+                    return match ? {
+                        name: row.ss_name || row.name || 'Unknown',
+                        lat: parseFloat(match[2]),
+                        lng: parseFloat(match[1]),
+                        type: row.ss_type || 'substation',
+                        volt: row.volt_ratio
                     } : null;
                 }).filter(s => s !== null);
                 setSubStations(parsed);
@@ -100,33 +103,48 @@ const MultiFileView = () => {
     // Load actual data for selected lots
     useEffect(() => {
         const loadLots = async () => {
-            const lotsToLoad = selectedLotIds.filter(id => !multiMapData[id]);
-            if (lotsToLoad.length === 0) return;
-
-            setIsLoading(true);
-            setLoadingProgress(0);
+            const isCustom = lotIds === 'custom';
+            const lotsToLoad = isCustom ? [] : selectedLotIds.filter(id => !multiMapData[id]);
 
             let filesToLoad = [];
-            lotsToLoad.forEach(id => {
-                if (lotFiles[id]) {
-                    lotFiles[id].forEach(f => filesToLoad.push({ lotId: id, fileName: f }));
+            if (isCustom) {
+                const filesParam = searchParams.get('files');
+                if (filesParam) {
+                    filesToLoad = filesParam.split(',').map(f => {
+                        const [lotId, fileName] = f.split('|');
+                        return { lotId, fileName };
+                    }).filter(f => !multiMapData[f.lotId]?.[f.fileName]);
                 }
-            });
+            } else {
+                lotsToLoad.forEach(id => {
+                    if (lotFiles[id]) {
+                        lotFiles[id].forEach(f => filesToLoad.push({ lotId: id, fileName: f }));
+                    }
+                });
+            }
 
             if (filesToLoad.length === 0) {
+                if (!bounds && Object.keys(multiMapData).length > 0) {
+                    recalculateBounds(multiMapData);
+                }
                 setIsLoading(false);
                 return;
             }
 
-            const newMapData = { ...multiMapData };
+            setIsLoading(true);
+            setLoadingProgress(0);
+
+            const updatedData = { ...multiMapData };
             let count = 0;
             const batchSize = 10;
 
             for (let i = 0; i < filesToLoad.length; i += batchSize) {
                 const batch = filesToLoad.slice(i, i + batchSize);
-                await Promise.all(batch.map(async (fileInfo) => {
+                const batchResults = await Promise.all(batch.map(async (fileInfo) => {
                     const lot = updatedLots.find(l => l.id === fileInfo.lotId);
-                    const fileUrl = `${lot.basePath}${fileInfo.fileName}`;
+                    if (!lot) return null;
+
+                    let fileUrl = fileInfo.fileName.includes('/') ? `/view/${fileInfo.fileName}` : `${lot.basePath}${fileInfo.fileName}`;
 
                     try {
                         const results = await new Promise((res, rej) => {
@@ -134,50 +152,62 @@ const MultiFileView = () => {
                         });
 
                         const pts = results.data
-                            .filter(row => {
-                                const lat = row.Latitude || row.latitude;
-                                const lng = row.Longitude || row.longitude;
-                                return lat && lng;
+                            .map(row => {
+                                const keys = Object.keys(row);
+                                const latKey = keys.find(k => k.toLowerCase().replace(/[^a-z]/g, '') === 'latitude' || k.toLowerCase().replace(/[^a-z]/g, '') === 'lat');
+                                const lngKey = keys.find(k => k.toLowerCase().replace(/[^a-z]/g, '') === 'longitude' || k.toLowerCase().replace(/[^a-z]/g, '') === 'lng');
+                                const towerNoKey = keys.find(k => ['towerno', 'tno', 'sno', 'sn'].includes(k.toLowerCase().replace(/[^a-z0-9]/g, '')));
+
+                                return {
+                                    lat: latKey ? parseFloat(row[latKey]) : NaN,
+                                    lng: lngKey ? parseFloat(row[lngKey]) : NaN,
+                                    towerNo: towerNoKey ? row[towerNoKey] : (row['Tower No.'] || 'N/A')
+                                };
                             })
-                            .map(row => ({
-                                lat: parseFloat(row.Latitude || row.latitude),
-                                lng: parseFloat(row.Longitude || row.longitude),
-                                towerNo: row['Tower No.'] || row['Tower No'] || row['S.No'] || row['s.no']
-                            }))
                             .filter(pt => !isNaN(pt.lat) && !isNaN(pt.lng));
 
-                        if (pts.length > 0) {
-                            setMultiMapData(prev => {
-                                const next = { ...prev };
-                                if (!next[fileInfo.lotId]) next[fileInfo.lotId] = {};
-                                next[fileInfo.lotId][fileInfo.fileName] = pts;
-                                return next;
-                            });
-                        }
-                    } catch (e) { console.warn(e); }
-                    count++;
-                    setLoadingProgress(Math.round((count / filesToLoad.length) * 100));
+                        return { ...fileInfo, pts };
+                    } catch (e) { console.warn(e); return null; }
                 }));
-                await new Promise(r => setTimeout(r, 10));
+
+                batchResults.forEach(res => {
+                    if (res && res.pts.length > 0) {
+                        if (!updatedData[res.lotId]) updatedData[res.lotId] = {};
+                        updatedData[res.lotId][res.fileName] = res.pts;
+                    }
+                    count++;
+                });
+
+                setMultiMapData({ ...updatedData });
+                setLoadingProgress(Math.round((count / filesToLoad.length) * 100));
             }
 
+            recalculateBounds(updatedData);
             setIsLoading(false);
+        };
 
-            // Re-calc bounds
+        const recalculateBounds = (data) => {
             const allPts = [];
-            Object.values(newMapData).forEach(lData => {
-                Object.values(lData).forEach(pts => {
+            const isCustom = lotIds === 'custom';
+            const filesParam = searchParams.get('files') || "";
+            const customFiles = isCustom ? filesParam.split(',').map(f => f.split('|')[1]) : [];
+
+            Object.entries(data).forEach(([lid, lFiles]) => {
+                if (!isCustom && !selectedLotIds.includes(lid)) return;
+
+                Object.entries(lFiles).forEach(([fName, pts]) => {
+                    if (isCustom && !customFiles.includes(fName)) return;
+
                     if (pts.length > 0) {
                         allPts.push([pts[0].lat, pts[0].lng]);
                         allPts.push([pts[pts.length - 1].lat, pts[pts.length - 1].lng]);
                     }
                 });
             });
+
             if (allPts.length > 0) {
                 const qCoord = getCoordinateFromParams(searchParams);
-                if (!qCoord) {
-                    setBounds(L.latLngBounds(allPts));
-                }
+                if (!qCoord) setBounds(L.latLngBounds(allPts));
             }
         };
 
@@ -254,7 +284,8 @@ const MultiFileView = () => {
         const layers = [];
         selectedLotIds.forEach(lid => {
             const lData = multiMapData[lid] || {};
-            const color = lid === 'lot1' ? '#6366F1' : lid === 'lot2' ? '#34D399' : lid === 'lot3' ? '#FBBF24' : '#F87171';
+            const lot = updatedLots.find(l => l.id === lid);
+            const color = lot ? lot.color : '#FFD700';
             Object.entries(lData).forEach(([fName, pts]) => {
                 layers.push({ id: `${lid}_${fName}`, name: fName, pts, color });
             });
@@ -281,22 +312,22 @@ const MultiFileView = () => {
                         <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     </button>
                     <div className="flex gap-2 overflow-x-auto no-scrollbar py-1">
-                        {updatedLots.map(l => (
-                            <button
-                                key={l.id}
-                                onClick={() => toggleLot(l.id)}
-                                className={`px-4 py-1.5 text-[10px] font-black rounded-full border transition-all whitespace-nowrap shadow-sm uppercase tracking-wider ${selectedLotIds.includes(l.id)
-                                    ? (l.id === 'lot1' ? 'bg-indigo-600 text-white border-indigo-700 ring-2 ring-indigo-100' :
-                                        l.id === 'lot2' ? 'bg-emerald-600 text-white border-emerald-700 ring-2 ring-emerald-100' :
-                                            l.id === 'lot3' ? 'bg-amber-600 text-white border-amber-700 ring-2 ring-amber-100' :
-                                                l.id === 'lot4' ? 'bg-rose-600 text-white border-rose-700 ring-2 ring-rose-100' :
-                                                    'bg-primary-blue text-white ring-2 ring-primary-blue/20')
-                                    : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'
-                                    }`}
-                            >
-                                {l.name}
-                            </button>
-                        ))}
+                        {lotIds === 'custom' ? (
+                            <div className="px-4 py-1.5 text-[10px] font-black rounded-full border bg-emerald-600 text-white border-emerald-700 ring-2 ring-emerald-100 shadow-sm uppercase tracking-wider">
+                                {searchParams.get('name') || "Custom Group"}
+                            </div>
+                        ) : (
+                            updatedLots.map(l => (
+                                <button
+                                    key={l.id}
+                                    onClick={() => toggleLot(l.id)}
+                                    className={`px-4 py-1.5 text-[10px] font-black rounded-full border transition-all whitespace-nowrap shadow-sm uppercase tracking-wider ${selectedLotIds.includes(l.id) ? 'text-white border-transparent ring-2' : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'}`}
+                                    style={selectedLotIds.includes(l.id) ? { backgroundColor: l.color, ringColor: `${l.color}33` } : {}}
+                                >
+                                    {l.name}
+                                </button>
+                            ))
+                        )}
                     </div>
                 </div>
 
@@ -392,6 +423,7 @@ const MultiFileView = () => {
                                 </>
                             )}
                         </button>
+
                         {exportProgress !== null && (
                             <div className="absolute -bottom-2 left-0 w-full h-1 bg-gray-100 rounded-full overflow-hidden">
                                 <div className="h-full bg-amber-600 transition-all duration-200" style={{ width: `${exportProgress}%` }}></div>
@@ -432,7 +464,8 @@ const MultiFileView = () => {
 
                     {selectedLotIds.map(lid => {
                         const lData = multiMapData[lid] || {};
-                        const color = lid === 'lot1' ? '#6366F1' : lid === 'lot2' ? '#34D399' : lid === 'lot3' ? '#FBBF24' : '#F87171';
+                        const lot = updatedLots.find(l => l.id === lid);
+                        const color = lot ? lot.color : '#FFD700';
 
                         return (
                             <React.Fragment key={lid}>

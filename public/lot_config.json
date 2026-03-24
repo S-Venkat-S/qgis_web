@@ -1,0 +1,60 @@
+{
+    "lots": [
+        {
+            "id": "lot1",
+            "name": "LOT 1",
+            "basePath": "/view/LOT_1/",
+            "color": "#6366F1",
+            "bgClass": "bg-indigo-600"
+        },
+        {
+            "id": "lot2",
+            "name": "LOT 2",
+            "basePath": "/view/LOT_2/",
+            "color": "#10B981",
+            "bgClass": "bg-emerald-600"
+        },
+        {
+            "id": "lot3",
+            "name": "LOT 3",
+            "basePath": "/view/LOT_3_TNEB/",
+            "color": "#F59E0B",
+            "bgClass": "bg-amber-600"
+        },
+        {
+            "id": "lot4",
+            "name": "LOT 4",
+            "basePath": "/view/LOT_4/",
+            "color": "#F43F5E",
+            "bgClass": "bg-rose-600"
+        },
+        {
+            "id": "glease1",
+            "name": "G LEASE 1",
+            "basePath": "/view/G_LEASE_1/",
+            "color": "#8B5CF6",
+            "bgClass": "bg-violet-600"
+        },
+        {
+            "id": "glease2",
+            "name": "G LEASE 2",
+            "basePath": "/view/G_LEASE_2/",
+            "color": "#EC4899",
+            "bgClass": "bg-pink-600"
+        },
+        {
+            "id": "existing",
+            "name": "Existing",
+            "basePath": "/view/EXISTING/",
+            "color": "#6B7280",
+            "bgClass": "bg-gray-600"
+        },
+        {
+            "id": "root",
+            "name": "Global Assets",
+            "basePath": "/view/",
+            "color": "#D97706",
+            "bgClass": "bg-orange-600"
+        }
+    ]
+}

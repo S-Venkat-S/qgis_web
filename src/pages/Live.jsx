@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { updatedLots, parseCoords } from './live/MapUtils';
+import { updatedLots, parseCoords, APP_VERSION } from './live/MapUtils';
 import Papa from 'papaparse';
 
 const getDistance = (p1, p2) => {
@@ -26,16 +26,19 @@ export default function Live() {
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [subStations, setSubStations] = useState([]);
 
+    const allLots = updatedLots;
+
     // Fetch Index files (Initial light load)
     useEffect(() => {
-        updatedLots.forEach(lot => {
+        allLots.forEach(lot => {
             fetch(`${lot.basePath}index.txt?${Date.now()}`)
                 .then(r => r.text())
                 .then(text => {
                     const files = text.split('\n')
                         .map(l => l.trim())
+                        .map(l => l.endsWith('.') ? l.slice(0, -1) : l) // Strip trailing dot if present
                         .filter(l => l.length > 0 && l.toLowerCase().endsWith('.csv'))
-                        .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+                        .sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' }));
                     setLotFiles(prev => ({ ...prev, [lot.id]: files }));
                 })
                 .catch(err => console.error(`Error loading lot index ${lot.id}:`, err));
@@ -65,7 +68,7 @@ export default function Live() {
         // Load cached stats from previous sessions
         const cached = localStorage.getItem('survey_stats_cache');
         if (cached) setFileStats(JSON.parse(cached));
-    }, []);
+    }, [allLots, refreshTrigger]);
 
     // Lazy load stats only when a lot is expanded
     useEffect(() => {
@@ -77,14 +80,14 @@ export default function Live() {
             return;
         }
 
-        const lot = updatedLots.find(l => l.id === expandedLot);
+        const lot = allLots.find(l => l.id === expandedLot);
         if (!lot) return;
 
         let processedCount = 0;
         const totalToFetch = filesToFetch.length;
         const batchSize = 10;
 
-        const fetchNextBatch = () => {
+        const fetchNextBatch = async () => {
             const batch = filesToFetch.slice(processedCount, processedCount + batchSize);
             if (batch.length === 0) {
                 localStorage.setItem('survey_stats_cache', JSON.stringify(fileStats));
@@ -97,52 +100,58 @@ export default function Live() {
                 [expandedLot]: Math.round((processedCount / totalToFetch) * 100)
             }));
 
-            Promise.all(batch.map(fileName => {
-                const fileUrl = `${lot.basePath}${fileName}`;
-                return fetch(fileUrl)
-                    .then(r => {
+            try {
+                const results = await Promise.all(batch.map(async (fileName) => {
+                    let fileUrl = fileName.includes('/') ? `/view/${fileName}` : `${lot.basePath}${fileName}`;
+                    try {
+                        const r = await fetch(fileUrl);
+                        if (!r.ok) return null;
                         const lastModified = r.headers.get('Last-Modified');
-                        return r.text().then(text => ({ text, lastModified, fileName }));
-                    })
-                    .catch(() => null);
-            })).then(results => {
-                const newStatsForBatch = {};
-                results.forEach(res => {
-                    if (!res) return;
-                    Papa.parse(res.text, {
-                        header: true,
-                        complete: (pResults) => {
-                            let totalDist = 0;
-                            const pts = pResults.data
-                                .map(r => ({
-                                    lat: parseFloat(r.Latitude || r.lat || r.LATITUDE),
-                                    lng: parseFloat(r.Longitude || r.lng || r.LONGITUDE)
-                                }))
-                                .filter(p => !isNaN(p.lat) && !isNaN(p.lng));
+                        const text = await r.text();
+                        return { text, lastModified, fileName };
+                    } catch (e) { return null; }
+                }));
 
-                            for (let i = 0; i < pts.length - 1; i++) {
-                                totalDist += getDistance(pts[i], pts[i + 1]);
-                            }
+                const batchStats = {};
+                for (const res of results) {
+                    if (!res) continue;
+                    const statsKey = `${expandedLot}_${res.fileName}`;
 
-                            newStatsForBatch[`${expandedLot}_${res.fileName}`] = {
-                                length: totalDist,
-                                points: pts.length,
-                                date: res.lastModified ? new Date(res.lastModified).toLocaleDateString('en-GB', {
-                                    day: '2-digit', month: 'short', year: 'numeric'
-                                }) : 'Unknown'
+                    // Synchronous parsing is faster and more reliable within this loop
+                    const pResults = Papa.parse(res.text, { header: true, skipEmptyLines: true });
+                    const pts = pResults.data
+                        .map(row => {
+                            const keys = Object.keys(row);
+                            const latKey = keys.find(k => k.toLowerCase().replace(/[^a-z]/g, '') === 'latitude' || k.toLowerCase().replace(/[^a-z]/g, '') === 'lat');
+                            const lngKey = keys.find(k => k.toLowerCase().replace(/[^a-z]/g, '') === 'longitude' || k.toLowerCase().replace(/[^a-z]/g, '') === 'lng');
+                            return {
+                                lat: latKey ? parseFloat(row[latKey]) : NaN,
+                                lng: lngKey ? parseFloat(row[lngKey]) : NaN
                             };
-                        }
-                    });
-                });
+                        })
+                        .filter(p => !isNaN(p.lat) && !isNaN(p.lng));
 
-                setFileStats(prev => {
-                    const merged = { ...prev, ...newStatsForBatch };
-                    // Optional: Periodic sync to storage for larger lots
-                    return merged;
-                });
+                    let totalDist = 0;
+                    for (let i = 0; i < pts.length - 1; i++) {
+                        totalDist += getDistance(pts[i], pts[i + 1]);
+                    }
+
+                    batchStats[statsKey] = {
+                        length: totalDist,
+                        points: pts.length,
+                        date: res.lastModified ? new Date(res.lastModified).toLocaleDateString('en-GB', {
+                            day: '2-digit', month: 'short', year: 'numeric'
+                        }) : 'Unknown'
+                    };
+                }
+
+                setFileStats(prev => ({ ...prev, ...batchStats }));
                 processedCount += batchSize;
-                setTimeout(fetchNextBatch, 50);
-            });
+                setTimeout(fetchNextBatch, 10); // Reduced delay for smoother feel
+            } catch (e) {
+                console.error("Batch processing error:", e);
+                setLotProgress(prev => ({ ...prev, [expandedLot]: 100 }));
+            }
         };
 
         fetchNextBatch();
@@ -168,8 +177,11 @@ export default function Live() {
 
     const viewSingleFile = (lotId, fileName) => window.open(`/live/${lotId}/${fileName}`, '_blank');
     const editSingleFile = (lotId, fileName) => window.open(`/live/edit/${lotId}/${fileName}`, '_blank');
-    const viewLot = (lotId) => navigate(`/live/lot/${lotId}`);
+    const viewLot = (lotId) => {
+        navigate(`/live/lot/${lotId}`);
+    };
     const viewAllLots = () => navigate('/live/lot/all');
+
 
     const handleCoordJump = (lat, lng) => {
         // Special route or just open root map at that location
@@ -202,11 +214,11 @@ export default function Live() {
             <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 md:p-8">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 border-b pb-6">
                     <div className="flex items-center gap-4">
-                        <h1 className="text-2xl md:text-3xl font-extrabold text-primary-blue tracking-tight">Survey Dashboard</h1>
+                        <h1 className="text-2xl md:text-3xl font-extrabold text-primary-blue tracking-tight">
+                            Survey Dashboard
+                            <span className="text-[10px] bg-primary-blue/10 text-primary-blue px-2 py-0.5 rounded-full ml-2 lowercase font-black tracking-widest opacity-80 border border-primary-blue/20 align-middle">v{APP_VERSION}</span>
+                        </h1>
                         <div className="flex gap-2">
-                            <button onClick={viewAllLots} className="text-[10px] bg-primary-blue text-white px-4 py-1.5 rounded-lg font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-md active:scale-95 text-center">
-                                Network Overview
-                            </button>
                             <button onClick={clearAllCache} className="text-[10px] bg-white text-gray-400 border border-gray-100 px-3 py-1.5 rounded-lg font-bold hover:bg-rose-50 hover:text-rose-600 transition-all active:scale-95" title="Purge local stats cache">
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                             </button>
@@ -290,8 +302,8 @@ export default function Live() {
                         </div>
                     </div>
 
-                    {updatedLots.map((lot) => {
-                        const rawFiles = (lotFiles[lot.id] || []).filter(f => f.toLowerCase().includes(searchQuery.toLowerCase()));
+                    {allLots.filter(l => l.id !== 'root').map((lot) => {
+                        const rawFiles = (lotFiles[lot.id] || []).filter(f => (typeof f === 'string' ? f : f).toLowerCase().includes(searchQuery.toLowerCase()));
                         const sortMode = sortConfigs[lot.id] || 'name';
                         const files = [...rawFiles].sort((a, b) => {
                             const statA = fileStats[`${lot.id}_${a}`];
@@ -299,7 +311,7 @@ export default function Live() {
                             if (sortMode === 'km') return (statB?.length || 0) - (statA?.length || 0);
                             if (sortMode === 'towers') return (statB?.points || 0) - (statA?.points || 0);
                             if (sortMode === 'date') return new Date(statB?.date || 0) - new Date(statA?.date || 0);
-                            return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+                            return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' });
                         });
                         const isExpanded = expandedLot === lot.id;
 
@@ -307,36 +319,37 @@ export default function Live() {
                             <div key={lot.id} className={`border rounded-xl overflow-hidden bg-white transition-all duration-300 ${isExpanded ? 'shadow-md border-primary-blue/20 ring-1 ring-primary-blue/10' : 'border-gray-200 hover:border-gray-300 shadow-sm'}`}>
                                 <div className={`px-6 py-4 flex justify-between items-center ${isExpanded ? 'bg-primary-blue/5' : 'bg-gray-50/50'}`}>
                                     <div className="flex-grow">
-                                        <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                                        <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2 uppercase tracking-tight">
                                             {lot.name}
-                                            <span className={`w-2 h-2 rounded-full ${lot.id === 'lot1' ? 'bg-indigo-500' : lot.id === 'lot2' ? 'bg-emerald-500' : lot.id === 'lot3' ? 'bg-amber-500' : 'bg-rose-500'}`}></span>
+                                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: lot.color }}></span>
                                         </h3>
                                         <div className="flex items-center gap-3 mt-0.5">
-                                            <p className="text-xs text-gray-500 font-medium">{files.length} Surveys</p>
+                                            <p className="text-xs font-bold uppercase tracking-tight text-gray-500">{files.length} Surveys</p>
                                             <span className="text-gray-300">|</span>
-                                            {isExpanded && lotProgress[lot.id] < 100 && (
+                                            {isExpanded && lotFiles[lot.id]?.some(f => !fileStats[`${lot.id}_${f}`]) ? (
                                                 <div className="flex items-center gap-2">
                                                     <div className="w-16 h-1 bg-gray-100 rounded-full overflow-hidden">
                                                         <div className="h-full bg-primary-blue transition-all duration-300" style={{ width: `${lotProgress[lot.id] || 0}%` }}></div>
                                                     </div>
-                                                    <span className="text-[9px] font-black text-primary-blue uppercase">{lotProgress[lot.id] || 0}% CALCULATING...</span>
+                                                    <span className="text-[9px] font-black text-primary-blue uppercase">{lotProgress[lot.id] || 0}%</span>
                                                 </div>
-                                            )}
-                                            {(!isExpanded || lotProgress[lot.id] === 100 || !lotProgress[lot.id]) && (() => {
-                                                const totalKm = files.reduce((acc, f) => acc + (fileStats[`${lot.id}_${f}`]?.length || 0), 0);
-                                                if (totalKm > 0) {
+                                            ) : (
+                                                (() => {
+                                                    const totalKm = files.reduce((acc, f) => acc + (fileStats[`${lot.id}_${f}`]?.length || 0), 0);
+                                                    if (totalKm > 0) {
+                                                        return (
+                                                            <p className="text-xs font-black uppercase tracking-tight" style={{ color: lot.color }}>
+                                                                {totalKm.toFixed(2)} KM TOTAL
+                                                            </p>
+                                                        );
+                                                    }
                                                     return (
-                                                        <p className="text-xs text-primary-blue font-black uppercase tracking-tight">
-                                                            {totalKm.toFixed(2)} KM TOTAL
+                                                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest italic opacity-70">
+                                                            {files.length > 0 ? "Awaiting Analysis" : "No Surveys"}
                                                         </p>
                                                     );
-                                                }
-                                                return (
-                                                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest italic opacity-70">
-                                                        {files.length > 0 ? "Awaiting Analysis" : "No Surveys"}
-                                                    </p>
-                                                );
-                                            })()}
+                                                })()
+                                            )}
                                         </div>
                                     </div>
                                     <div className="flex gap-3 items-center">
@@ -353,7 +366,7 @@ export default function Live() {
                                                 </select>
                                             </div>
                                         )}
-                                        <button onClick={() => viewLot(lot.id)} className="px-5 py-2 bg-white text-primary-blue text-[11px] font-bold rounded-lg border border-primary-blue/20 shadow-sm hover:bg-primary-blue hover:text-white transition-all transform hover:-translate-y-px">EXPLORE LOT</button>
+                                        <button onClick={() => viewLot(lot.id)} className="px-5 py-2 bg-white text-[11px] font-bold rounded-lg border shadow-sm transition-all transform hover:-translate-y-px uppercase text-primary-blue border-primary-blue/20 hover:bg-primary-blue hover:text-white">Explore Lot</button>
                                         <button onClick={() => setExpandedLot(isExpanded ? null : lot.id)} className={`p-2 border rounded-lg transition-colors ${isExpanded ? 'bg-white border-primary-blue/20 text-primary-blue' : 'bg-white border-gray-100 text-gray-400 hover:text-gray-600'}`}>
                                             <svg className={`w-5 h-5 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                                         </button>
@@ -363,13 +376,13 @@ export default function Live() {
                                     <div className="border-t border-gray-100 p-3 max-h-[440px] overflow-y-auto bg-white custom-scrollbar">
                                         <div className="space-y-1">
                                             {files.map((file, idx) => (
-                                                <div key={idx} className="flex items-center justify-between p-3 hover:bg-primary-blue/5 rounded-xl group border border-transparent hover:border-primary-blue/10 transition-all cursor-default">
+                                                <div key={idx} className="flex items-center justify-between p-3 rounded-xl group border border-transparent transition-all cursor-default hover:bg-primary-blue/5 hover:border-primary-blue/10">
                                                     <div className="flex items-center gap-3 min-w-0">
-                                                        <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 group-hover:bg-primary-blue/10 group-hover:text-primary-blue transition-colors">
+                                                        <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 transition-colors group-hover:bg-primary-blue/10 group-hover:text-primary-blue">
                                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                                                         </div>
                                                         <div className="min-w-0">
-                                                            <span className="text-xs font-semibold text-gray-700 truncate group-hover:text-primary-blue transition-colors block" title={file}>{file}</span>
+                                                            <span className="text-xs font-semibold text-gray-700 truncate transition-colors block group-hover:text-primary-blue" title={file}>{file}</span>
                                                             <div className="flex items-center gap-2 mt-0.5">
                                                                 <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">
                                                                     {fileStats[`${lot.id}_${file}`]
@@ -397,7 +410,8 @@ export default function Live() {
                     })}
                 </div>
             </div>
-            <style dangerouslySetInnerHTML={{ __html: `
+            <style dangerouslySetInnerHTML={{
+                __html: `
                 .custom-scrollbar::-webkit-scrollbar { width: 6px; }
                 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
                 .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }

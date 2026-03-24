@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useMap, useMapEvents } from 'react-leaflet';
 import Papa from 'papaparse';
 import JSZip from 'jszip';
+import packageJson from '../../../package.json';
+
 
 export const parseCoords = (input) => {
   // Matches "12.34, 56.78", "12.34 56.78", etc.
@@ -10,13 +12,13 @@ export const parseCoords = (input) => {
   if (match) {
     const v1 = parseFloat(match[1]);
     const v2 = parseFloat(match[2]);
-    
+
     // Heuristic for region: If one value is > 60, it's likely Longitude (India is ~68-98E, 8-37N)
     let lat, lng;
     if (Math.abs(v1) > Math.abs(v2) && Math.abs(v1) > 40) {
-        lng = v1; lat = v2;
+      lng = v1; lat = v2;
     } else {
-        lat = v1; lng = v2;
+      lat = v1; lng = v2;
     }
 
     if (!isNaN(lat) && !isNaN(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180) {
@@ -27,27 +29,32 @@ export const parseCoords = (input) => {
 };
 
 export const getCoordinateFromParams = (searchParams) => {
-    const lat = searchParams.get('lat') || searchParams.get('latitude');
-    const lng = searchParams.get('lng') || searchParams.get('longitude');
-    if (lat && lng) {
-        return { lat: parseFloat(lat), lng: parseFloat(lng) };
-    }
+  const lat = searchParams.get('lat') || searchParams.get('latitude');
+  const lng = searchParams.get('lng') || searchParams.get('longitude');
+  if (lat && lng) {
+    return { lat: parseFloat(lat), lng: parseFloat(lng) };
+  }
 
-    const combined = searchParams.get('coords') || searchParams.get('coord') || searchParams.get('c');
-    if (combined) {
-        return parseCoords(combined);
-    }
-    return null;
+  const combined = searchParams.get('coords') || searchParams.get('coord') || searchParams.get('c');
+  if (combined) {
+    return parseCoords(combined);
+  }
+  return null;
 };
 
 export const updatedLots = [
-  { id: 'lot1', name: 'LOT 1', basePath: '/view/LOT_1/' },
-  { id: 'lot2', name: 'LOT 2', basePath: '/view/LOT_2/' },
-  { id: 'lot3', name: 'LOT 3', basePath: '/view/LOT_3_TNEB/' },
-  { id: 'lot4', name: 'LOT 4', basePath: '/view/LOT_4/' },
-  { id: 'existing', name: 'Existing', basePath: '/view/EXISTING/' },
-  { id: 'root', name: 'Global Assets', basePath: '/view/' }
+  { id: 'lot1', name: 'LOT 1', basePath: '/view/LOT_1/', color: '#6366F1' },
+  { id: 'lot2', name: 'LOT 2', basePath: '/view/LOT_2/', color: '#10B981' },
+  { id: 'lot3', name: 'LOT 3', basePath: '/view/LOT_3_TNEB/', color: '#F59E0B' },
+  { id: 'lot4', name: 'LOT 4', basePath: '/view/LOT_4/', color: '#F43F5E' },
+  { id: 'glease1', name: 'G LEASE 1', basePath: '/view/G_LEASE_1/', color: '#8B5CF6' },
+  { id: 'glease2', name: 'G LEASE 2', basePath: '/view/G_LEASE_2/', color: '#EC4899' },
+  { id: 'existing', name: 'Existing', basePath: '/view/EXISTING/', color: '#6B7280' },
+  { id: 'root', name: 'Global Assets', basePath: '/view/', color: '#D97706' }
 ];
+
+
+export const APP_VERSION = packageJson.version;
 
 // Helper to fit map bounds dynamically
 export const ChangeView = ({ bounds }) => {
@@ -157,15 +164,15 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
   // Fetch config to mirror symbology
   let config = null;
   try {
-      const resp = await fetch('/substation_config.json');
-      if (resp.ok) config = await resp.json();
+    const resp = await fetch('/substation_config.json');
+    if (resp.ok) config = await resp.json();
   } catch (e) { console.warn("Symbology config not found, using fallbacks."); }
 
   const zip = new JSZip();
   const mapLayersXml = [];
-  
+
   // Tree Nodes
-  const lotGroups = {}; 
+  const lotGroups = {};
   let progressCounter = 0;
   const totalLayers = layers.length;
   const totalSteps = totalLayers * 2 + 5;
@@ -176,18 +183,18 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
     const { id, name, color } = layer;
     const lotId = id.split('_')[0];
     const lotDef = updatedLots.find(l => l.id === lotId) || { name: lotId.toUpperCase(), id: lotId };
-    
+
     if (!lotGroups[lotId]) {
-      lotGroups[lotId] = { 
-        name: lotDef.name, 
-        pathNodes: [], 
-        pointNodes: [] 
+      lotGroups[lotId] = {
+        name: lotDef.name,
+        pathNodes: [],
+        pointNodes: []
       };
     }
 
     // Use ID for unique filenames to avoid collisions
     const safeBaseName = id.replace(/[^a-z0-9_-]/gi, '_');
-    
+
     try {
       const fetchUrl = lotDef.basePath ? `${lotDef.basePath}${name}` : null;
       if (fetchUrl) {
@@ -197,14 +204,14 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
           dataFolder.file(`${safeBaseName}_raw.csv`, fileData);
         }
       }
-    } catch (e) {}
+    } catch (e) { }
 
     // ─── 1. LINE LAYER (Path) ──────────────────────────────────────────
     const lineLayerId = `${safeBaseName}_line`;
     const lineWkt = `LINESTRING(${layer.pts.map(p => `${p.lng} ${p.lat}`).join(', ')})`;
     const lineCsvName = `${safeBaseName}_path.csv`;
     const lineLabel = name.split(' ')[1] || name.split(' ')[0];
-    
+
     dataFolder.file(lineCsvName, `id,WKT,label\n"${id}","${lineWkt}","${lineLabel}"`);
 
     mapLayersXml.push(`
@@ -239,8 +246,8 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
     const pointCsvName = `${safeBaseName}_towers.csv`;
     const pointRows = ["tower_no,lat,lng,WKT"];
     layer.pts.forEach(p => {
-        // Include even if towerNo is missing to avoid "Data source error" for empty CSVs
-        pointRows.push(`"${p.towerNo || ''}",${p.lat},${p.lng},"POINT(${p.lng} ${p.lat})"`);
+      // Include even if towerNo is missing to avoid "Data source error" for empty CSVs
+      pointRows.push(`"${p.towerNo || ''}",${p.lat},${p.lng},"POINT(${p.lng} ${p.lat})"`);
     });
     dataFolder.file(pointCsvName, pointRows.join("\n"));
 
@@ -292,30 +299,30 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
 
       // Type Rules (HO, GENERATION)
       if (config && config.types) {
-          Object.keys(config.types).forEach(typeKey => {
-              const conf = config.types[typeKey];
-              const qgisShape = typeKey === 'HO' ? 'star' : 'hexagon';
-              const color = hexToRgb(conf.color);
-              const filter = `upper("ss_type") = '${typeKey.toUpperCase()}'`;
-              rules.unshift(`<rule filter="${escapeXml(filter)}" symbol="${ruleIdx}" label="${escapeXml(conf.name || typeKey)}"/>`);
-              symbols.push(`<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SimpleMarker"><prop k="name" v="${qgisShape}"/><prop k="color" v="${color}"/><prop k="size" v="${(conf.baseSize || 12) / 3}"/></layer></symbol>`);
-              ruleIdx++;
-          });
+        Object.keys(config.types).forEach(typeKey => {
+          const conf = config.types[typeKey];
+          const qgisShape = typeKey === 'HO' ? 'star' : 'hexagon';
+          const color = hexToRgb(conf.color);
+          const filter = `upper("ss_type") = '${typeKey.toUpperCase()}'`;
+          rules.unshift(`<rule filter="${escapeXml(filter)}" symbol="${ruleIdx}" label="${escapeXml(conf.name || typeKey)}"/>`);
+          symbols.push(`<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SimpleMarker"><prop k="name" v="${qgisShape}"/><prop k="color" v="${color}"/><prop k="size" v="${(conf.baseSize || 12) / 3}"/></layer></symbol>`);
+          ruleIdx++;
+        });
       }
 
       // Voltage Rules
       if (config && config.voltages) {
-          config.voltages.forEach((v, idx) => {
-              const qgisShape = v.shape === 'triangle' ? 'triangle' : v.shape === 'hexagon' ? 'hexagon' : v.shape === 'diamond' ? 'diamond' : v.shape === 'square' ? 'square' : 'circle';
-              const color = hexToRgb(v.color);
-              const filter = idx === 0 
-                ? `to_int(left("volt_ratio", strpos("volt_ratio", '/')-1)) >= ${v.class}` 
-                : `to_int(left("volt_ratio", strpos("volt_ratio", '/')-1)) >= ${v.class} AND to_int(left("volt_ratio", strpos("volt_ratio", '/')-1)) < ${config.voltages[idx-1].class}`;
-              
-              rules.push(`<rule filter="${escapeXml(filter)}" symbol="${ruleIdx}" label="${v.class}kV Substation"/>`);
-              symbols.push(`<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SimpleMarker"><prop k="name" v="${qgisShape}"/><prop k="color" v="${color}"/><prop k="outline_color" v="255,255,255,255"/><prop k="size" v="${(v.baseSize || 10) / 3}"/></layer></symbol>`);
-              ruleIdx++;
-          });
+        config.voltages.forEach((v, idx) => {
+          const qgisShape = v.shape === 'triangle' ? 'triangle' : v.shape === 'hexagon' ? 'hexagon' : v.shape === 'diamond' ? 'diamond' : v.shape === 'square' ? 'square' : 'circle';
+          const color = hexToRgb(v.color);
+          const filter = idx === 0
+            ? `to_int(left("volt_ratio", strpos("volt_ratio", '/')-1)) >= ${v.class}`
+            : `to_int(left("volt_ratio", strpos("volt_ratio", '/')-1)) >= ${v.class} AND to_int(left("volt_ratio", strpos("volt_ratio", '/')-1)) < ${config.voltages[idx - 1].class}`;
+
+          rules.push(`<rule filter="${escapeXml(filter)}" symbol="${ruleIdx}" label="${v.class}kV Substation"/>`);
+          symbols.push(`<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SimpleMarker"><prop k="name" v="${qgisShape}"/><prop k="color" v="${color}"/><prop k="outline_color" v="255,255,255,255"/><prop k="size" v="${(v.baseSize || 10) / 3}"/></layer></symbol>`);
+          ruleIdx++;
+        });
       }
 
       mapLayersXml.push(`
@@ -338,7 +345,7 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
       </labeling>
     </maplayer>`);
     }
-  } catch (e) {}
+  } catch (e) { }
 
   const layerTreeXml = Object.values(lotGroups).map(group => `
     <layer-tree-group name="${escapeXml(group.name)}" expanded="1">
@@ -376,4 +383,5 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
 };
+
 

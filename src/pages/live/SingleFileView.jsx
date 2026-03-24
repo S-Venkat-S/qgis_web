@@ -15,6 +15,7 @@ const SingleFileView = () => {
     const [exportProgress, setExportProgress] = useState(null);
     const [points, setPoints] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [bounds, setBounds] = useState(null);
     const [zoomLevel, setZoomLevel] = useState(13);
     const [searchQuery, setSearchQuery] = useState("");
@@ -63,18 +64,38 @@ const SingleFileView = () => {
             complete: (results) => {
                 const parsedPoints = results.data
                     .map(row => {
-                        const latKey = Object.keys(row).find(k => k.toLowerCase() === 'latitude');
-                        const lngKey = Object.keys(row).find(k => k.toLowerCase() === 'longitude');
-                        const towerNoKey = Object.keys(row).find(k => ['tower no.', 'tower no', 's.no', 's.no.'].includes(k.toLowerCase()));
+                        const keys = Object.keys(row);
+                        const latKey = keys.find(k => {
+                            const low = k.toLowerCase().replace(/[^a-z]/g, '');
+                            return low === 'latitude' || low === 'lat';
+                        });
+                        const lngKey = keys.find(k => {
+                            const low = k.toLowerCase().replace(/[^a-z]/g, '');
+                            return low === 'longitude' || low === 'lng' || low === 'long';
+                        });
+                        const towerNoKey = keys.find(k => {
+                            const low = k.toLowerCase().replace(/[^a-z0-9]/g, '');
+                            return ['towerno', 'tno', 'sno', 'sn'].includes(low);
+                        });
+
+                        const lat = latKey ? parseFloat(row[latKey]) : NaN;
+                        const lng = lngKey ? parseFloat(row[lngKey]) : NaN;
 
                         return {
-                            lat: latKey ? parseFloat(row[latKey]) : NaN,
-                            lng: lngKey ? parseFloat(row[lngKey]) : NaN,
-                            towerNo: towerNoKey ? row[towerNoKey] : 'N/A',
-                            description: row.Description
+                            lat,
+                            lng,
+                            towerNo: towerNoKey ? row[towerNoKey] : (row['Tower No.'] || 'N/A'),
+                            description: row.Description || row.description
                         };
                     })
                     .filter(pt => !isNaN(pt.lat) && !isNaN(pt.lng));
+
+                if (parsedPoints.length === 0 && results.data.length > 0) {
+                    console.error("No valid coordinates found in file. Columns found:", Object.keys(results.data[0]));
+                    setError(`No valid coordinates found in ${fileName}. Checked for Latitude/Longitude columns.`);
+                } else if (parsedPoints.length === 0) {
+                    setError(`File ${fileName} appears to be empty or invalid CSV.`);
+                }
 
                 setPoints(parsedPoints);
 
@@ -88,10 +109,11 @@ const SingleFileView = () => {
             },
             error: (err) => {
                 console.error("Single file parse error:", err);
+                setError(`Failed to load file: ${err.message || 'Unknown error'}`);
                 setLoading(false);
             }
         });
-    }, [lotId, fileName]);
+    }, [lotId, fileName, searchParams]);
 
     // Load Index files and Substations for search
     useEffect(() => {
@@ -192,7 +214,8 @@ const SingleFileView = () => {
     const handleExport = async () => {
         if (points.length === 0) return;
         setExportProgress(0);
-        const color = lotId === 'lot1' ? '#6366F1' : lotId === 'lot2' ? '#34D399' : lotId === 'lot3' ? '#FBBF24' : '#F87171';
+        const lot = updatedLots.find(l => l.id === lotId);
+        const color = lot ? lot.color : '#FFD700';
         try {
             await exportQGISProject([{ id: fileName, name: fileName, pts: points, color }], fileName.split('.')[0], setExportProgress);
         } catch (e) {
@@ -204,11 +227,27 @@ const SingleFileView = () => {
 
     const handleBack = () => navigate('/live');
 
+    if (error) {
+        return (
+            <div className="h-[calc(100vh-4rem)] flex flex-col items-center justify-center bg-gray-50 p-6 text-center">
+                <div className="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mb-4">
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                </div>
+                <h3 className="text-lg font-bold text-gray-800 mb-2 uppercase tracking-tight">Mapping Error</h3>
+                <p className="max-w-md text-sm text-gray-500 font-medium mb-6 leading-relaxed">{error}</p>
+                <button onClick={handleBack} className="px-6 py-2.5 bg-primary-blue text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg hover:bg-blue-700 transition-all flex items-center gap-2">
+                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                    Return to Dashboard
+                </button>
+            </div>
+        );
+    }
+
     if (loading) {
         return (
             <div className="h-[calc(100vh-4rem)] flex flex-col items-center justify-center bg-gray-50">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-blue"></div>
-                <p className="mt-4 text-sm font-medium text-gray-500">Loading {fileName}...</p>
+                <p className="mt-4 text-[10px] font-black uppercase tracking-[0.2em] text-primary-blue/60">Synchronizing Map Data...</p>
             </div>
         );
     }
@@ -247,7 +286,7 @@ const SingleFileView = () => {
                                     >
                                         <div className="flex items-center gap-3">
                                             <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${res.type === 'line' ? 'bg-blue-100 text-blue-600' :
-                                                    res.type === 'ss' ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'
+                                                res.type === 'ss' ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'
                                                 }`}>
                                                 {res.type === 'line' && <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>}
                                                 {res.type === 'ss' && <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>}
@@ -317,6 +356,7 @@ const SingleFileView = () => {
                                 </>
                             )}
                         </button>
+
                         {exportProgress !== null && (
                             <div className="absolute -bottom-2 left-0 w-full h-1 bg-gray-100 rounded-full overflow-hidden">
                                 <div className="h-full bg-amber-600 transition-all duration-200" style={{ width: `${exportProgress}%` }}></div>
@@ -360,73 +400,77 @@ const SingleFileView = () => {
                     )}
 
                     <SubStationLayer showLabels={showSSLabels} />
+                    {(() => {
+                        const lot = updatedLots.find(l => l.id === lotId);
+                        const lotColor = lot ? lot.color : "#FFD700";
 
-                    {points.length > 0 && (
-                        <>
-                            <Polyline
-                                positions={points.map(p => [p.lat, p.lng])}
-                                color="#FFD700"
-                                weight={5}
-                                opacity={1} // Ensuring drawn line is always fully opaque (relative to its own path)
-                            >
-                                <Tooltip sticky permanent={false} direction="top" className="line-tooltip-label">
-                                    {fileName}
-                                </Tooltip>
-                            </Polyline>
-                            {points.map((pt, idx) => {
-                                const nextPt = points[idx + 1];
-                                let distance = null;
-                                let midpoint = null;
+                        return points.length > 0 && (
+                            <>
+                                <Polyline
+                                    positions={points.map(p => [p.lat, p.lng])}
+                                    color={lotColor}
+                                    weight={5}
+                                    opacity={1} // Ensuring drawn line is always fully opaque (relative to its own path)
+                                >
+                                    <Tooltip sticky permanent={false} direction="top" className="line-tooltip-label">
+                                        {fileName}
+                                    </Tooltip>
+                                </Polyline>
+                                {points.map((pt, idx) => {
+                                    const nextPt = points[idx + 1];
+                                    let distance = null;
+                                    let midpoint = null;
 
-                                if (nextPt) {
-                                    const p1 = L.latLng(pt.lat, pt.lng);
-                                    const p2 = L.latLng(nextPt.lat, nextPt.lng);
-                                    distance = Math.round(p1.distanceTo(p2));
-                                    midpoint = [(pt.lat + nextPt.lat) / 2, (pt.lng + nextPt.lng) / 2];
-                                }
+                                    if (nextPt) {
+                                        const p1 = L.latLng(pt.lat, pt.lng);
+                                        const p2 = L.latLng(nextPt.lat, nextPt.lng);
+                                        distance = Math.round(p1.distanceTo(p2));
+                                        midpoint = [(pt.lat + nextPt.lat) / 2, (pt.lng + nextPt.lng) / 2];
+                                    }
 
-                                return (
-                                    <React.Fragment key={idx}>
-                                        <CircleMarker
-                                            center={[pt.lat, pt.lng]}
-                                            radius={4}
-                                            pathOptions={{
-                                                color: 'red',
-                                                fillColor: '#f03',
-                                                fillOpacity: 1,
-                                                weight: 1
-                                            }}
-                                        >
-                                            <Popup>
-                                                <div className="text-xs text-black min-w-[120px]">
-                                                    <strong className="block border-b mb-1 pb-1">{fileName}</strong>
-                                                    <span className="block font-bold mt-1">Tower: {pt.towerNo}</span>
-                                                    <span className="block font-mono text-[10px] opacity-70 mb-1">{pt.lat}, {pt.lng}</span>
-                                                </div>
-                                            </Popup>
-                                            {showTowerLabels && zoomLevel >= 16 && (
-                                                <Tooltip permanent direction="top">
-                                                    {pt.towerNo}
-                                                </Tooltip>
-                                            )}
-                                        </CircleMarker>
-
-                                        {midpoint && showDistLabels && zoomLevel >= 15 && (
+                                    return (
+                                        <React.Fragment key={idx}>
                                             <CircleMarker
-                                                center={midpoint}
-                                                radius={0}
-                                                pathOptions={{ opacity: 0, fillOpacity: 0 }}
+                                                center={[pt.lat, pt.lng]}
+                                                radius={4}
+                                                pathOptions={{
+                                                    color: 'red',
+                                                    fillColor: '#f03',
+                                                    fillOpacity: 1,
+                                                    weight: 1
+                                                }}
                                             >
-                                                <Tooltip permanent direction="center">
-                                                    {distance}
-                                                </Tooltip>
+                                                <Popup>
+                                                    <div className="text-xs text-black min-w-[120px]">
+                                                        <strong className="block border-b mb-1 pb-1">{fileName}</strong>
+                                                        <span className="block font-bold mt-1">Tower: {pt.towerNo}</span>
+                                                        <span className="block font-mono text-[10px] opacity-70 mb-1">{pt.lat}, {pt.lng}</span>
+                                                    </div>
+                                                </Popup>
+                                                {showTowerLabels && zoomLevel >= 16 && (
+                                                    <Tooltip permanent direction="top">
+                                                        {pt.towerNo}
+                                                    </Tooltip>
+                                                )}
                                             </CircleMarker>
-                                        )}
-                                    </React.Fragment>
-                                );
-                            })}
-                        </>
-                    )}
+
+                                            {midpoint && showDistLabels && zoomLevel >= 15 && (
+                                                <CircleMarker
+                                                    center={midpoint}
+                                                    radius={0}
+                                                    pathOptions={{ opacity: 0, fillOpacity: 0 }}
+                                                >
+                                                    <Tooltip permanent direction="center">
+                                                        {distance}
+                                                    </Tooltip>
+                                                </CircleMarker>
+                                            )}
+                                        </React.Fragment>
+                                    );
+                                })}
+                            </>
+                        )
+                    })()}
                 </MapContainer>
             </div>
         </div>

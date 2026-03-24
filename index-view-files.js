@@ -13,6 +13,12 @@ const viewDir = path.resolve(__dirname, 'public/view');
  * directly in that directory and writes them to an 'index.txt' in that folder.
  */
 function createFolderIndexes(dir) {
+    const folderName = path.basename(dir);
+    if (folderName.startsWith('G_')) {
+        console.log(`Skipping index generation for redirect folder: ${folderName}`);
+        return;
+    }
+
     const items = fs.readdirSync(dir);
     const files = [];
 
