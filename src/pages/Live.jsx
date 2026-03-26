@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { updatedLots, parseCoords, APP_VERSION } from './live/MapUtils';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { updatedLots, parseCoords, APP_VERSION, extractPointsFromCSV } from './live/MapUtils';
 import Papa from 'papaparse';
 
 const getDistance = (p1, p2) => {
@@ -25,6 +25,7 @@ export default function Live() {
     const [lotProgress, setLotProgress] = useState({}); // { lotId: percentage }
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [subStations, setSubStations] = useState([]);
+    const [selectedLots, setSelectedLots] = useState([]);
 
     const allLots = updatedLots;
 
@@ -119,17 +120,7 @@ export default function Live() {
 
                     // Synchronous parsing is faster and more reliable within this loop
                     const pResults = Papa.parse(res.text, { header: true, skipEmptyLines: true });
-                    const pts = pResults.data
-                        .map(row => {
-                            const keys = Object.keys(row);
-                            const latKey = keys.find(k => k.toLowerCase().replace(/[^a-z]/g, '') === 'latitude' || k.toLowerCase().replace(/[^a-z]/g, '') === 'lat');
-                            const lngKey = keys.find(k => k.toLowerCase().replace(/[^a-z]/g, '') === 'longitude' || k.toLowerCase().replace(/[^a-z]/g, '') === 'lng');
-                            return {
-                                lat: latKey ? parseFloat(row[latKey]) : NaN,
-                                lng: lngKey ? parseFloat(row[lngKey]) : NaN
-                            };
-                        })
-                        .filter(p => !isNaN(p.lat) && !isNaN(p.lng));
+                    const pts = extractPointsFromCSV(pResults.data);
 
                     let totalDist = 0;
                     for (let i = 0; i < pts.length - 1; i++) {
@@ -181,6 +172,152 @@ export default function Live() {
         navigate(`/live/lot/${lotId}`);
     };
     const viewAllLots = () => navigate('/live/lot/all');
+    
+    const copyToClipboard = (text) => {
+        if (!text) return;
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text)
+                .catch(() => fallbackCopy(text));
+        } else {
+            fallbackCopy(text);
+        }
+    };
+
+    const fallbackCopy = (text) => {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        textArea.style.top = "0";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+        } catch (err) {}
+        document.body.removeChild(textArea);
+    };
+
+    const [searchParams] = useSearchParams();
+    const isBillingMode = searchParams.get('mode') === 'billing';
+
+    const exportBillingPDF = () => {
+        if (!window.jspdf || !window.jspdf.jsPDF) {
+            alert("PDF library is still loading. Please wait a moment.");
+            return;
+        }
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const timestamp = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+        // Header
+        doc.setFillColor(30, 64, 175); // primary-blue
+        doc.rect(0, 0, 210, 30, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(22);
+        doc.setFont(undefined, 'bold');
+        doc.text("LINKS ABSTRACT REPORT", 105, 18, { align: "center" });
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'normal');
+
+        let finalY = 45;
+        let grandTotalKm = 0;
+        let totalSurveys = 0;
+
+        const lotsToExport = allLots.filter(l => l.id !== 'root' && (selectedLots.length === 0 || selectedLots.includes(l.id)));
+
+        // --- PAGE 1: LOT-WISE ABSTRACT ---
+        doc.setFontSize(16);
+        doc.setTextColor(30, 64, 175);
+        doc.setFont(undefined, 'bold');
+        doc.text("LOT SUMMARY ABSTRACT", 14, finalY);
+
+        const summaryData = [];
+        lotsToExport.forEach(lot => {
+            const files = lotFiles[lot.id] || [];
+            if (files.length === 0) return;
+            const lotTotalKm = files.reduce((acc, f) => acc + (fileStats[`${lot.id}_${f}`]?.length || 0), 0);
+            summaryData.push([lot.name, files.length, lotTotalKm.toFixed(3) + " KM"]);
+            grandTotalKm += lotTotalKm;
+            totalSurveys += files.length;
+        });
+
+        doc.autoTable({
+            startY: finalY + 8,
+            head: [['Lot Name', 'Total Surveys', 'Total Distance (KM)']],
+            body: summaryData,
+            theme: 'grid',
+            headStyles: { fillColor: [30, 64, 175], textColor: 255, fontStyle: 'bold' },
+            styles: { fontSize: 10, cellPadding: 4 },
+            margin: { left: 14, right: 14 }
+        });
+
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        const summaryEndY = doc.lastAutoTable.finalY + 15;
+        doc.text(`Grand Total Surveys: ${totalSurveys}`, 14, summaryEndY);
+        doc.text(`Grand Total Distance: ${grandTotalKm.toFixed(3)} KM`, 14, summaryEndY + 7);
+
+        // --- DETAILED PAGES ---
+        lotsToExport.forEach((lot) => {
+            const files = lotFiles[lot.id] || [];
+            if (files.length === 0) return;
+
+            doc.addPage(); // Start each lot on a new page
+            finalY = 20;
+
+            const tableData = files.map((f, idx) => {
+                const stats = fileStats[`${lot.id}_${f}`];
+                const km = stats?.length || 0;
+                return [
+                    idx + 1,
+                    f,
+                    km > 0 ? km.toFixed(3) : "Pending",
+                    stats?.points || "--"
+                ];
+            });
+
+            const lotTotalKm = files.reduce((acc, f) => acc + (fileStats[`${lot.id}_${f}`]?.length || 0), 0);
+
+            doc.setTextColor(lot.color[0] === '#' ? lot.color : '#000000');
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text(`${lot.name}`, 14, finalY);
+
+            doc.setFontSize(9);
+            doc.setTextColor(100, 100, 100);
+            doc.text(`${files.length} Surveys analyzed`, 14, finalY + 5);
+            doc.setTextColor(0);
+
+            doc.autoTable({
+                startY: finalY + 8,
+                head: [['#', 'Survey Line Name', 'Distance (KM)', 'Points']],
+                body: tableData,
+                foot: [['', 'TOTAL FOR ' + lot.name, lotTotalKm.toFixed(3), '']],
+                theme: 'grid',
+                headStyles: { fillColor: lot.color, textColor: 255, fontSize: 8, fontStyle: 'bold' },
+                footStyles: { fillColor: [245, 245, 245], textColor: lot.color, fontSize: 9, fontStyle: 'bold' },
+                columnStyles: {
+                    0: { cellWidth: 12 },
+                    2: { cellWidth: 30, halign: 'right' },
+                    3: { cellWidth: 15, halign: 'right' }
+                },
+                showFoot: 'lastPage',
+                styles: { fontSize: 8, cellPadding: 3 },
+                margin: { left: 14, right: 14 }
+            });
+        });
+
+        // Final generation footer
+        const lastPage = doc.internal.getNumberOfPages();
+        doc.setPage(lastPage);
+        doc.setFontSize(10);
+        doc.setTextColor(150, 150, 150);
+        doc.text(`Report Generated on ${timestamp} at ${new Date().toLocaleTimeString()}`, 105, 280, { align: "center" });
+
+        doc.save(`Links_Abstract_${new Date().toISOString().slice(0, 10)}.pdf`);
+    };
 
 
     const handleCoordJump = (lat, lng) => {
@@ -219,7 +356,13 @@ export default function Live() {
                             <span className="text-[10px] bg-primary-blue/10 text-primary-blue px-2 py-0.5 rounded-full ml-2 lowercase font-black tracking-widest opacity-80 border border-primary-blue/20 align-middle">v{APP_VERSION}</span>
                         </h1>
                         <div className="flex gap-2">
-                            <button onClick={clearAllCache} className="text-[10px] bg-white text-gray-400 border border-gray-100 px-3 py-1.5 rounded-lg font-bold hover:bg-rose-50 hover:text-rose-600 transition-all active:scale-95" title="Purge local stats cache">
+                            {isBillingMode && (
+                                <button onClick={exportBillingPDF} className="text-[10px] bg-primary-blue text-white border border-primary-blue/20 px-4 py-2 rounded-lg font-black uppercase tracking-widest hover:bg-blue-700 transition-all active:scale-95 shadow-md flex items-center gap-2">
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                    Links Abstract
+                                </button>
+                            )}
+                            <button onClick={clearAllCache} className="text-[10px] bg-white text-gray-400 border border-gray-100 px-3 py-2 rounded-lg font-bold hover:bg-rose-50 hover:text-rose-600 transition-all active:scale-95" title="Purge local stats cache">
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                             </button>
                         </div>
@@ -250,22 +393,35 @@ export default function Live() {
                                                 }
                                                 setSearchQuery("");
                                             }}
-                                            className="p-3 hover:bg-primary-blue/5 cursor-pointer border-b border-gray-50 last:border-0 group transition-colors"
+                                            className="p-3 hover:bg-primary-blue/5 cursor-pointer border-b border-gray-50 last:border-0 group transition-colors relative"
                                         >
-                                            <div className="flex items-center gap-3">
-                                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${res.type === 'ss' ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'}`}>
-                                                    {res.type === 'ss' ? (
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                                                    ) : (
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                                                    )}
-                                                </div>
-                                                <div>
-                                                    <div className="text-xs font-bold text-gray-800 group-hover:text-primary-blue transition-colors uppercase tracking-tight">{res.name}</div>
-                                                    <div className="text-[10px] text-gray-400 font-medium">
-                                                        {res.type === 'ss' ? `${res.volt || 'Substation'} • ${res.lat.toFixed(4)}, ${res.lng.toFixed(4)}` : 'Navigate to coordinates'}
+                                            <div className="flex items-center justify-between gap-3">
+                                                <div className="flex items-center gap-3 min-w-0">
+                                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${res.type === 'ss' ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'}`}>
+                                                        {res.type === 'ss' ? (
+                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                                                        ) : (
+                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                                        )}
+                                                    </div>
+                                                    <div className="min-w-0 select-text">
+                                                        <div className="text-xs font-bold text-gray-800 group-hover:text-primary-blue transition-colors uppercase tracking-tight truncate">{res.name}</div>
+                                                        <div className="text-[10px] text-gray-400 font-medium truncate">
+                                                            {res.type === 'ss' ? `${res.volt || 'Substation'} • ${res.lat.toFixed(5)}, ${res.lng.toFixed(5)}` : 'Navigate to coordinates'}
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                
+                                                <button 
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        copyToClipboard(`${res.lat.toFixed(6)}, ${res.lng.toFixed(6)}`);
+                                                    }}
+                                                    className="shrink-0 p-2 text-gray-300 hover:text-primary-blue hover:bg-primary-blue/10 rounded-lg transition-all"
+                                                    title="Copy Coordinates"
+                                                >
+                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                                                </button>
                                             </div>
                                         </div>
                                     ))}
@@ -318,38 +474,51 @@ export default function Live() {
                         return (
                             <div key={lot.id} className={`border rounded-xl overflow-hidden bg-white transition-all duration-300 ${isExpanded ? 'shadow-md border-primary-blue/20 ring-1 ring-primary-blue/10' : 'border-gray-200 hover:border-gray-300 shadow-sm'}`}>
                                 <div className={`px-6 py-4 flex justify-between items-center ${isExpanded ? 'bg-primary-blue/5' : 'bg-gray-50/50'}`}>
-                                    <div className="flex-grow">
-                                        <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2 uppercase tracking-tight">
-                                            {lot.name}
-                                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: lot.color }}></span>
-                                        </h3>
-                                        <div className="flex items-center gap-3 mt-0.5">
-                                            <p className="text-xs font-bold uppercase tracking-tight text-gray-500">{files.length} Surveys</p>
-                                            <span className="text-gray-300">|</span>
-                                            {isExpanded && lotFiles[lot.id]?.some(f => !fileStats[`${lot.id}_${f}`]) ? (
-                                                <div className="flex items-center gap-2">
-                                                    <div className="w-16 h-1 bg-gray-100 rounded-full overflow-hidden">
-                                                        <div className="h-full bg-primary-blue transition-all duration-300" style={{ width: `${lotProgress[lot.id] || 0}%` }}></div>
+                                    <div className="flex-grow flex items-center gap-3">
+                                        {isBillingMode && (
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedLots.includes(lot.id)}
+                                                onChange={(e) => {
+                                                    e.stopPropagation();
+                                                    setSelectedLots(prev => prev.includes(lot.id) ? prev.filter(id => id !== lot.id) : [...prev, lot.id]);
+                                                }}
+                                                className="w-4 h-4 rounded border-gray-300 text-primary-blue focus:ring-primary-blue transition-all cursor-pointer"
+                                            />
+                                        )}
+                                        <div>
+                                            <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2 uppercase tracking-tight">
+                                                {lot.name}
+                                                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: lot.color }}></span>
+                                            </h3>
+                                            <div className="flex items-center gap-3 mt-0.5">
+                                                <p className="text-xs font-bold uppercase tracking-tight text-gray-500">{files.length} Surveys</p>
+                                                <span className="text-gray-300">|</span>
+                                                {isExpanded && lotFiles[lot.id]?.some(f => !fileStats[`${lot.id}_${f}`]) ? (
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-16 h-1 bg-gray-100 rounded-full overflow-hidden">
+                                                            <div className="h-full bg-primary-blue transition-all duration-300" style={{ width: `${lotProgress[lot.id] || 0}%` }}></div>
+                                                        </div>
+                                                        <span className="text-[9px] font-black text-primary-blue uppercase">{lotProgress[lot.id] || 0}%</span>
                                                     </div>
-                                                    <span className="text-[9px] font-black text-primary-blue uppercase">{lotProgress[lot.id] || 0}%</span>
-                                                </div>
-                                            ) : (
-                                                (() => {
-                                                    const totalKm = files.reduce((acc, f) => acc + (fileStats[`${lot.id}_${f}`]?.length || 0), 0);
-                                                    if (totalKm > 0) {
+                                                ) : (
+                                                    (() => {
+                                                        const totalKm = files.reduce((acc, f) => acc + (fileStats[`${lot.id}_${f}`]?.length || 0), 0);
+                                                        if (totalKm > 0) {
+                                                            return (
+                                                                <p className="text-xs font-black uppercase tracking-tight" style={{ color: lot.color }}>
+                                                                    {totalKm.toFixed(2)} KM TOTAL
+                                                                </p>
+                                                            );
+                                                        }
                                                         return (
-                                                            <p className="text-xs font-black uppercase tracking-tight" style={{ color: lot.color }}>
-                                                                {totalKm.toFixed(2)} KM TOTAL
+                                                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest italic opacity-70">
+                                                                {files.length > 0 ? "Awaiting Analysis" : "No Surveys"}
                                                             </p>
                                                         );
-                                                    }
-                                                    return (
-                                                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest italic opacity-70">
-                                                            {files.length > 0 ? "Awaiting Analysis" : "No Surveys"}
-                                                        </p>
-                                                    );
-                                                })()
-                                            )}
+                                                    })()
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="flex gap-3 items-center">
@@ -361,7 +530,7 @@ export default function Live() {
                                                 <select value={sortMode} onChange={(e) => setSortConfigs(prev => ({ ...prev, [lot.id]: e.target.value }))} className="text-[10px] font-black uppercase tracking-widest bg-white border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-primary-blue transition-all text-gray-600">
                                                     <option value="name">Sort: Name</option>
                                                     <option value="km">Sort: KM (High-Low)</option>
-                                                    <option value="towers">Sort: Towers</option>
+                                                    <option value="towers">Sort: Points</option>
                                                     <option value="date">Sort: Recent</option>
                                                 </select>
                                             </div>
@@ -386,7 +555,7 @@ export default function Live() {
                                                             <div className="flex items-center gap-2 mt-0.5">
                                                                 <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">
                                                                     {fileStats[`${lot.id}_${file}`]
-                                                                        ? `${fileStats[`${lot.id}_${file}`].length.toFixed(3)} KM • ${fileStats[`${lot.id}_${file}`].points} TOWERS`
+                                                                        ? `${fileStats[`${lot.id}_${file}`].length.toFixed(3)} KM • ${fileStats[`${lot.id}_${file}`].points} POINTS`
                                                                         : "Analysis Pending..."
                                                                     }
                                                                 </span>

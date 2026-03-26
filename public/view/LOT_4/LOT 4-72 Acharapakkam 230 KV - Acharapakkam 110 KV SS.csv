@@ -1,0 +1,8 @@
+S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude.,Longitude.,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Power Line,"Rail, Road, River, Car Track",Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,Gantry ,Gantry,H POLE,15,,,-,17,,12.412166666666668,79.81138888888889,GOOD,,,,SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.81138888888889 12.412166666666668, 79.81222222222222 12.413833333333333)"
+2,T.No-1,T,DC,25,GANTRY - TN 1,60,11.01,18,86°3'48''RT,12.412855, 79.811656,GOOD,NO E/W,"11KV , LT",TAAR ROAD,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.81222222222222 12.413833333333333, 79.81416666666667 12.416333333333334)"
+3,Gantry,Gantry ,H POLE,15,TN 1 - GANTRY,65,-,18,,12.412889, 79.812605,GOOD,EX. OPGW,,,SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,125,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

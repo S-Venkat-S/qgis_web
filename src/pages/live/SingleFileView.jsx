@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Polyline, CircleMarker, Popup, Tooltip } from 
 import L from 'leaflet';
 import Papa from 'papaparse';
 import 'leaflet/dist/leaflet.css';
-import { updatedLots, ChangeView, ZoomHandler, CopyCoordsHandler, OPACITY_KEY, DEFAULT_OPACITY, SHOW_MAP_KEY, DEFAULT_SHOW_MAP, SHOW_SS_LABELS_KEY, DEFAULT_SS_LABELS, SHOW_LINE_LABELS_KEY, DEFAULT_LINE_LABELS, exportQGISProject, parseCoords, getCoordinateFromParams } from './MapUtils';
+import { updatedLots, ChangeView, ZoomHandler, CopyCoordsHandler, OPACITY_KEY, DEFAULT_OPACITY, SHOW_MAP_KEY, DEFAULT_SHOW_MAP, SHOW_SS_LABELS_KEY, DEFAULT_SS_LABELS, SHOW_LINE_LABELS_KEY, DEFAULT_LINE_LABELS, exportQGISProject, parseCoords, getCoordinateFromParams, extractPointsFromCSV } from './MapUtils';
 import SubStationLayer from './SubStationLayer';
 
 const SingleFileView = () => {
@@ -62,33 +62,7 @@ const SingleFileView = () => {
             skipEmptyLines: true,
             transformHeader: (h) => h.trim(),
             complete: (results) => {
-                const parsedPoints = results.data
-                    .map(row => {
-                        const keys = Object.keys(row);
-                        const latKey = keys.find(k => {
-                            const low = k.toLowerCase().replace(/[^a-z]/g, '');
-                            return low === 'latitude' || low === 'lat';
-                        });
-                        const lngKey = keys.find(k => {
-                            const low = k.toLowerCase().replace(/[^a-z]/g, '');
-                            return low === 'longitude' || low === 'lng' || low === 'long';
-                        });
-                        const towerNoKey = keys.find(k => {
-                            const low = k.toLowerCase().replace(/[^a-z0-9]/g, '');
-                            return ['towerno', 'tno', 'sno', 'sn'].includes(low);
-                        });
-
-                        const lat = latKey ? parseFloat(row[latKey]) : NaN;
-                        const lng = lngKey ? parseFloat(row[lngKey]) : NaN;
-
-                        return {
-                            lat,
-                            lng,
-                            towerNo: towerNoKey ? row[towerNoKey] : (row['Tower No.'] || 'N/A'),
-                            description: row.Description || row.description
-                        };
-                    })
-                    .filter(pt => !isNaN(pt.lat) && !isNaN(pt.lng));
+                const parsedPoints = extractPointsFromCSV(results.data);
 
                 if (parsedPoints.length === 0 && results.data.length > 0) {
                     console.error("No valid coordinates found in file. Columns found:", Object.keys(results.data[0]));

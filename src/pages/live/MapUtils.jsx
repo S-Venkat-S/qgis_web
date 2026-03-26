@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useMap, useMapEvents } from 'react-leaflet';
 import Papa from 'papaparse';
 import JSZip from 'jszip';
@@ -26,6 +27,36 @@ export const parseCoords = (input) => {
     }
   }
   return null;
+};
+
+// Centralized CSV coordinate/tower extraction logic
+export const extractPointsFromCSV = (data) => {
+  if (!Array.isArray(data)) return [];
+  return data.map(row => {
+    const keys = Object.keys(row);
+    const latKey = keys.find(k => {
+      const low = k.toLowerCase().replace(/[^a-z]/g, '');
+      return low === 'latitude' || low === 'lat';
+    });
+    const lngKey = keys.find(k => {
+      const low = k.toLowerCase().replace(/[^a-z]/g, '');
+      return low === 'longitude' || low === 'lng' || low === 'long' || low === 'lon';
+    });
+    const towerNoKey = keys.find(k => {
+      const low = k.toLowerCase().replace(/[^a-z0-9]/g, '');
+      return ['towerno', 'tno', 'sno', 'sn'].includes(low);
+    });
+
+    const lat = latKey ? parseFloat(row[latKey]) : NaN;
+    const lng = lngKey ? parseFloat(row[lngKey]) : NaN;
+
+    return {
+      lat,
+      lng,
+      towerNo: towerNoKey ? row[towerNoKey] : (row['Tower No.'] || 'N/A'),
+      description: row.Description || row.description
+    };
+  }).filter(pt => !isNaN(pt.lat) && !isNaN(pt.lng));
 };
 
 export const getCoordinateFromParams = (searchParams) => {
@@ -85,41 +116,93 @@ export const CopyCoordsHandler = () => {
       setPos({ x: e.originalEvent.pageX, y: e.originalEvent.pageY, lat: e.latlng.lat, lng: e.latlng.lng });
       setCopied(false);
     },
-    click: () => setPos(null),
+    click: (e) => {
+      // Don't close if clicking inside the popup
+      if (e.originalEvent && e.originalEvent.target && e.originalEvent.target.closest('.coordinate-popup')) return;
+      setPos(null);
+    },
     movestart: () => setPos(null)
   });
 
   const handleCopy = () => {
     if (!pos) return;
     const text = `${pos.lat.toFixed(6)}, ${pos.lng.toFixed(6)}`;
-    navigator.clipboard.writeText(text);
+    
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text)
+            .then(() => markCopied())
+            .catch(() => fallbackCopy(text));
+    } else {
+        fallbackCopy(text);
+    }
+  };
+
+  const markCopied = () => {
     setCopied(true);
     setTimeout(() => setPos(null), 1000);
   };
 
+  const fallbackCopy = (text) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-9999px";
+    textArea.style.top = "0";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      markCopied();
+    } catch (err) {}
+    document.body.removeChild(textArea);
+  };
+
   if (!pos) return null;
 
-  return (
+  return createPortal(
     <div
+      className="coordinate-popup"
+      onClick={(e) => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
+      onMouseUp={(e) => e.stopPropagation()}
+      onContextMenu={(e) => e.stopPropagation()}
       style={{
         position: 'fixed',
         left: pos.x,
         top: pos.y,
         zIndex: 10000,
         background: 'white',
-        padding: '4px',
+        padding: '6px 12px',
         borderRadius: '8px',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-        border: '1px solid #e2e8f0'
+        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+        border: '1px solid #f1f5f9',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+        cursor: 'default'
       }}
     >
+      <span 
+        className="text-[11px] font-mono select-text text-gray-600 bg-gray-50 px-2 py-1 rounded border border-gray-100 italic cursor-text"
+        onMouseDown={(e) => e.stopPropagation()}
+        style={{ userSelect: 'text', WebkitUserSelect: 'text' }}
+      >
+        {pos.lat.toFixed(6)}, {pos.lng.toFixed(6)}
+      </span>
       <button
         onClick={handleCopy}
-        className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-md transition-all whitespace-nowrap shadow-sm ${copied ? 'bg-green-600 text-white' : 'bg-primary-blue text-white hover:bg-blue-700'}`}
+        className={`p-1.5 rounded-md transition-all shrink-0 ${copied ? 'text-emerald-600 bg-emerald-50' : 'text-slate-400 hover:text-primary-blue hover:bg-slate-50'}`}
+        title={copied ? "Copied!" : "Copy Coordinates"}
       >
-        {copied ? '✓ COPIED!' : `COPY: ${pos.lat.toFixed(6)}, ${pos.lng.toFixed(6)}`}
+        {copied ? (
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+        ) : (
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+        )}
       </button>
-    </div>
+    </div>,
+    document.body
   );
 };
 

@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Polyline, CircleMarker, Popup, Tooltip } from 
 import L from 'leaflet';
 import Papa from 'papaparse';
 import 'leaflet/dist/leaflet.css';
-import { updatedLots, ChangeView, ZoomHandler, CopyCoordsHandler, OPACITY_KEY, DEFAULT_OPACITY, SHOW_MAP_KEY, DEFAULT_SHOW_MAP, SHOW_SS_LABELS_KEY, DEFAULT_SS_LABELS, SHOW_LINE_LABELS_KEY, DEFAULT_LINE_LABELS, exportQGISProject, parseCoords, getCoordinateFromParams } from './MapUtils';
+import { updatedLots, ChangeView, ZoomHandler, CopyCoordsHandler, OPACITY_KEY, DEFAULT_OPACITY, SHOW_MAP_KEY, DEFAULT_SHOW_MAP, SHOW_SS_LABELS_KEY, DEFAULT_SS_LABELS, SHOW_LINE_LABELS_KEY, DEFAULT_LINE_LABELS, exportQGISProject, parseCoords, getCoordinateFromParams, extractPointsFromCSV } from './MapUtils';
 import SubStationLayer from './SubStationLayer';
 
 const MultiFileView = () => {
@@ -151,20 +151,8 @@ const MultiFileView = () => {
                             Papa.parse(fileUrl, { download: true, header: true, complete: res, error: rej });
                         });
 
-                        const pts = results.data
-                            .map(row => {
-                                const keys = Object.keys(row);
-                                const latKey = keys.find(k => k.toLowerCase().replace(/[^a-z]/g, '') === 'latitude' || k.toLowerCase().replace(/[^a-z]/g, '') === 'lat');
-                                const lngKey = keys.find(k => k.toLowerCase().replace(/[^a-z]/g, '') === 'longitude' || k.toLowerCase().replace(/[^a-z]/g, '') === 'lng');
-                                const towerNoKey = keys.find(k => ['towerno', 'tno', 'sno', 'sn'].includes(k.toLowerCase().replace(/[^a-z0-9]/g, '')));
+                        const pts = extractPointsFromCSV(results.data);
 
-                                return {
-                                    lat: latKey ? parseFloat(row[latKey]) : NaN,
-                                    lng: lngKey ? parseFloat(row[lngKey]) : NaN,
-                                    towerNo: towerNoKey ? row[towerNoKey] : (row['Tower No.'] || 'N/A')
-                                };
-                            })
-                            .filter(pt => !isNaN(pt.lat) && !isNaN(pt.lng));
 
                         return { ...fileInfo, pts };
                     } catch (e) { console.warn(e); return null; }

@@ -1,0 +1,33 @@
+1. Acharapakkam 230 kV SS  - Acharapakkam 110 kV SS OPGW link shown in the map is not  correct.
+    ( Survey report for Lot 4 Link No. 72 attached)
+    - The link is not connecting to the Acharapakkam 110 in the given new survey also.
+    - Manually corrected the line.
+
+2. Ottiyambakkam to Perumbakkam OPGW link shown in the map is not correct that is to be deleted ( Which resembles Kitz park - Velachery deleted link's survey report  Lot 4  Link No. 98 ) 
+     (Survey report for Lot 4 Link No. 93 attached)
+    - The new survey report attached itself is also have incorrect co-ordinates.
+    - No options to correct the survey.
+
+3.Korattur to Kilpauk link a modified survery report attached herewith. 
+      ( Survey report for Lot 4 Link No. 126 attached)
+    - The new survey has missing towers from 16 to 30
+    - Line spit into two as 126A, 126B
+
+
+4. Acharapakkam - SP Koil LILO Moosivakkam OPGW link to be included in the map ( Survey report Lot4-69  attached.)
+    - Link already available
+
+5. KITZ - Madampakkam OPGW link - UptoTower loc 34  is mentioned in the map, From Tower loc 34 to Madambakkam SS to be included in the map. ( Survey report attached.)
+    - Survey not available
+
+6. Thiruninravoor SS  and Thirumazhisai SS  names to be interchanged in the Map.
+    - Already in correct position
+
+7. Thiruvallur - Kakkalur link   OPGW link ,  Kakkalur   Sub station's   name not mentioned
+    - Already available
+
+8. SP Koil - Veerapurma OPGW link - Veerapuram SS Name not mentioned.
+    - Already available
+
+9. Continuity is not found Vadakathipatty - Somalapuram  Link.
+    - Corrected
