@@ -59,6 +59,29 @@ export const extractPointsFromCSV = (data) => {
   }).filter(pt => !isNaN(pt.lat) && !isNaN(pt.lng));
 };
 
+/**
+ * Fetches a zip file and extracts it using JSZip
+ */
+export const fetchAndUnzip = async (zipUrl) => {
+  const resp = await fetch(zipUrl);
+  if (!resp.ok) throw new Error(`Zip bundle not found: ${zipUrl}`);
+  const blob = await resp.blob();
+  const zip = await JSZip.loadAsync(blob);
+  return zip;
+};
+
+/**
+ * Parses index.txt and extracts version and file listing
+ */
+export const parseIndexFile = (text) => {
+  const lines = text.split('\n').map(l => l.trim());
+  const versionLine = lines.find(l => l.startsWith('#v:'));
+  const version = versionLine ? versionLine.split(':')[1] : null;
+  const files = lines.filter(l => l.length > 0 && !l.startsWith('#'))
+      .map(l => l.endsWith('.') ? l.slice(0, -1) : l);
+  return { version, files };
+};
+
 export const getCoordinateFromParams = (searchParams) => {
   const lat = searchParams.get('lat') || searchParams.get('latitude');
   const lng = searchParams.get('lng') || searchParams.get('longitude');

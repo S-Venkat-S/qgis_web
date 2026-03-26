@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { updatedLots, parseCoords, APP_VERSION, extractPointsFromCSV } from './live/MapUtils';
+import { updatedLots, parseCoords, APP_VERSION, extractPointsFromCSV, fetchAndUnzip, parseIndexFile } from './live/MapUtils';
 import Papa from 'papaparse';
 
 const getDistance = (p1, p2) => {
@@ -26,6 +26,7 @@ export default function Live() {
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [subStations, setSubStations] = useState([]);
     const [selectedLots, setSelectedLots] = useState([]);
+    const [lotVersions, setLotVersions] = useState({});
 
     const allLots = updatedLots;
 
@@ -35,12 +36,12 @@ export default function Live() {
             fetch(`${lot.basePath}index.txt?${Date.now()}`)
                 .then(r => r.text())
                 .then(text => {
-                    const files = text.split('\n')
-                        .map(l => l.trim())
-                        .map(l => l.endsWith('.') ? l.slice(0, -1) : l) // Strip trailing dot if present
-                        .filter(l => l.length > 0 && l.toLowerCase().endsWith('.csv'))
-                        .sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' }));
-                    setLotFiles(prev => ({ ...prev, [lot.id]: files }));
+                    const { version, files } = parseIndexFile(text);
+                    setLotVersions(prev => ({ ...prev, [lot.id]: version }));
+                    setLotFiles(prev => ({ 
+                        ...prev, 
+                        [lot.id]: files.sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' }))
+                    }));
                 })
                 .catch(err => console.error(`Error loading lot index ${lot.id}:`, err));
         });
@@ -75,8 +76,8 @@ export default function Live() {
     useEffect(() => {
         if (!expandedLot || !lotFiles[expandedLot]) return;
 
-        const filesToFetch = lotFiles[expandedLot].filter(f => !fileStats[`${expandedLot}_${f}`]);
-        if (filesToFetch.length === 0) {
+        const filesToProcess = lotFiles[expandedLot].filter(f => !fileStats[`${expandedLot}_${f}`]);
+        if (filesToProcess.length === 0) {
             setLotProgress(prev => ({ ...prev, [expandedLot]: 100 }));
             return;
         }
@@ -84,69 +85,63 @@ export default function Live() {
         const lot = allLots.find(l => l.id === expandedLot);
         if (!lot) return;
 
-        let processedCount = 0;
-        const totalToFetch = filesToFetch.length;
-        const batchSize = 10;
-
-        const fetchNextBatch = async () => {
-            const batch = filesToFetch.slice(processedCount, processedCount + batchSize);
-            if (batch.length === 0) {
-                localStorage.setItem('survey_stats_cache', JSON.stringify(fileStats));
-                setLotProgress(prev => ({ ...prev, [expandedLot]: 100 }));
-                return;
-            }
-
-            setLotProgress(prev => ({
-                ...prev,
-                [expandedLot]: Math.round((processedCount / totalToFetch) * 100)
-            }));
-
+        const processLotZip = async () => {
+            setLotProgress(prev => ({ ...prev, [expandedLot]: 5 }));
             try {
-                const results = await Promise.all(batch.map(async (fileName) => {
-                    let fileUrl = fileName.includes('/') ? `/view/${fileName}` : `${lot.basePath}${fileName}`;
-                    try {
-                        const r = await fetch(fileUrl);
-                        if (!r.ok) return null;
-                        const lastModified = r.headers.get('Last-Modified');
-                        const text = await r.text();
-                        return { text, lastModified, fileName };
-                    } catch (e) { return null; }
-                }));
-
+                const version = lotVersions[expandedLot] || Date.now();
+                const zipUrl = `${lot.basePath}lot_bundle.zip?v=${version}`;
+                
+                const zip = await fetchAndUnzip(zipUrl);
                 const batchStats = {};
-                for (const res of results) {
-                    if (!res) continue;
-                    const statsKey = `${expandedLot}_${res.fileName}`;
-
-                    // Synchronous parsing is faster and more reliable within this loop
-                    const pResults = Papa.parse(res.text, { header: true, skipEmptyLines: true });
-                    const pts = extractPointsFromCSV(pResults.data);
-
-                    let totalDist = 0;
-                    for (let i = 0; i < pts.length - 1; i++) {
-                        totalDist += getDistance(pts[i], pts[i + 1]);
+                let count = 0;
+                
+                const filesInLot = lotFiles[expandedLot];
+                for (const fileName of filesInLot) {
+                    const statsKey = `${expandedLot}_${fileName}`;
+                    if (fileStats[statsKey]) {
+                        count++;
+                        continue;
                     }
 
-                    batchStats[statsKey] = {
-                        length: totalDist,
-                        points: pts.length,
-                        date: res.lastModified ? new Date(res.lastModified).toLocaleDateString('en-GB', {
-                            day: '2-digit', month: 'short', year: 'numeric'
-                        }) : 'Unknown'
-                    };
+                    const zipEntryName = fileName.includes('/') ? fileName.split('/').pop() : fileName;
+                    const zipFile = zip.file(zipEntryName);
+
+                    if (zipFile) {
+                        const content = await zipFile.async("string");
+                        const pResults = Papa.parse(content, { header: true, skipEmptyLines: true });
+                        const pts = extractPointsFromCSV(pResults.data);
+                        
+                        let totalDist = 0;
+                        for (let i = 0; i < pts.length - 1; i++) {
+                            totalDist += getDistance(pts[i], pts[i + 1]);
+                        }
+                        
+                        batchStats[statsKey] = {
+                            length: totalDist,
+                            points: pts.length,
+                            date: 'Lot Bundle'
+                        };
+                    }
+                    count++;
+                    if (count % 10 === 0 || count === filesInLot.length) {
+                        setLotProgress(prev => ({ ...prev, [expandedLot]: Math.round((count / filesInLot.length) * 100) }));
+                    }
                 }
 
-                setFileStats(prev => ({ ...prev, ...batchStats }));
-                processedCount += batchSize;
-                setTimeout(fetchNextBatch, 10); // Reduced delay for smoother feel
-            } catch (e) {
-                console.error("Batch processing error:", e);
+                setFileStats(prev => {
+                    const next = { ...prev, ...batchStats };
+                    localStorage.setItem('survey_stats_cache', JSON.stringify(next));
+                    return next;
+                });
+                setLotProgress(prev => ({ ...prev, [expandedLot]: 100 }));
+            } catch (err) {
+                console.error("ZIP processing failed:", err);
                 setLotProgress(prev => ({ ...prev, [expandedLot]: 100 }));
             }
         };
 
-        fetchNextBatch();
-    }, [expandedLot, lotFiles, refreshTrigger]);
+        processLotZip();
+    }, [expandedLot, lotFiles, lotVersions, refreshTrigger]);
 
     const clearAllCache = () => {
         if (!window.confirm("Clear all cached KM/Tower stats? This will force a re-scan of all files.")) return;

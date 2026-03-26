@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Polyline, CircleMarker, Popup, Tooltip } from 
 import L from 'leaflet';
 import Papa from 'papaparse';
 import 'leaflet/dist/leaflet.css';
-import { updatedLots, ChangeView, ZoomHandler, CopyCoordsHandler, OPACITY_KEY, DEFAULT_OPACITY, SHOW_MAP_KEY, DEFAULT_SHOW_MAP, SHOW_SS_LABELS_KEY, DEFAULT_SS_LABELS, SHOW_LINE_LABELS_KEY, DEFAULT_LINE_LABELS, exportQGISProject, parseCoords, getCoordinateFromParams, extractPointsFromCSV } from './MapUtils';
+import { updatedLots, ChangeView, ZoomHandler, CopyCoordsHandler, OPACITY_KEY, DEFAULT_OPACITY, SHOW_MAP_KEY, DEFAULT_SHOW_MAP, SHOW_SS_LABELS_KEY, DEFAULT_SS_LABELS, SHOW_LINE_LABELS_KEY, DEFAULT_LINE_LABELS, exportQGISProject, parseCoords, getCoordinateFromParams, extractPointsFromCSV, fetchAndUnzip, parseIndexFile } from './MapUtils';
 import SubStationLayer from './SubStationLayer';
 
 const MultiFileView = () => {
@@ -24,6 +24,7 @@ const MultiFileView = () => {
     const [lotFiles, setLotFiles] = useState({});
     const [loadingProgress, setLoadingProgress] = useState(0);
     const [exportProgress, setExportProgress] = useState(null);
+    const [lotVersions, setLotVersions] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [bounds, setBounds] = useState(null);
     const [subStations, setSubStations] = useState([]);
@@ -69,12 +70,12 @@ const MultiFileView = () => {
             fetch(`${lot.basePath}index.txt?${Date.now()}`)
                 .then(r => r.text())
                 .then(text => {
-                    const files = text.split('\n')
-                        .map(l => l.trim())
-                        .map(l => l.endsWith('.') ? l.slice(0, -1) : l)
-                        .filter(l => l.length > 0 && l.toLowerCase().endsWith('.csv'))
-                        .sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' }));
-                    setLotFiles(prev => ({ ...prev, [lot.id]: files }));
+                    const { version, files } = parseIndexFile(text);
+                    setLotVersions(prev => ({ ...prev, [lot.id]: version }));
+                    setLotFiles(prev => ({ 
+                        ...prev, 
+                        [lot.id]: files.sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' }))
+                    }));
                 });
         });
 
@@ -104,29 +105,13 @@ const MultiFileView = () => {
     useEffect(() => {
         const loadLots = async () => {
             const isCustom = lotIds === 'custom';
-            const lotsToLoad = isCustom ? [] : selectedLotIds.filter(id => !multiMapData[id]);
+            // Only load lots that aren't already in memory
+            const lotsToLoad = isCustom 
+                ? Array.from(new Set(searchParams.get('files')?.split(',').map(f => f.split('|')[0])))
+                : selectedLotIds.filter(id => !multiMapData[id]);
 
-            let filesToLoad = [];
-            if (isCustom) {
-                const filesParam = searchParams.get('files');
-                if (filesParam) {
-                    filesToLoad = filesParam.split(',').map(f => {
-                        const [lotId, fileName] = f.split('|');
-                        return { lotId, fileName };
-                    }).filter(f => !multiMapData[f.lotId]?.[f.fileName]);
-                }
-            } else {
-                lotsToLoad.forEach(id => {
-                    if (lotFiles[id]) {
-                        lotFiles[id].forEach(f => filesToLoad.push({ lotId: id, fileName: f }));
-                    }
-                });
-            }
-
-            if (filesToLoad.length === 0) {
-                if (!bounds && Object.keys(multiMapData).length > 0) {
-                    recalculateBounds(multiMapData);
-                }
+            if (lotsToLoad.length === 0) {
+                if (!bounds && Object.keys(multiMapData).length > 0) recalculateBounds(multiMapData);
                 setIsLoading(false);
                 return;
             }
@@ -135,39 +120,46 @@ const MultiFileView = () => {
             setLoadingProgress(0);
 
             const updatedData = { ...multiMapData };
-            let count = 0;
-            const batchSize = 10;
+            let lotCount = 0;
 
-            for (let i = 0; i < filesToLoad.length; i += batchSize) {
-                const batch = filesToLoad.slice(i, i + batchSize);
-                const batchResults = await Promise.all(batch.map(async (fileInfo) => {
-                    const lot = updatedLots.find(l => l.id === fileInfo.lotId);
-                    if (!lot) return null;
+            for (const lid of lotsToLoad) {
+                const lot = updatedLots.find(l => l.id === lid);
+                if (!lot) continue;
 
-                    let fileUrl = fileInfo.fileName.includes('/') ? `/view/${fileInfo.fileName}` : `${lot.basePath}${fileInfo.fileName}`;
+                try {
+                    const version = lotVersions[lid] || Date.now();
+                    const zipUrl = `${lot.basePath}lot_bundle.zip?v=${version}`;
+                    const zip = await fetchAndUnzip(zipUrl);
+                    
+                    if (!updatedData[lid]) updatedData[lid] = {};
 
-                    try {
-                        const results = await new Promise((res, rej) => {
-                            Papa.parse(fileUrl, { download: true, header: true, complete: res, error: rej });
-                        });
-
-                        const pts = extractPointsFromCSV(results.data);
-
-
-                        return { ...fileInfo, pts };
-                    } catch (e) { console.warn(e); return null; }
-                }));
-
-                batchResults.forEach(res => {
-                    if (res && res.pts.length > 0) {
-                        if (!updatedData[res.lotId]) updatedData[res.lotId] = {};
-                        updatedData[res.lotId][res.fileName] = res.pts;
+                    // If custom, only extract specific files. Otherwise extract all.
+                    let filesToExtract = [];
+                    if (isCustom) {
+                        const filesParam = searchParams.get('files') || "";
+                        filesToExtract = filesParam.split(',')
+                            .filter(f => f.startsWith(`${lid}|`))
+                            .map(f => f.split('|')[1]);
+                    } else {
+                        filesToExtract = lotFiles[lid] || [];
                     }
-                    count++;
-                });
 
+                    for (const fileName of filesToExtract) {
+                        const zipEntryName = fileName.includes('/') ? fileName.split('/').pop() : fileName;
+                        const zipFile = zip.file(zipEntryName);
+                        if (zipFile) {
+                            const content = await zipFile.async("string");
+                            const pResults = Papa.parse(content, { header: true, skipEmptyLines: true });
+                            updatedData[lid][fileName] = extractPointsFromCSV(pResults.data);
+                        }
+                    }
+                } catch (e) {
+                    console.error(`Failed to load zip for lot ${lid}:`, e);
+                }
+                
+                lotCount++;
+                setLoadingProgress(Math.round((lotCount / lotsToLoad.length) * 100));
                 setMultiMapData({ ...updatedData });
-                setLoadingProgress(Math.round((count / filesToLoad.length) * 100));
             }
 
             recalculateBounds(updatedData);
