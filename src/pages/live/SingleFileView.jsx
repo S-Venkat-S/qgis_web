@@ -4,11 +4,11 @@ import { MapContainer, TileLayer, Polyline, CircleMarker, Popup, Tooltip } from 
 import L from 'leaflet';
 import Papa from 'papaparse';
 import 'leaflet/dist/leaflet.css';
-import { updatedLots, ChangeView, ZoomHandler, CopyCoordsHandler, OPACITY_KEY, DEFAULT_OPACITY, SHOW_MAP_KEY, DEFAULT_SHOW_MAP, SHOW_SS_LABELS_KEY, DEFAULT_SS_LABELS, SHOW_LINE_LABELS_KEY, DEFAULT_LINE_LABELS, exportQGISProject, parseCoords, getCoordinateFromParams, extractPointsFromCSV } from './MapUtils';
+import { updatedLots, ChangeView, ZoomHandler, CopyCoordsHandler, OPACITY_KEY, DEFAULT_OPACITY, SHOW_MAP_KEY, DEFAULT_SHOW_MAP, SHOW_SS_LABELS_KEY, DEFAULT_SS_LABELS, SHOW_LINE_LABELS_KEY, DEFAULT_LINE_LABELS, exportQGISProject, parseCoords, getCoordinateFromParams, extractPointsFromCSV, resolveFileUrl } from './MapUtils';
 import SubStationLayer from './SubStationLayer';
 
 const SingleFileView = () => {
-    const { lotId, fileName } = useParams();
+    const { lotId, '*': fileName } = useParams();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
 
@@ -21,6 +21,19 @@ const SingleFileView = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [subStations, setSubStations] = useState([]);
     const [lotFiles, setLotFiles] = useState({});
+    const [searchCenter, setSearchCenter] = useState(null); // Point to jump to
+    const [searchMarker, setSearchMarker] = useState(null); // Persistent marker for search
+
+    // Clear search marker after 4 seconds
+    useEffect(() => {
+        if (searchMarker) {
+            const timer = setTimeout(() => {
+                setSearchMarker(null);
+                setSearchCenter(null);
+            }, 4000);
+            return () => clearTimeout(timer);
+        }
+    }, [searchMarker]);
     const [mapOpacity, setMapOpacity] = useState(() => {
         const saved = localStorage.getItem(OPACITY_KEY);
         return saved !== null ? parseFloat(saved) : DEFAULT_OPACITY;
@@ -54,7 +67,9 @@ const SingleFileView = () => {
         if (!lot || !fileName) return;
 
         setLoading(true);
-        const fileUrl = `${lot.basePath}${fileName}`;
+        const rangeMatch = fileName.match(/@(\d+):(\d+)$/);
+        const actualFileName = rangeMatch ? fileName.substring(0, rangeMatch.index) : fileName;
+        const fileUrl = resolveFileUrl(lot.basePath, actualFileName);
 
         Papa.parse(fileUrl, {
             download: true,
@@ -62,7 +77,14 @@ const SingleFileView = () => {
             skipEmptyLines: true,
             transformHeader: (h) => h.trim(),
             complete: (results) => {
-                const parsedPoints = extractPointsFromCSV(results.data);
+                let data = results.data;
+                if (rangeMatch) {
+                    const start = parseInt(rangeMatch[1]);
+                    const end = parseInt(rangeMatch[2]);
+                    // Assuming @1:14 means first 14 data rows. Papa.parse with header:true stores data rows starting from index 0.
+                    data = data.slice(start - 1, end);
+                }
+                const parsedPoints = extractPointsFromCSV(data);
 
                 if (parsedPoints.length === 0 && results.data.length > 0) {
                     console.error("No valid coordinates found in file. Columns found:", Object.keys(results.data[0]));
@@ -161,14 +183,16 @@ const SingleFileView = () => {
                 // If it's the current file, just re-zoom to it
                 const polyBounds = L.latLngBounds(points.map(p => [p.lat, p.lng]));
                 setBounds(polyBounds);
+                setSearchCenter(null);
             } else {
                 // Navigate to other file
-                navigate(`/live/${res.lid}/${res.fName}`);
+                navigate(`/live/${res.lid}/${encodeURIComponent(res.fName)}`);
             }
             setSearchQuery("");
-        } else if (res.type === 'coord' || res.type === 'ss') {
-            const b = L.latLngBounds([[res.lat - 0.005, res.lng - 0.005], [res.lat + 0.005, res.lng + 0.005]]);
-            setBounds(b);
+            setSearchMarker(null);
+        } else if (res.type === 'ss' || res.type === 'coord') {
+            setSearchCenter({ lat: res.lat, lng: res.lng });
+            setSearchMarker({ lat: res.lat, lng: res.lng, name: res.name });
             setSearchQuery("");
         }
     };
@@ -177,11 +201,8 @@ const SingleFileView = () => {
     useEffect(() => {
         const qCoord = getCoordinateFromParams(searchParams);
         if (qCoord) {
-            const b = L.latLngBounds([
-                [qCoord.lat - 0.002, qCoord.lng - 0.002],
-                [qCoord.lat + 0.002, qCoord.lng + 0.002]
-            ]);
-            setBounds(b);
+            setSearchCenter({ lat: qCoord.lat, lng: qCoord.lng });
+            setSearchMarker({ lat: qCoord.lat, lng: qCoord.lng, name: 'Target Location' });
         }
     }, [searchParams]);
 
@@ -360,9 +381,39 @@ const SingleFileView = () => {
                     preferCanvas={true}
                     className="h-full w-full bg-gray-900"
                 >
-                    <ChangeView bounds={bounds} />
+                    <ChangeView bounds={bounds} center={searchCenter} />
                     <ZoomHandler onZoom={setZoomLevel} />
                     <CopyCoordsHandler />
+                    
+                    {searchMarker && (
+                        <CircleMarker
+                            center={[searchMarker.lat, searchMarker.lng]}
+                            radius={8}
+                            pathOptions={{
+                                color: '#00ffff',
+                                fillColor: '#00ffff',
+                                fillOpacity: 0.6,
+                                weight: 2,
+                                className: 'pulse-marker'
+                            }}
+                        >
+                            <Popup>
+                                <div className="text-[11px] p-1">
+                                    <div className="font-black text-primary-blue uppercase mb-1">Search Result</div>
+                                    <div className="font-medium text-gray-700 mb-2">{searchMarker.name}</div>
+                                    <button 
+                                        onClick={() => setSearchMarker(null)}
+                                        className="w-full py-1 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded text-[9px] font-bold transition-colors"
+                                    >
+                                        CLEAR POINTER
+                                    </button>
+                                </div>
+                            </Popup>
+                            <Tooltip permanent direction="top" className="search-tooltip">
+                                Search Point
+                            </Tooltip>
+                        </CircleMarker>
+                    )}
                     {showMap && (
                         <TileLayer
                             url="http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
@@ -423,7 +474,7 @@ const SingleFileView = () => {
                                                 </Popup>
                                                 {showTowerLabels && zoomLevel >= 16 && (
                                                     <Tooltip permanent direction="top">
-                                                        {pt.towerNo}
+                                                        {idx + 1}-{pt.towerNo}
                                                     </Tooltip>
                                                 )}
                                             </CircleMarker>

@@ -26,8 +26,8 @@ function App() {
             {/* New Specialized Map Routes */}
             <Route path="/download" element={<Download />} />
             <Route path="/live" element={<Live />} />
-            <Route path="/live/:lotId/:fileName" element={<SingleFileView />} />
-            <Route path="/live/edit/:lotId/:fileName" element={<CSVEditor />} />
+            <Route path="/live/:lotIds/*" element={<MultiFileView />} />
+            <Route path="/live/edit/:lotId/*" element={<CSVEditor />} />
             <Route path="/live/lot/:lotIds" element={<MultiFileView />} />
 
             {/* Fallback */}

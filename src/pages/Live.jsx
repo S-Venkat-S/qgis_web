@@ -161,8 +161,8 @@ export default function Live() {
         setRefreshTrigger(prev => prev + 1);
     };
 
-    const viewSingleFile = (lotId, fileName) => window.open(`/live/${lotId}/${fileName}`, '_blank');
-    const editSingleFile = (lotId, fileName) => window.open(`/live/edit/${lotId}/${fileName}`, '_blank');
+    const viewSingleFile = (lotId, fileName) => window.open(`/live/${lotId}/${encodeURIComponent(fileName)}`, '_blank');
+    const editSingleFile = (lotId, fileName) => window.open(`/live/edit/${lotId}/${encodeURIComponent(fileName)}`, '_blank');
     const viewLot = (lotId) => {
         navigate(`/live/lot/${lotId}`);
     };

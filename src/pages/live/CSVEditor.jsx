@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Papa from 'papaparse';
-import { updatedLots } from './MapUtils';
+import { updatedLots, resolveFileUrl } from './MapUtils';
 
 const CSVEditor = () => {
-    const { lotId, fileName } = useParams();
+    const { lotId, '*': fileName } = useParams();
     const navigate = useNavigate();
     const [data, setData] = useState([]);
     const [originalData, setOriginalData] = useState([]);
@@ -34,7 +34,9 @@ const CSVEditor = () => {
         }
 
         setLoading(true);
-        const fileUrl = `${lot.basePath}${fileName}`;
+        const rangeMatch = fileName.match(/@(\d+):(\d+)$/);
+        const actualFileName = rangeMatch ? fileName.substring(0, rangeMatch.index) : fileName;
+        const fileUrl = resolveFileUrl(lot.basePath, actualFileName);
         setCurFileName(fileName);
         setCurLotId(lotId);
 
@@ -44,9 +46,15 @@ const CSVEditor = () => {
             skipEmptyLines: true,
             complete: (results) => {
                 if (results.data && results.data.length > 0) {
-                    setHeaders(Object.keys(results.data[0]));
-                    setData(results.data);
-                    setOriginalData(JSON.parse(JSON.stringify(results.data)));
+                    let rows = results.data;
+                    if (rangeMatch) {
+                        const start = parseInt(rangeMatch[1]);
+                        const end = parseInt(rangeMatch[2]);
+                        rows = rows.slice(start - 1, end);
+                    }
+                    setHeaders(Object.keys(rows[0]));
+                    setData(rows);
+                    setOriginalData(JSON.parse(JSON.stringify(rows)));
                 }
                 setLoading(false);
             },

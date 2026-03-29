@@ -12,3 +12,24 @@
 .card {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
+
+@keyframes pulse {
+  0% { stroke-width: 2; r: 8; opacity: 1; stroke: #00ffff; }
+  50% { stroke-width: 10; r: 15; opacity: 0.2; stroke: #ff00ff; }
+  100% { stroke-width: 2; r: 8; opacity: 1; stroke: #00ffff; }
+}
+
+.pulse-marker {
+  animation: pulse 2s infinite ease-in-out;
+}
+
+.search-tooltip {
+  background: #00ffff !important;
+  border-color: #00ffff !important;
+  color: #000 !important;
+  font-weight: 800 !important;
+  font-size: 9px !important;
+  text-transform: uppercase !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 4px !important;
+}

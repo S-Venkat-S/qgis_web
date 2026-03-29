@@ -33,7 +33,7 @@
             "name": "G LEASE 1",
             "basePath": "/view/G_LEASE_1/",
             "color": "#8B5CF6",
-            "bgClass": "bg-violet-600"
+            "bgClass": "bg-yellow-600"
         },
         {
             "id": "glease2",

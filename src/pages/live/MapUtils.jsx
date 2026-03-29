@@ -78,8 +78,15 @@ export const parseIndexFile = (text) => {
   const versionLine = lines.find(l => l.startsWith('#v:'));
   const version = versionLine ? versionLine.split(':')[1] : null;
   const files = lines.filter(l => l.length > 0 && !l.startsWith('#'))
-      .map(l => l.endsWith('.') ? l.slice(0, -1) : l);
+    .map(l => l.endsWith('.') ? l.slice(0, -1) : l);
   return { version, files };
+};
+
+export const resolveFileUrl = (basePath, fileName) => {
+  if (fileName.includes('/') && (fileName.startsWith('LOT_') || fileName.startsWith('EXISTING/'))) {
+    return `/view/${fileName}`;
+  }
+  return `${basePath}${fileName}`;
 };
 
 export const getCoordinateFromParams = (searchParams) => {
@@ -101,7 +108,7 @@ export const updatedLots = [
   { id: 'lot2', name: 'LOT 2', basePath: '/view/LOT_2/', color: '#10B981' },
   { id: 'lot3', name: 'LOT 3', basePath: '/view/LOT_3_TNEB/', color: '#F59E0B' },
   { id: 'lot4', name: 'LOT 4', basePath: '/view/LOT_4/', color: '#F43F5E' },
-  { id: 'glease1', name: 'G LEASE 1', basePath: '/view/G_LEASE_1/', color: '#8B5CF6' },
+  { id: 'glease1', name: 'G LEASE 1', basePath: '/view/G_LEASE_1/', color: '#1310ccff' },
   { id: 'glease2', name: 'G LEASE 2', basePath: '/view/G_LEASE_2/', color: '#EC4899' },
   { id: 'existing', name: 'Existing', basePath: '/view/EXISTING/', color: '#6B7280' },
   { id: 'root', name: 'Global Assets', basePath: '/view/', color: '#D97706' }
@@ -111,13 +118,26 @@ export const updatedLots = [
 export const APP_VERSION = packageJson.version;
 
 // Helper to fit map bounds dynamically
-export const ChangeView = ({ bounds }) => {
+export const ChangeView = ({ bounds, center }) => {
   const map = useMap();
+  const lastBoundsRef = React.useRef(null);
+  const lastCenterRef = React.useRef(null);
+
   useEffect(() => {
-    if (bounds) {
-      map.fitBounds(bounds, { padding: [50, 50], animate: true });
+    if (center && center !== lastCenterRef.current) {
+      // Jump to point. Keep current zoom if it's already high (> 18), otherwise zoom to 18.
+      map.setView([center.lat, center.lng], Math.max(map.getZoom(), 18), { animate: true });
+      lastCenterRef.current = center;
+    }
+  }, [center, map]);
+
+  useEffect(() => {
+    if (bounds && bounds !== lastBoundsRef.current) {
+      map.fitBounds(bounds, { padding: [50, 50], animate: true, maxZoom: 19 });
+      lastBoundsRef.current = bounds;
     }
   }, [bounds, map]);
+
   return null;
 };
 
@@ -150,13 +170,13 @@ export const CopyCoordsHandler = () => {
   const handleCopy = () => {
     if (!pos) return;
     const text = `${pos.lat.toFixed(6)}, ${pos.lng.toFixed(6)}`;
-    
+
     if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text)
-            .then(() => markCopied())
-            .catch(() => fallbackCopy(text));
+      navigator.clipboard.writeText(text)
+        .then(() => markCopied())
+        .catch(() => fallbackCopy(text));
     } else {
-        fallbackCopy(text);
+      fallbackCopy(text);
     }
   };
 
@@ -177,7 +197,7 @@ export const CopyCoordsHandler = () => {
     try {
       document.execCommand('copy');
       markCopied();
-    } catch (err) {}
+    } catch (err) { }
     document.body.removeChild(textArea);
   };
 
@@ -206,7 +226,7 @@ export const CopyCoordsHandler = () => {
         cursor: 'default'
       }}
     >
-      <span 
+      <span
         className="text-[11px] font-mono select-text text-gray-600 bg-gray-50 px-2 py-1 rounded border border-gray-100 italic cursor-text"
         onMouseDown={(e) => e.stopPropagation()}
         style={{ userSelect: 'text', WebkitUserSelect: 'text' }}
@@ -302,7 +322,7 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
     const safeBaseName = id.replace(/[^a-z0-9_-]/gi, '_');
 
     try {
-      const fetchUrl = lotDef.basePath ? `${lotDef.basePath}${name}` : null;
+      const fetchUrl = lotDef.basePath ? resolveFileUrl(lotDef.basePath, name) : null;
       if (fetchUrl) {
         const res = await fetch(fetchUrl);
         if (res.ok) {
