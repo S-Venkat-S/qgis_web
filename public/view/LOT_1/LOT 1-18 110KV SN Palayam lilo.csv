@@ -1,7 +1,4 @@
-S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Longitude,Latitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,T.NO 35 LILO SN PALAYAM,DB,T ,24,,,1,434,"2°54'27""",76.92661111111111,11.007777777777777,GOOD,GOOD,,TAAR ROAD,PLAIN,OKM To Thudiyalur Main link 3-way JB Proposed,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.92661111111111 11.007777777777777, 76.92680555555556 11.007972222222222)"
-2,GANTRY SN Palayam ss,T,GANTRY,12,T.NO 35 LILO -SN Palayam GANTRY,51,,370,,76.92680555555556,11.007972222222222,GOOD,MISSING,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,51,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S.No,Tower No.,JOINT BOX,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Longitude,Latitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,T.NO 35 LILO SN PALAYAM,,DB,T ,24,,,1,434,"2°54'27""",76.92661111,11.00777778,GOOD,GOOD,,TAAR ROAD,PLAIN,OKM To Thudiyalur Main link 3-way JB Proposed,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.92661111111111 11.007777777777777, 76.92680555555556 11.007972222222222)"
+2,GANTRY SN Palayam ss,2W,T,GANTRY,12,T.NO 35 LILO -SN Palayam GANTRY,51,,370,,76.92680556,11.00797222,GOOD,MISSING,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,51,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

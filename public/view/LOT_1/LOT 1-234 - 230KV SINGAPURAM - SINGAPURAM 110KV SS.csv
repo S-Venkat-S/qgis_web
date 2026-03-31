@@ -1,10 +1,7 @@
-Tower No,Tower Type & Supspension/Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),,,Latitude,Longitude,,,,,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earthwire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-Gantry Singapuram 110kv,T,20,,,,323,,,,11.63769,78.40791,2W,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.40791 11.63769, 78.40781 11.6375)"
-1 (96),T,28,GANTRY-1,23.6920663852862,,321,"149⁰15'33"" RT",,,11.6375,78.40781,,,,,GOOD,GOOD,,,,SUBSTATION INIDE THE TOWER 110KV SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.40781 11.6375, 78.40778 11.63801)"
-2,T,24,1-2,56.5439583328925,,322,"2⁰35'10"" RT",,,11.63801,78.40778,,,,,GOOD,GOOD,, TAR ROAD CROSSING ,,SUBSTATION INIDE THE TOWER 110KV SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.40778 11.63801, 78.40777 11.63878)"
-3,T,28,2-3,85.2341125067979,,319,"73⁰31'43"" LT",,,11.63878,78.40777,,,,,GOOD,GOOD,, TAR ROAD CROSSING ,,SUBSTATION INIDE THE TOWER 230KV SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.40777 11.63878, 78.40759 11.63883)"
-Gantry Singapuram 230kv,T,20,3-GANTRY,20.4045860258064,,319,,,,11.63883,78.40759,2W,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-TOTAL SPAN LENGTH,,,,=SUM(E7:E10), ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Tower No,JOINT BOX,Tower Type & Supspension/Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),,,Latitude,Longitude,,,,,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earthwire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+Gantry Singapuram 110kv,,T,20,,,,323,,,,11.63769,78.40791,2W,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.40791 11.63769, 78.40781 11.6375)"
+1 (96),,T,28,GANTRY-1,23.69206639,,321,"149⁰15'33"" RT",,,11.6375,78.40781,,,,,GOOD,GOOD,,,,SUBSTATION INIDE THE TOWER 110KV SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.40781 11.6375, 78.40778 11.63801)"
+2,,T,24,01-Feb,56.54395833,,322,"2⁰35'10"" RT",,,11.63801,78.40778,,,,,GOOD,GOOD,, TAR ROAD CROSSING ,,SUBSTATION INIDE THE TOWER 110KV SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.40778 11.63801, 78.40777 11.63878)"
+3,,T,28,02-Mar,85.23411251,,319,"73⁰31'43"" LT",,,11.63878,78.40777,,,,,GOOD,GOOD,, TAR ROAD CROSSING ,,SUBSTATION INIDE THE TOWER 230KV SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.40777 11.63878, 78.40759 11.63883)"
+Gantry Singapuram 230kv,2W,T,20,3-GANTRY,20.40458603,,319,,,,11.63883,78.40759,2W,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL SPAN LENGTH,,,,,0, ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

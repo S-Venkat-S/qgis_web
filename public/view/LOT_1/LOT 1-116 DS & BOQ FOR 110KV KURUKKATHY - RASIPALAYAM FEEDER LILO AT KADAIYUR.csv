@@ -1,10 +1,7 @@
-S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Longitude,Latitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,LILO : T.NO 20 MC ,T (MC),MC,45,,,4.12,303,,77.5196111111111,10.983305555555555,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.5196111111111 10.983305555555555, 77.52016666666667 10.981666666666667)"
-2,T.NO 20A ,T,DB,24,20-20A,190.7065809037538,3.16,307,"12°34'33""",77.52016666666667,10.981666666666667,GOOD,GOOD,HT-2,ROAD-1,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.52016666666667 10.981666666666667, 77.52036111111111 10.981333333333334)"
-3,GANTRY (110KV KADAIYUR SS ),GANTRY,GANTRY,15,20A-GANTRY,43.56604182158393,,306,,77.52036111111111,10.981333333333334,GOOD,MISSING,HT-3,ROAD-1,PLAIN,110KV KADAIYUR SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-TOTAL,,,,,,=SUM(G6:G8),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-Note : 1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S.No,Tower No.,JOINT BOX,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Longitude,Latitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,LILO : T.NO 20 MC ,,T (MC),MC,45,,,4.12,303,,77.51961111,10.98330556,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.5196111111111 10.983305555555555, 77.52016666666667 10.981666666666667)"
+2,T.NO 20A ,,T,DB,24,20-20A,190.7065809,3.16,307,"12°34'33""",77.52016667,10.98166667,GOOD,GOOD,HT-2,ROAD-1,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.52016666666667 10.981666666666667, 77.52036111111111 10.981333333333334)"
+3,GANTRY (110KV KADAIYUR SS ),2W,GANTRY,GANTRY,15,20A-GANTRY,43.56604182,,306,,77.52036111,10.98133333,GOOD,MISSING,HT-3,ROAD-1,PLAIN,110KV KADAIYUR SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note : 1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

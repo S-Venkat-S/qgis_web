@@ -1,9 +1,6 @@
-Tower No,Tower Type  (T/S),Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation/ M,Horizontal Angle(˚),Longitude,Latitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Ground Earth Available,Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-T.NO-1 POOLANKINAR LILO,S,DA,26,,,12.17,398,,77.18019444444445,10.582055555555556,GOOD,,NO,,,CULTIVATION,NEED 3WAY JUNCTION BOX.2 EARTH WIRE .ONE IS COUTINUE TO OUT LINE T.NO-2.ANOTHER ONE CONNECT TO UDUMALPET - ALIYAR  T.NO-106,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.18019444444445 10.582055555555556, 77.17991666666667 10.582055555555556)"
-T.NO-2,T,DD,28,1--2,29.017,4.33,398,"66°0'1.94""",77.17991666666667,10.582055555555556,GOOD,GOOD,NO,2nos 22KV,,CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.17991666666667 10.582055555555556, 77.17941666666667 10.58311111111111)"
-T.NO-3,T,DB,24,2--3,130.146,404,0.9,"10°27'1.02""",77.17941666666667,10.58311111111111,GOOD,GOOD,YES,,,CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.17941666666667 10.58311111111111, 77.17933333333333 10.583416666666666)"
-GANTRY POOLANKINAR,GANTRY,GANTRY,20,3-GANTRY,37.363,399,,,77.17933333333333,10.583416666666666,GOOD,MISSING,NO,,,SUBSTATION,POOLANKINAR GANTRY,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,=SUM(F8:F10),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Tower No,JOINT BOX,Tower Type  (T/S),Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation/ M,Horizontal Angle(˚),Longitude,Latitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Ground Earth Available,Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+T.NO-1 POOLANKINAR LILO,,S,DA,26,,,12.17,398,,77.18019444,10.58205556,GOOD,,NO,,,CULTIVATION,NEED 3WAY JUNCTION BOX.2 EARTH WIRE .ONE IS COUTINUE TO OUT LINE T.NO-2.ANOTHER ONE CONNECT TO UDUMALPET - ALIYAR  T.NO-106,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.18019444444445 10.582055555555556, 77.17991666666667 10.582055555555556)"
+T.NO-2,,T,DD,28,1--2,29.017,4.33,398,"66°0'1.94""",77.17991667,10.58205556,GOOD,GOOD,NO,2nos 22KV,,CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.17991666666667 10.582055555555556, 77.17941666666667 10.58311111111111)"
+T.NO-3,,T,DB,24,2--3,130.146,404,0.9,"10°27'1.02""",77.17941667,10.58311111,GOOD,GOOD,YES,,,CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.17941666666667 10.58311111111111, 77.17933333333333 10.583416666666666)"
+GANTRY POOLANKINAR,2W,GANTRY,GANTRY,20,3-GANTRY,37.363,399,,,77.17933333,10.58341667,GOOD,MISSING,NO,,,SUBSTATION,POOLANKINAR GANTRY,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

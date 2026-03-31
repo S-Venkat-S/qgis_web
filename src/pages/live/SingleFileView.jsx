@@ -23,17 +23,19 @@ const SingleFileView = () => {
     const [lotFiles, setLotFiles] = useState({});
     const [searchCenter, setSearchCenter] = useState(null); // Point to jump to
     const [searchMarker, setSearchMarker] = useState(null); // Persistent marker for search
+    const [searchLine, setSearchLine] = useState(null); // Highlighting line
 
-    // Clear search marker after 4 seconds
+    // Clear search marker and line highlight after 4 seconds
     useEffect(() => {
-        if (searchMarker) {
+        if (searchMarker || searchLine) {
             const timer = setTimeout(() => {
                 setSearchMarker(null);
                 setSearchCenter(null);
+                setSearchLine(null);
             }, 4000);
             return () => clearTimeout(timer);
         }
-    }, [searchMarker]);
+    }, [searchMarker, searchLine]);
     const [mapOpacity, setMapOpacity] = useState(() => {
         const saved = localStorage.getItem(OPACITY_KEY);
         return saved !== null ? parseFloat(saved) : DEFAULT_OPACITY;
@@ -94,6 +96,11 @@ const SingleFileView = () => {
                 }
 
                 setPoints(parsedPoints);
+
+                // Set search highlight if param exists
+                if (searchParams.get('hl') === 'true' && parsedPoints.length > 0) {
+                    setSearchLine(parsedPoints);
+                }
 
                 // Set bounds only if not already set by query params
                 const qCoord = getCoordinateFromParams(searchParams);
@@ -184,13 +191,15 @@ const SingleFileView = () => {
                 const polyBounds = L.latLngBounds(points.map(p => [p.lat, p.lng]));
                 setBounds(polyBounds);
                 setSearchCenter(null);
+                setSearchLine(points);
             } else {
                 // Navigate to other file
-                navigate(`/live/${res.lid}/${encodeURIComponent(res.fName)}`);
+                navigate(`/live/${res.lid}/${encodeURIComponent(res.fName)}?hl=true`);
             }
             setSearchQuery("");
             setSearchMarker(null);
         } else if (res.type === 'ss' || res.type === 'coord') {
+            setSearchLine(null);
             setSearchCenter({ lat: res.lat, lng: res.lng });
             setSearchMarker({ lat: res.lat, lng: res.lng, name: res.name });
             setSearchQuery("");
@@ -414,6 +423,16 @@ const SingleFileView = () => {
                             </Tooltip>
                         </CircleMarker>
                     )}
+                    
+                    {searchLine && (
+                        <Polyline 
+                            positions={searchLine.map(p => [p.lat, p.lng])}
+                            pathOptions={{
+                                color: '#00ffff',
+                                className: 'pulse-line'
+                            }}
+                        />
+                    )}
                     {showMap && (
                         <TileLayer
                             url="http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
@@ -474,7 +493,7 @@ const SingleFileView = () => {
                                                 </Popup>
                                                 {showTowerLabels && zoomLevel >= 16 && (
                                                     <Tooltip permanent direction="top">
-                                                        {idx + 1}-{pt.towerNo}
+                                                        {(idx + 1)}-{pt.towerNo || '?'}
                                                     </Tooltip>
                                                 )}
                                             </CircleMarker>

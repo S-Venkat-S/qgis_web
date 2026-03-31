@@ -1,9 +1,6 @@
-S. No ,Tower No,Supspension/Tension,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Longitude,Latitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,T.NO 118 LILO CHINNAPUTHUR 110KV SS,T,DC,24,,,4.32,295,,77.46052777777778,10.713916666666666,GOOD,GOOD,,,PLAIN,CHINNAPUDUR LILO NEED 3WAY JUNCTION BOX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.46052777777778 10.713916666666666, 77.45966666666666 10.715694444444443)"
-2,T.NO 1,T,DC,26,118-1,220.04544985070697,6.13,293,"23°56'28""",77.45966666666666,10.715694444444443,GOOD,GOOD,HT,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.45966666666666 10.715694444444443, 77.45961111111112 10.71786111111111)"
-3,T.NO 2,T,DD,28,1-2,238.1344158243407,5.15,288,"95°34'14""",77.45961111111112,10.71786111111111,GOOD,GOOD,2nos HT,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.45961111111112 10.71786111111111, 77.45925 10.717805555555556)"
-4,GANTRY 110KV CHINNAPUTHUR SS,,GANTRY,20,2-GANTRY,38.3275357934736,,293,,77.45925,10.717805555555556,GOOD,MISSING,,,PLAIN,110KV CHINNAPUDUR SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,TOTAL ,=SUM(G9:G11),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S. No ,Tower No,JOINT BOX,Supspension/Tension,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Longitude,Latitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,T.NO 118 LILO CHINNAPUTHUR 110KV SS,,T,DC,24,,,4.32,295,,77.46052778,10.71391667,GOOD,GOOD,,,PLAIN,CHINNAPUDUR LILO NEED 3WAY JUNCTION BOX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.46052777777778 10.713916666666666, 77.45966666666666 10.715694444444443)"
+2,T.NO 1,,T,DC,26,118-1,220.0454499,6.13,293,"23°56'28""",77.45966667,10.71569444,GOOD,GOOD,HT,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.45966666666666 10.715694444444443, 77.45961111111112 10.71786111111111)"
+3,T.NO 2,,T,DD,28,01-Feb,238.1344158,5.15,288,"95°34'14""",77.45961111,10.71786111,GOOD,GOOD,2nos HT,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.45961111111112 10.71786111111111, 77.45925 10.717805555555556)"
+4,GANTRY 110KV CHINNAPUTHUR SS,2W,,GANTRY,20,2-GANTRY,38.32753579,,293,,77.45925,10.71780556,GOOD,MISSING,,,PLAIN,110KV CHINNAPUDUR SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,TOTAL ,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

@@ -1,11 +1,62 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { MapContainer, TileLayer, Polyline, CircleMarker, Popup, Tooltip } from 'react-leaflet';
+import { MapContainer, TileLayer, Polyline, CircleMarker, Marker, Popup, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
 import Papa from 'papaparse';
 import 'leaflet/dist/leaflet.css';
-import { updatedLots, ChangeView, ZoomHandler, CopyCoordsHandler, OPACITY_KEY, DEFAULT_OPACITY, SHOW_MAP_KEY, DEFAULT_SHOW_MAP, SHOW_SS_LABELS_KEY, DEFAULT_SS_LABELS, SHOW_LINE_LABELS_KEY, DEFAULT_LINE_LABELS, exportQGISProject, parseCoords, getCoordinateFromParams, extractPointsFromCSV, fetchAndUnzip, parseIndexFile } from './MapUtils';
+import { 
+    updatedLots, 
+    ChangeView, 
+    ZoomHandler, 
+    CopyCoordsHandler, 
+    OPACITY_KEY, 
+    DEFAULT_OPACITY, 
+    SHOW_MAP_KEY, 
+    DEFAULT_SHOW_MAP, 
+    SHOW_SS_LABELS_KEY, 
+    DEFAULT_SS_LABELS, 
+    SHOW_LINE_LABELS_KEY, 
+    DEFAULT_LINE_LABELS, 
+    exportQGISProject, 
+    parseCoords, 
+    getCoordinateFromParams, 
+    extractPointsFromCSV, 
+    fetchAndUnzip, 
+    parseIndexFile,
+    checkJointBoxOverlap 
+} from './MapUtils';
 import SubStationLayer from './SubStationLayer';
+
+const getJBIcon = (type) => {
+    const color = type === '4W' ? '#f0f' : type === '3W' ? '#0ff' : '#fbbf24';
+    const connectors = {
+        '4W': '<rect x="10" y="1" width="4" height="4" rx="0.5"/><rect x="10" y="19" width="4" height="4" rx="0.5"/><rect x="1" y="10" width="4" height="4" rx="0.5"/><rect x="19" y="10" width="4" height="4" rx="0.5"/>',
+        '3W': '<rect x="10" y="1" width="4" height="4" rx="0.5"/><rect x="10" y="19" width="4" height="4" rx="0.5"/><rect x="1" y="10" width="4" height="4" rx="0.5"/>',
+        '2W': '<rect x="10" y="1" width="4" height="4" rx="0.5"/><rect x="10" y="19" width="4" height="4" rx="0.5"/>'
+    };
+
+    const svg = `
+    <svg viewBox="0 0 24 24" style="filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));">
+      <rect x="5" y="5" width="14" height="14" rx="2" fill="white" stroke="${color}" stroke-width="1.5"/>
+      <g fill="#444">
+        ${connectors[type] || ''}
+      </g>
+      <circle cx="12" cy="12" r="3.5" fill="${color}"/>
+      <path d="M12 9l-1.5 2.5h3L12 14" stroke="white" stroke-width="1" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="7" cy="7" r="0.8" fill="${color}" opacity="0.6"/>
+      <circle cx="17" cy="7" r="0.8" fill="${color}" opacity="0.6"/>
+      <circle cx="7" cy="17" r="0.8" fill="${color}" opacity="0.6"/>
+      <circle cx="17" cy="17" r="0.8" fill="${color}" opacity="0.6"/>
+    </svg>`;
+
+    return L.divIcon({
+        html: svg,
+        className: 'jb-custom-marker',
+        iconSize: [24, 24],
+        iconAnchor: [12, 12],
+        popupAnchor: [0, -10]
+    });
+};
 
 const MultiFileView = () => {
     const { lotIds, '*': urlFileName } = useParams(); // e.g. "lot1,lot2" or "all", and optional file path
@@ -32,17 +83,28 @@ const MultiFileView = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [searchCenter, setSearchCenter] = useState(null); // Point to jump to
     const [searchMarker, setSearchMarker] = useState(null); // Persistent marker for search
+    const [searchLine, setSearchLine] = useState(null); // Highlighting line
 
-    // Clear search marker after 4 seconds
+    // Expose utility function to console
     useEffect(() => {
-        if (searchMarker) {
+        window.checkJointBoxDuplicates = () => checkJointBoxOverlap(multiMapData);
+        console.log("%c[UTILITY] Joint Box duplicate checker registered. Call 'checkJointBoxDuplicates()' in console to run.", "color: #3b82f6; font-size: 10px; font-weight: bold;");
+        return () => {
+            delete window.checkJointBoxDuplicates;
+        };
+    }, [multiMapData]);
+
+    // Clear search marker and line highlight after 4 seconds
+    useEffect(() => {
+        if (searchMarker || searchLine) {
             const timer = setTimeout(() => {
                 setSearchMarker(null);
                 setSearchCenter(null);
+                setSearchLine(null);
             }, 4000);
             return () => clearTimeout(timer);
         }
-    }, [searchMarker]);
+    }, [searchMarker, searchLine]);
     const [mapOpacity, setMapOpacity] = useState(() => {
         const saved = localStorage.getItem(OPACITY_KEY);
         return saved !== null ? parseFloat(saved) : DEFAULT_OPACITY;
@@ -61,7 +123,7 @@ const MultiFileView = () => {
     });
     const [showTowerLabels, setShowTowerLabels] = useState(true);
     const [showDistLabels, setShowDistLabels] = useState(true);
-    const [focusedLine, setFocusedLine] = useState(null); // { lid, fName, pts }
+    const [focusedLines, setFocusedLines] = useState([]); // Array of { lid, fName, pts }
 
     useEffect(() => {
         document.title = selectedLotIds.length > 0 ? `Map: ${selectedLotIds.map(id => id.toUpperCase()).join(', ')}` : "Multi-Lot Map";
@@ -119,6 +181,8 @@ const MultiFileView = () => {
 
     // Load actual data for selected lots
     useEffect(() => {
+        if (isLoading) return; // Guard against redundant triggers during load
+
         const loadLots = async () => {
             const isCustom = lotIds === 'custom';
             // Only load lots that aren't already in memory
@@ -166,7 +230,7 @@ const MultiFileView = () => {
                         if (zipFile) {
                             const content = await zipFile.async("string");
                             const pResults = Papa.parse(content, { header: true, skipEmptyLines: true, transformHeader: (h) => h.trim() });
-                            updatedData[lid][fileName] = extractPointsFromCSV(pResults.data);
+                            updatedData[lid][fileName] = extractPointsFromCSV(pResults.data, zipEntryName);
                         }
                     }
                 } catch (e) {
@@ -226,26 +290,22 @@ const MultiFileView = () => {
         }
     }, [selectedLotIds, lotFiles, urlFileName, searchParams]);
 
-    // Handle URL-based file and range focusing
+    // Handle URL-based file and range centering (only for initial navigation, doesn't force persistent focus)
     useEffect(() => {
         if (!urlFileName || Object.keys(multiMapData).length === 0) return;
 
         const rangeMatch = urlFileName.match(/@(\d+):(\d+)$/);
         const actualFileName = rangeMatch ? urlFileName.substring(0, rangeMatch.index) : urlFileName;
         
-        // Find which lot owns this file
-        let foundLid = null;
         let foundPts = null;
-
-        for (const [lid, files] of Object.entries(multiMapData)) {
+        for (const files of Object.values(multiMapData)) {
             if (files[actualFileName]) {
-                foundLid = lid;
                 foundPts = files[actualFileName];
                 break;
             }
         }
 
-        if (foundLid && foundPts) {
+        if (foundPts) {
             let ptsToUse = foundPts;
             if (rangeMatch) {
                 const start = parseInt(rangeMatch[1]);
@@ -253,11 +313,12 @@ const MultiFileView = () => {
                 ptsToUse = foundPts.slice(start - 1, end);
             }
             
-            // Only update if actually different to prevent loops
-            if (!focusedLine || focusedLine.fName !== urlFileName) {
-                setFocusedLine({ lid: foundLid, fName: urlFileName, pts: ptsToUse });
-                const lineBounds = L.latLngBounds(ptsToUse.map(p => [p.lat, p.lng]));
-                setBounds(lineBounds);
+            // Just center the map, don't force adding to persistent focusedLines state on load/refresh
+            const lineBounds = L.latLngBounds(ptsToUse.map(p => [p.lat, p.lng]));
+            setBounds(lineBounds);
+
+            if (searchParams.get('hl') === 'true') {
+                setSearchLine(ptsToUse);
             }
         }
     }, [urlFileName, multiMapData]);
@@ -271,7 +332,7 @@ const MultiFileView = () => {
         const lineBounds = L.latLngBounds(pts.map(p => [p.lat, p.lng]));
         setBounds(lineBounds);
         setSearchQuery(""); // Clear search after zooming
-        setFocusedLine({ lid, fName, pts });
+        setSearchLine(pts);
     };
 
     const searchResults = useMemo(() => {
@@ -313,6 +374,7 @@ const MultiFileView = () => {
         } else if (res.type === 'coord' || res.type === 'ss') {
             setSearchCenter({ lat: res.lat, lng: res.lng });
             setSearchMarker({ lat: res.lat, lng: res.lng, name: res.name });
+            setSearchLine(null);
             setSearchQuery("");
         }
     };
@@ -450,7 +512,7 @@ const MultiFileView = () => {
                             <span className="text-[10px] font-bold text-gray-400 group-hover:text-amber-500 transition-colors uppercase">STATIONS</span>
                         </div>
 
-                        {focusedLine && (
+                        {focusedLines.length > 0 && (
                             <>
                                 <div className="border-l h-4 mx-1 border-gray-100"></div>
                                 <div className="flex items-center gap-2 cursor-pointer select-none group" title="Toggle Focused Towers" onClick={() => setShowTowerLabels(!showTowerLabels)}>
@@ -466,9 +528,9 @@ const MultiFileView = () => {
                                     <span className="text-[10px] font-bold text-gray-400 group-hover:text-yellow-600 transition-colors uppercase">DIST</span>
                                 </div>
                                 <button
-                                    onClick={() => setFocusedLine(null)}
+                                    onClick={() => setFocusedLines([])}
                                     className="ml-2 p-1.5 bg-gray-100 hover:bg-rose-50 text-gray-400 hover:text-rose-500 rounded-full transition-all"
-                                    title="Clear Focus"
+                                    title="Clear All Focus"
                                 >
                                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
@@ -551,6 +613,16 @@ const MultiFileView = () => {
                             </Tooltip>
                         </CircleMarker>
                     )}
+                    {searchLine && (
+                        <Polyline 
+                            positions={searchLine.map(p => [p.lat, p.lng])}
+                            pathOptions={{
+                                color: '#00ffff',
+                                className: 'pulse-line',
+                                weight: 8
+                            }}
+                        />
+                    )}
                     {showMap && (
                         <TileLayer
                             url="http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
@@ -571,13 +643,14 @@ const MultiFileView = () => {
                         return (
                             <React.Fragment key={lid}>
                                 {Object.entries(lData).map(([fName, pts]) => {
+                                    const isFocused = focusedLines.some(fl => fl.fName === fName);
                                     return (
                                             <Polyline
                                                 key={`${lid}-${fName}`}
                                                 positions={pts.map(p => [p.lat, p.lng])}
                                                 color={color}
-                                                weight={focusedLine?.fName === fName ? 6 : (zoomLevel >= 15 ? 4 : 2)}
-                                                opacity={focusedLine && focusedLine.fName !== fName ? 0.3 : 1}
+                                                weight={isFocused ? 6 : (zoomLevel >= 15 ? 4 : 2)}
+                                                opacity={focusedLines.length > 0 && !isFocused ? 0.3 : 1}
                                             >
                                                 {showLineLabels && (
                                                     <Tooltip sticky permanent={false} direction="top" className="line-tooltip-label whitespace-pre-wrap">
@@ -586,7 +659,18 @@ const MultiFileView = () => {
                                                 )}
                                                 <Popup maxWidth={320} minWidth={240}>
                                                     <div className="p-1">
-                                                        <strong className="block border-b mb-2 pb-1 text-primary-blue whitespace-pre-wrap text-[11px] leading-tight uppercase tracking-tight">{fName}</strong>
+                                                        <div className="flex flex-col gap-2 border-b pb-2 mb-3">
+                                                            <div className="flex items-start gap-2">
+                                                                <div className="w-1.5 h-1.5 rounded-full bg-primary-blue mt-1 shrink-0"></div>
+                                                                <strong className="text-gray-800 text-[11px] font-black leading-tight uppercase tracking-normal break-words flex-grow">{fName}</strong>
+                                                            </div>
+                                                            {!pts.hasJointBox && (
+                                                                <div className="flex items-center gap-2 px-2 py-1 bg-amber-50 border border-amber-100 rounded-md text-amber-600 self-start group animate-pulse hover:animate-none transition-all">
+                                                                    <svg className="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                                                                    <span className="text-[8px] font-black uppercase tracking-widest leading-none">JOINT BOX COLUMN NOT FOUND</span>
+                                                                </div>
+                                                            )}
+                                                        </div>
                                                             <div className="flex gap-4 mt-2">
                                                                 <button
                                                                     onClick={() => window.open(`/live/${lid}/${encodeURIComponent(fName)}`, '_blank')}
@@ -600,13 +684,16 @@ const MultiFileView = () => {
                                                                 <div 
                                                                     className="flex items-center gap-2 cursor-pointer select-none group" 
                                                                     onClick={() => {
-                                                                        if (focusedLine?.fName === fName) setFocusedLine(null);
-                                                                        else setFocusedLine({ lid, fName, pts });
+                                                                        setFocusedLines(prev => {
+                                                                            const exists = prev.some(fl => fl.fName === fName);
+                                                                            if (exists) return prev.filter(fl => fl.fName !== fName);
+                                                                            return [...prev, { lid, fName, pts }];
+                                                                        });
                                                                     }}
                                                                 >
-                                                                    <span className={`text-[9px] font-black transition-colors uppercase tracking-tight ${focusedLine?.fName === fName ? 'text-rose-500' : 'text-gray-400 group-hover:text-rose-400'}`}>Show Details</span>
-                                                                    <div className={`w-7 h-3.5 rounded-full relative transition-all duration-200 ${focusedLine?.fName === fName ? 'bg-rose-500' : 'bg-gray-200'}`}>
-                                                                        <div className={`absolute top-0.5 left-0.5 w-2.5 h-2.5 bg-white rounded-full transition-transform ${focusedLine?.fName === fName ? 'translate-x-3.5' : 'translate-x-0'}`}></div>
+                                                                    <span className={`text-[9px] font-black transition-colors uppercase tracking-tight ${isFocused ? 'text-rose-500' : 'text-gray-400 group-hover:text-rose-400'}`}>Show Details</span>
+                                                                    <div className={`w-7 h-3.5 rounded-full relative transition-all duration-200 ${isFocused ? 'bg-rose-500' : 'bg-gray-200'}`}>
+                                                                        <div className={`absolute top-0.5 left-0.5 w-2.5 h-2.5 bg-white rounded-full transition-transform ${isFocused ? 'translate-x-3.5' : 'translate-x-0'}`}></div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -616,50 +703,97 @@ const MultiFileView = () => {
                                     );
                                 })}
 
-                                {focusedLine && focusedLine.lid === lid && (
-                                    <>
+                                {focusedLines.filter(fl => fl.lid === lid).map((fl, flIdx) => (
+                                    <React.Fragment key={`focused-${fl.fName}-${flIdx}`}>
                                         {/* 1. Tower Markers (Mid+ Zoom Priority: 15+) */}
-                                        {zoomLevel >= 15 && focusedLine.pts.map((pt, idx) => (
-                                            <CircleMarker
-                                                key={`focus-pt-${lid}-${idx}`}
-                                                center={[pt.lat, pt.lng]}
-                                                radius={zoomLevel >= 17 ? 5 : 3}
-                                                pathOptions={{
-                                                    color: 'red',
-                                                    fillColor: '#f03',
-                                                    fillOpacity: 1,
-                                                    weight: 1
-                                                }}
-                                            >
-                                                <Popup maxWidth={280} minWidth={200}>
-                                                    <div className="text-black p-1">
-                                                        <strong className="block border-b mb-2 pb-1 whitespace-pre-wrap text-[11px] leading-tight text-primary-blue">{focusedLine.fName}</strong>
-                                                        <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-1">
-                                                            <div className="flex flex-col">
-                                                                <span className="text-[8px] uppercase font-bold text-gray-400">Position</span>
-                                                                <span className="text-[11px] font-bold">Tower {pt.towerNo}</span>
+                                        {zoomLevel >= 15 && fl.pts.map((pt, idx) => {
+                                            const isJB = pt.jointBox && ['2W', '3W', '4W'].includes(pt.jointBox);
+                                            
+                                            if (isJB) {
+                                                return (
+                                                    <Marker
+                                                        key={`focus-jb-${lid}-${fl.fName}-${idx}`}
+                                                        position={[pt.lat, pt.lng]}
+                                                        icon={getJBIcon(pt.jointBox)}
+                                                    >
+                                                        <Popup maxWidth={280} minWidth={200}>
+                                                            <div className="text-black p-1">
+                                                                <div className="flex items-start gap-2 border-b mb-2 pb-1">
+                                                                    <div className="w-1 h-1 rounded-full bg-primary-blue mt-1 shrink-0"></div>
+                                                                    <strong className="text-gray-800 text-[10px] font-black uppercase leading-tight tracking-tight break-words flex-grow">{fl.fName}</strong>
+                                                                </div>
+                                                                <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-1">
+                                                                    <div className="flex flex-col">
+                                                                        <span className="text-[8px] uppercase font-bold text-gray-400">Position</span>
+                                                                        <span className="text-[11px] font-bold">Tower {pt.towerNo || '?'}</span>
+                                                                        <div className="mt-1">
+                                                                            <span className="text-[7px] font-black bg-fuchsia-600 text-white px-1 py-0.5 rounded uppercase tracking-widest">{pt.jointBox} JOINT BOX</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="flex flex-col items-end">
+                                                                        <span className="text-[8px] uppercase font-bold text-gray-400">Position</span>
+                                                                        <span className="text-[11px] font-bold">#{idx + 1}</span>
+                                                                    </div>
+                                                                    <div className="col-span-2 pt-1 border-t mt-1">
+                                                                        <span className="block font-mono text-[9px] text-gray-500 tracking-tighter">{pt.lat.toFixed(6)}, {pt.lng.toFixed(6)}</span>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <div className="flex flex-col items-end">
-                                                                <span className="text-[8px] uppercase font-bold text-gray-400">Index</span>
-                                                                <span className="text-[11px] font-bold">#{idx + 1}</span>
+                                                        </Popup>
+                                                        {showTowerLabels && (
+                                                            <Tooltip permanent direction="top" offset={[0, -15]} opacity={0.9}>
+                                                                {idx + 1}-{pt.towerNo || '?'}{pt.jointBox ? ` (${pt.jointBox})` : ''}
+                                                            </Tooltip>
+                                                        )}
+                                                    </Marker>
+                                                );
+                                            }
+
+                                            return (
+                                                <CircleMarker
+                                                    key={`focus-pt-${lid}-${fl.fName}-${idx}`}
+                                                    center={[pt.lat, pt.lng]}
+                                                    radius={zoomLevel >= 17 ? 5 : 3}
+                                                    pathOptions={{
+                                                        color: 'red',
+                                                        fillColor: '#f03',
+                                                        fillOpacity: 1,
+                                                        weight: 1
+                                                    }}
+                                                >
+                                                    <Popup maxWidth={280} minWidth={200}>
+                                                        <div className="text-black p-1">
+                                                            <div className="flex items-start gap-2 border-b mb-2 pb-1">
+                                                                <div className="w-1 h-1 rounded-full bg-primary-blue mt-1 shrink-0"></div>
+                                                                <strong className="text-gray-800 text-[10px] font-black uppercase leading-tight tracking-tight break-words flex-grow">{fl.fName}</strong>
                                                             </div>
-                                                            <div className="col-span-2 pt-1 border-t mt-1">
-                                                                <span className="block font-mono text-[9px] text-gray-500 tracking-tighter">{pt.lat.toFixed(6)}, {pt.lng.toFixed(6)}</span>
+                                                            <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-1">
+                                                                <div className="flex flex-col">
+                                                                    <span className="text-[8px] uppercase font-bold text-gray-400">Position</span>
+                                                                    <span className="text-[11px] font-bold">Tower {pt.towerNo || '?'}</span>
+                                                                </div>
+                                                                <div className="flex flex-col items-end">
+                                                                    <span className="text-[8px] uppercase font-bold text-gray-400">Index</span>
+                                                                    <span className="text-[11px] font-bold">#{idx + 1}</span>
+                                                                </div>
+                                                                <div className="col-span-2 pt-1 border-t mt-1">
+                                                                    <span className="block font-mono text-[9px] text-gray-500 tracking-tighter">{pt.lat.toFixed(6)}, {pt.lng.toFixed(6)}</span>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </Popup>
-                                                {showTowerLabels && zoomLevel >= 15 && (
-                                                    <Tooltip permanent direction="top">
-                                                        {idx + 1}-{pt.towerNo}
-                                                    </Tooltip>
-                                                )}
-                                            </CircleMarker>
-                                        ))}
+                                                    </Popup>
+                                                    {showTowerLabels && zoomLevel >= 16 && (
+                                                        <Tooltip permanent direction="top">
+                                                            {(idx + 1)}-{pt.towerNo || '?'}
+                                                        </Tooltip>
+                                                    )}
+                                                </CircleMarker>
+                                            );
+                                        })}
 
                                         {/* 2. Distance Labels (High Zoom Priority: 16+) */}
-                                        {showDistLabels && zoomLevel >= 16 && focusedLine.pts.map((pt, idx) => {
-                                            const nextPt = focusedLine.pts[idx + 1];
+                                        {showDistLabels && zoomLevel >= 16 && fl.pts.map((pt, idx) => {
+                                            const nextPt = fl.pts[idx + 1];
                                             if (!nextPt) return null;
                                             const p1 = L.latLng(pt.lat, pt.lng);
                                             const p2 = L.latLng(nextPt.lat, nextPt.lng);
@@ -668,7 +802,7 @@ const MultiFileView = () => {
 
                                             return (
                                                 <CircleMarker
-                                                    key={`dist-${lid}-${idx}`}
+                                                    key={`dist-${lid}-${fl.fName}-${idx}`}
                                                     center={midpoint}
                                                     radius={0}
                                                     pathOptions={{ opacity: 0, fillOpacity: 0 }}
@@ -679,8 +813,8 @@ const MultiFileView = () => {
                                                 </CircleMarker>
                                             );
                                         })}
-                                    </>
-                                )}
+                                    </React.Fragment>
+                                ))}
                             </React.Fragment >
                         );
                     })}

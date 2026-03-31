@@ -1,10 +1,7 @@
-S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length (m),Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire ( Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,59,Tension,DD+0,28,-,-,3.0,473,,11.129097222222223,76.92979444444445,OK,OK,-,-,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.92979444444445 11.129097222222223, 76.93044444444445 11.130747222222222)"
-2,1,Tension,DB+0,24,"=CONCATENATE(B6,""-"",B7)",198,1,471," 0° 56’19.11""LT",11.130747222222222,76.93044444444445,OK,OK,LT,CC Road,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.93044444444445 11.130747222222222, 76.93100555555556 11.132169444444445)"
-3,2,Tension,DB+0,24,"=CONCATENATE(B7,""-"",B8)",169,4,465," 13° 12’24.44""RT",11.132169444444445,76.93100555555556,OK,OK,LT,Tar Road,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.93100555555556 11.132169444444445, 76.93155 11.132908333333333)"
-4,3,Tension,DD+0,28,"=CONCATENATE(B8,""-"",B9)",106,8.7,468," 50°4’44.51""LT",11.132908333333333,76.93155,OK,OK,-,-,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.93155 11.132908333333333, 76.93142222222222 11.133269444444444)"
-5,PN Palayam Gantry,,Gantry,15,"=CONCATENATE(B9,""-"",B10)",47,-,456,,11.133269444444444,76.93142222222222,OK,NO,-,-,Plain,No Peak Available on Gantry,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,=SUM(G6:G10),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S.No,Tower No.,JOINT BOX,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length (m),Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire ( Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,59,,Tension,DD+0,28,-,-,3,473,,11.12909722,76.92979444,OK,OK,-,-,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.92979444444445 11.129097222222223, 76.93044444444445 11.130747222222222)"
+2,1,,Tension,DB+0,24,PN Palayam Gantry-,198,1,471," 0° 56’19.11""LT",11.13074722,76.93044444,OK,OK,LT,CC Road,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.93044444444445 11.130747222222222, 76.93100555555556 11.132169444444445)"
+3,2,,Tension,DB+0,24,-,169,4,465," 13° 12’24.44""RT",11.13216944,76.93100556,OK,OK,LT,Tar Road,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.93100555555556 11.132169444444445, 76.93155 11.132908333333333)"
+4,3,,Tension,DD+0,28,-,106,8.7,468," 50°4’44.51""LT",11.13290833,76.93155,OK,OK,-,-,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.93155 11.132908333333333, 76.93142222222222 11.133269444444444)"
+5,PN Palayam Gantry,2W,,Gantry,15,-,47,-,456,,11.13326944,76.93142222,OK,NO,-,-,Plain,No Peak Available on Gantry,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

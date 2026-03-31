@@ -1,8 +1,5 @@
-Tower No,Tower Type  (T/S),Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation/ M,Horizontal Angle(˚),Longitude,Latitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Ground Earth Available,Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-T.NO -01 ANAMALAI 110KV LILO (T.NO-43),DB,T,24,,,7.76,269,"8°53'24.95""",76.92877777777778,10.594222222222223,GOOD,GOOD,NO,,,CULTIVATION,2 EARTH WIRE 1 EARTH WIRE CONTINUE TO OUR T.NO-02 ANOTHER ONE CONNECT TO M.N PALAYAM  110KV T.NO-44,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.92877777777778 10.594222222222223, 76.92843611111111 10.592258333333334)"
-T.NO-2,DD,T,28,1-2,221,11.74,272,"85°14'41.76""",76.92843611111111,10.592258333333334,GOOD,GOOD,YES,LT,MUD ROAD,CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.92843611111111 10.592258333333334, 76.92833333333334 10.592258333333334)"
-GANTRY ANAMALI,GANTRY,GANTRY,20,2-GANTRY,15,,,,76.92833333333334,10.592258333333334,GOOD,MISSING,NO,,,SUBSTATION,NO EARTH WIRE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,TOTAL,=SUM(F7:F9),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Tower No,JOINT BOX,Tower Type  (T/S),Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation/ M,Horizontal Angle(˚),Longitude,Latitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Ground Earth Available,Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+T.NO -01 ANAMALAI 110KV LILO (T.NO-43),,DB,T,24,,,7.76,269,"8°53'24.95""",76.92877778,10.59422222,GOOD,GOOD,NO,,,CULTIVATION,2 EARTH WIRE 1 EARTH WIRE CONTINUE TO OUR T.NO-02 ANOTHER ONE CONNECT TO M.N PALAYAM  110KV T.NO-44,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.92877777777778 10.594222222222223, 76.92843611111111 10.592258333333334)"
+T.NO-2,,DD,T,28,01-Feb,221,11.74,272,"85°14'41.76""",76.92843611,10.59225833,GOOD,GOOD,YES,LT,MUD ROAD,CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.92843611111111 10.592258333333334, 76.92833333333334 10.592258333333334)"
+GANTRY ANAMALI,2W,GANTRY,GANTRY,20,2-GANTRY,15,,,,76.92833333,10.59225833,GOOD,MISSING,NO,,,SUBSTATION,NO EARTH WIRE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,TOTAL,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

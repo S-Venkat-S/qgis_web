@@ -1,12 +1,9 @@
-Tower No,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span length             (As per tower schedule) ,Span Length (Mtrs),,Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom,,,,,,,,,,,,,,
-LMHEP 4 Gantry ,T,20,,,,,,,,11.48529,77.70063,Good,Good,,,,In side the LMHEP-4 SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.70063 11.48529, 77.700524 11.48537)",,,,,,,,,,,,,,
-1,T,28,Gantry to 1,,14.572268486194252,16,16,,"109°34'47"" LT",11.48537,77.700524,Good,Good,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.700524 11.48537, 77.700276 11.48461)",,,,,,,,,,,,,,
-2,T,28,1 to 2,,88.3765030429911,19,19,179,"51°44'16"" LT",11.48461,77.700276,Good,Good,,Fence,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.700276 11.48461, 77.7014 11.48296)",,,,,,,,,,,,,,
-3 lilo,T,28,2 to 3,,220.0411259611805,19,19,172,"73°38'35"" RT",11.48296,77.7014,Good,Good,,,Plain ,tapping  to kumarapalayam (T off),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.7014 11.48296, 77.700105 11.481424)",,,,,,,,,,,,,,
-2,T,28,3 to 4,,221.13054464523125,21,21,173,"40°41'16"" RT",11.481424,77.700105,Good,Good,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.700105 11.481424, 77.698571 11.481169)",,,,,,,,,,,,,,
-1,T,24,4 to5,,169.84387620016565,22,22,175,"10°51'57"" RT",11.481169,77.698571,Good,Good,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.698571 11.481169, 77.698343 11.4811741)",,,,,,,,,,,,,,
-Uratchikottai  Gantry,T,20,5 to Gantry ,,24.899406808021375,,,176,,11.4811741,77.698343,Good,Good,,,,Inside the Urachikottai SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-TOTAL SPAN LENGTH ,,,,,=SUM(F8:F13),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Tower No,JOINT BOX,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span length             (As per tower schedule) ,Span Length (Mtrs),,Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+LMHEP 4 Gantry ,,T,20,,,,,,,,11.48529,77.70063,Good,Good,,,,In side the LMHEP-4 SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.70063 11.48529, 77.700524 11.48537)"
+1,,T,28,Gantry to 1,,14.57226849,16,16,,"109°34'47"" LT",11.48537,77.700524,Good,Good,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.700524 11.48537, 77.700276 11.48461)"
+2,,T,28,1 to 2,,88.37650304,19,19,179,"51°44'16"" LT",11.48461,77.700276,Good,Good,,Fence,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.700276 11.48461, 77.7014 11.48296)"
+3 lilo,,T,28,2 to 3,,220.041126,19,19,172,"73°38'35"" RT",11.48296,77.7014,Good,Good,,,Plain ,tapping  to kumarapalayam (T off),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.7014 11.48296, 77.700105 11.481424)"
+2,,T,28,3 to 4,,221.1305446,21,21,173,"40°41'16"" RT",11.481424,77.700105,Good,Good,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.700105 11.481424, 77.698571 11.481169)"
+1,,T,24,4 to5,,169.8438762,22,22,175,"10°51'57"" RT",11.481169,77.698571,Good,Good,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.698571 11.481169, 77.698343 11.4811741)"
+Uratchikottai  Gantry,2W,T,20,5 to Gantry ,,24.89940681,,,176,,11.4811741,77.698343,Good,Good,,,,Inside the Urachikottai SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL SPAN LENGTH ,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

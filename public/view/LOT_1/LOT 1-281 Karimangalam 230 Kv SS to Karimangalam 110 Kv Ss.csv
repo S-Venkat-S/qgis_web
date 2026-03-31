@@ -1,9 +1,6 @@
-Tower No,Tower Type,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span length             (As per tower schedule) ,Span Length (Mtrs),,Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom,,,,,,,,,,,,,,,
-GANTRY,230 KV KARIAMANGALAM GANTRY,T,20,,,,,,478,,12.30456,78.21152,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.21152 12.30456, 78.21116 12.30479)",,,,,,,,,,,,,,,
-1,D/T,T,28,GANTRY TO 1,,50,,4.9,479,86°45'36'' LT,12.30479,78.21116,GOOD,GOOD,_,_,PLAIN,INSIDE THE 230 KV KARIMANGALAM SUBSTATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.21116 12.30479, 78.21072 12.3042)",,,,,,,,,,,,,,,
-2,C/T,T,26,1 TO 2,,275,,5.2,476,8°15'53''   RT,12.3042,78.21072,GOOD,GOOD,_,_,PLAIN,INSIDE THE 230 KV KARIMANGALAM SUBSTATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.21072 12.3042, 78.2105 12.30398)",,,,,,,,,,,,,,,
-GANTRY,110 KV KARIAMANGALAM GANTRY,T,20,2 TO GAN,,75,,,475,,12.30398,78.2105,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,=SUM(G8:G10),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Tower No,JOINT BOX,Tower Type,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span length             (As per tower schedule) ,Span Length (Mtrs),,Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+GANTRY,2W,230 KV KARIAMANGALAM GANTRY,T,20,,,,,,478,,12.30456,78.21152,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.21152 12.30456, 78.21116 12.30479)"
+1,,D/T,T,28,GANTRY TO 1,,50,,4.9,479,86°45'36'' LT,12.30479,78.21116,GOOD,GOOD,_,_,PLAIN,INSIDE THE 230 KV KARIMANGALAM SUBSTATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.21116 12.30479, 78.21072 12.3042)"
+2,,C/T,T,26,1 TO 2,,275,,5.2,476,8°15'53''   RT,12.3042,78.21072,GOOD,GOOD,_,_,PLAIN,INSIDE THE 230 KV KARIMANGALAM SUBSTATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.21072 12.3042, 78.2105 12.30398)"
+GANTRY,2W,110 KV KARIAMANGALAM GANTRY,T,20,2 TO GAN,,75,,,475,,12.30398,78.2105,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

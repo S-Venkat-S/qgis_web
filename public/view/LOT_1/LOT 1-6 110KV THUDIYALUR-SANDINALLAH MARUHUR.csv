@@ -1,9 +1,6 @@
-S. No ,Tower No,Supspension/Tension,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Longitude,Latitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,T.NO 19/1 MARUDHUR LILO,T,DD,37,,,10.5,374, 3°16’27.47”,76.90094444444445,11.231894444444444,GOOD,GOOD,,,PLAIN,MARUDHUR LILO NEED JUNCTION BOX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.90094444444445 11.231894444444444, 76.90044444444445 11.231527777777778)"
-2,T.NO 151/1 MARUDHUR LILO,T,DC,26,19-151/1,250,5.96,374,,76.90044444444445,11.231527777777778,GOOD,MISSING,"Two LT, 33kv",SH,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.90044444444445 11.231527777777778, 76.89986111111112 11.231361111111111)"
-3,T.NO 151/2,T,DC,26,151/1-151/2,64.8459713474939,7.2,378,"27°20'33""",76.89986111111112,11.231361111111111,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.89986111111112 11.231361111111111, 76.89966666666668 11.231388888888889)"
-4,GANTRY 110KV MARUDHUR SS,T,GANTRY,20,151/2-GT,22.360679774997898,,374,,76.89966666666668,11.231388888888889,GOOD,MISSING,,,PLAIN,110KV MARUHUR SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,=SUM(G7:G10),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S. No ,Tower No,JOINT BOX,Supspension/Tension,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Longitude,Latitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,T.NO 19/1 MARUDHUR LILO,,T,DD,37,,,10.5,374, 3°16’27.47”,76.90094444,11.23189444,GOOD,GOOD,,,PLAIN,MARUDHUR LILO NEED JUNCTION BOX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.90094444444445 11.231894444444444, 76.90044444444445 11.231527777777778)"
+2,T.NO 151/1 MARUDHUR LILO,,T,DC,26,19-151/1,250,5.96,374,,76.90044444,11.23152778,GOOD,MISSING,"Two LT, 33kv",SH,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.90044444444445 11.231527777777778, 76.89986111111112 11.231361111111111)"
+3,T.NO 151/2,,T,DC,26,151/1-151/2,64.84597135,7.2,378,"27°20'33""",76.89986111,11.23136111,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.89986111111112 11.231361111111111, 76.89966666666668 11.231388888888889)"
+4,GANTRY 110KV MARUDHUR SS,2W,T,GANTRY,20,151/2-GT,22.36067977,,374,,76.89966667,11.23138889,GOOD,MISSING,,,PLAIN,110KV MARUHUR SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

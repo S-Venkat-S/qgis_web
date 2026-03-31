@@ -29,34 +29,136 @@ export const parseCoords = (input) => {
   return null;
 };
 
+/**
+ * Geodesic distance between two points in meters (Haversine formula)
+ */
+export const getGeodesicDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371e3; // meters
+    const phi1 = lat1 * Math.PI / 180;
+    const phi2 = lat2 * Math.PI / 180;
+    const deltaPhi = (lat2 - lat1) * Math.PI / 180;
+    const deltaLambda = (lon2 - lon1) * Math.PI / 180;
+
+    const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+        Math.cos(phi1) * Math.cos(phi2) *
+        Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return R * c; // meters
+};
+
+/**
+ * Utility to find joint boxes overlapping within a 20m radius
+ */
+export const checkJointBoxOverlap = (multiMapData) => {
+    const allJBs = [];
+    Object.entries(multiMapData).forEach(([lid, files]) => {
+        Object.entries(files).forEach(([fName, pts]) => {
+            pts.forEach((p, idx) => {
+                if (p.jointBox) {
+                    allJBs.push({ ...p, lid, fName, seqIdx: idx + 1 });
+                }
+            });
+        });
+    });
+
+    console.log(`[JB SCANNER] Analyzing ${allJBs.length} JV locations across all lots...`);
+    const results = [];
+    for (let i = 0; i < allJBs.length; i++) {
+        for (let j = i + 1; j < allJBs.length; j++) {
+            const jb1 = allJBs[i];
+            const jb2 = allJBs[j];
+            const dist = getGeodesicDistance(jb1.lat, jb1.lng, jb2.lat, jb2.lng);
+
+            if (dist < 20) {
+                results.push({
+                    "Distance (m)": parseFloat(dist.toFixed(2)),
+                    "Lot A": jb1.lid.toUpperCase(),
+                    "File A": jb1.fName,
+                    "Tower A": jb1.towerNo || 'N/A',
+                    "Type A": jb1.jointBox,
+                    "Lot B": jb2.lid.toUpperCase(),
+                    "File B": jb2.fName,
+                    "Tower B": jb2.towerNo || 'N/A',
+                    "Type B": jb2.jointBox,
+                    "Coords A": `${jb1.lat.toFixed(6)}, ${jb1.lng.toFixed(6)}`,
+                    "Coords B": `${jb2.lat.toFixed(6)}, ${jb2.lng.toFixed(6)}`
+                });
+            }
+        }
+    }
+
+    if (results.length === 0) {
+        console.log("%c✓ NO DUPLICATE JOINT BOXES FOUND", "color: #10b981; font-weight: bold; font-size: 11px;");
+    } else {
+        console.group(`%c⚠ FOUND ${results.length} POTENTIAL DUPLICATES (< 20m RADIUS)`, "color: #ef4444; font-weight: bold; font-size: 12px;");
+        console.table(results);
+        console.groupEnd();
+    }
+    return results;
+};
+
 // Centralized CSV coordinate/tower extraction logic
-export const extractPointsFromCSV = (data) => {
-  if (!Array.isArray(data)) return [];
-  return data.map(row => {
-    const keys = Object.keys(row);
-    const latKey = keys.find(k => {
+export const extractPointsFromCSV = (data, fileName = 'Unknown File') => {
+  if (!Array.isArray(data) || data.length === 0) return [];
+  
+  const keys = Object.keys(data[0]);
+  const hasJointBox = keys.some(k => k.toLowerCase().replace(/[^a-z]/g, '') === 'jointbox');
+
+  const validationErrors = [];
+  const rKeys = Object.keys(data[0] || {});
+  const towerNoKey = rKeys.find(k => {
+    const low = k.toLowerCase().replace(/[^a-z0-9]/g, '');
+    // Specifically look for Tower No fragments, ignore sno, sn, serialno
+    return (low.includes('towerno') || low.includes('tno') || low === 'tower') && !low.includes('sno') && !low.includes('slno');
+  });
+
+  if (!towerNoKey) {
+    console.warn(`[TOWER NO DETECTION] Could not find valid Tower No column in "${fileName}". Checked: ${rKeys.join(', ')}`);
+  }
+
+  const pts = data.map(row => {
+    const latKey = rKeys.find(k => {
       const low = k.toLowerCase().replace(/[^a-z]/g, '');
       return low === 'latitude' || low === 'lat';
     });
-    const lngKey = keys.find(k => {
+    const lngKey = rKeys.find(k => {
       const low = k.toLowerCase().replace(/[^a-z]/g, '');
       return low === 'longitude' || low === 'lng' || low === 'long' || low === 'lon';
     });
-    const towerNoKey = keys.find(k => {
-      const low = k.toLowerCase().replace(/[^a-z0-9]/g, '');
-      return ['towerno', 'tno', 'sno', 'sn'].includes(low);
+    const jointBoxKey = rKeys.find(k => {
+      const low = k.toLowerCase().replace(/[^a-z]/g, '');
+      return low === 'jointbox';
     });
 
     const lat = latKey ? parseFloat(row[latKey]) : NaN;
     const lng = lngKey ? parseFloat(row[lngKey]) : NaN;
 
+    const jbValue = jointBoxKey ? (row[jointBoxKey] || '').toString().trim().toUpperCase() : null;
+    
+    // Check for invalid values and push to a separate error collection (handled after map)
+    if (jointBoxKey && row[jointBoxKey] && (row[jointBoxKey] || '').toString().trim() !== '' && !['2W', '3W', '4W'].includes(jbValue)) {
+      validationErrors.push(`Tower ${towerNoKey ? row[towerNoKey] : 'N/A'} (Value: "${row[jointBoxKey]}")`);
+    }
+
+    const jointBox = ['2W', '3W', '4W'].includes(jbValue) ? jbValue : null;
+
     return {
       lat,
       lng,
-      towerNo: towerNoKey ? row[towerNoKey] : (row['Tower No.'] || 'N/A'),
-      description: row.Description || row.description
+      towerNo: towerNoKey ? (row[towerNoKey] || '').toString().trim() : '',
+      description: row.Description || row.description,
+      jointBox
     };
   }).filter(pt => !isNaN(pt.lat) && !isNaN(pt.lng));
+
+  // Log summary of validation errors if any were found
+  if (validationErrors.length > 0) {
+    console.warn(`[JOINT BOX VALIDATION] Found ${validationErrors.length} invalid values in "${fileName}":\n  • ${validationErrors.join('\n  • ')}`);
+  }
+
+  pts.hasJointBox = hasJointBox;
+  return pts;
 };
 
 /**
@@ -110,8 +212,7 @@ export const updatedLots = [
   { id: 'lot4', name: 'LOT 4', basePath: '/view/LOT_4/', color: '#F43F5E' },
   { id: 'glease1', name: 'G LEASE 1', basePath: '/view/G_LEASE_1/', color: '#1310ccff' },
   { id: 'glease2', name: 'G LEASE 2', basePath: '/view/G_LEASE_2/', color: '#EC4899' },
-  { id: 'existing', name: 'Existing', basePath: '/view/EXISTING/', color: '#6B7280' },
-  { id: 'root', name: 'Global Assets', basePath: '/view/', color: '#D97706' }
+  { id: 'existing', name: 'Existing', basePath: '/view/EXISTING/', color: '#6B7280' }
 ];
 
 
@@ -295,6 +396,16 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
   } catch (e) { console.warn("Symbology config not found, using fallbacks."); }
 
   const zip = new JSZip();
+  const dataFolder = zip.folder("data");
+  const iconsFolder = zip.folder("icons");
+  const getSvgText = (type, color) => {
+    const connectors = {
+      '4W': '<rect x="10" y="1" width="4" height="4" rx="0.5"/><rect x="10" y="19" width="4" height="4" rx="0.5"/><rect x="1" y="10" width="4" height="4" rx="0.5"/><rect x="19" y="10" width="4" height="4" rx="0.5"/>',
+      '3W': '<rect x="10" y="1" width="4" height="4" rx="0.5"/><rect x="10" y="19" width="4" height="4" rx="0.5"/><rect x="1" y="10" width="4" height="4" rx="0.5"/>',
+      '2W': '<rect x="10" y="1" width="4" height="4" rx="0.5"/><rect x="10" y="19" width="4" height="4" rx="0.5"/>'
+    };
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2" fill="white" stroke="${color}" stroke-width="1.5"/><g fill="#444">${connectors[type] || ''}</g><circle cx="12" cy="12" r="3.5" fill="${color}"/><path d="M12 9l-1.5 2.5h3L12 14" stroke="white" stroke-width="1" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  };
   const mapLayersXml = [];
 
   // Tree Nodes
@@ -302,8 +413,6 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
   let progressCounter = 0;
   const totalLayers = layers.length;
   const totalSteps = totalLayers * 2 + 5;
-
-  const dataFolder = zip.folder("data");
 
   for (const layer of layers) {
     const { id, name, color } = layer;
@@ -370,12 +479,17 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
     // ─── 2. TOWERS LAYER (Points) ───────────────────────────────────────
     const pointLayerId = `${safeBaseName}_towers`;
     const pointCsvName = `${safeBaseName}_towers.csv`;
-    const pointRows = ["tower_no,lat,lng,WKT"];
+    const pointRows = ["tower_no,lat,lng,joint_box,WKT"];
     layer.pts.forEach(p => {
-      // Include even if towerNo is missing to avoid "Data source error" for empty CSVs
-      pointRows.push(`"${p.towerNo || ''}",${p.lat},${p.lng},"POINT(${p.lng} ${p.lat})"`);
+      const cleanedTowerNo = (p.towerNo === '#VALUE!' || !p.towerNo) ? '?' : p.towerNo;
+      pointRows.push(`"${cleanedTowerNo}",${p.lat},${p.lng},"${p.jointBox || ''}","POINT(${p.lng} ${p.lat})"`);
     });
     dataFolder.file(pointCsvName, pointRows.join("\n"));
+
+    iconsFolder.file("jb_4w.svg", getSvgText('4W', '#ff00ff'));
+    iconsFolder.file("jb_3w.svg", getSvgText('3W', '#00ffff'));
+    iconsFolder.file("jb_2w.svg", getSvgText('2W', '#fbbf24'));
+
 
     mapLayersXml.push(`
     <maplayer simplifyAlgorithm="0" type="vector" geometry="Point">
@@ -383,15 +497,25 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
       <datasource>file:./data/${pointCsvName}?type=csv&amp;wktField=WKT</datasource>
       <layername>${escapeXml(name)} (Towers)</layername>
       <provider encoding="UTF-8">delimitedtext</provider>
-      <renderer-v2 type="singleSymbol">
+      <renderer-v2 type="RuleRenderer">
+        <rules key="root">
+          <rule filter="&quot;joint_box&quot; = '4W'" symbol="0" label="JB 4W"/>
+          <rule filter="&quot;joint_box&quot; = '3W'" symbol="1" label="JB 3W"/>
+          <rule filter="&quot;joint_box&quot; = '2W'" symbol="2" label="JB 2W"/>
+          <rule filter="&quot;joint_box&quot; IS NULL OR &quot;joint_box&quot; = ''" symbol="3" label="Tower"/>
+        </rules>
         <symbols>
           <symbol alpha="1" type="marker" name="0">
-            <layer pass="0" class="SimpleMarker" locked="0">
-              <prop k="name" v="circle"/>
-              <prop k="color" v="255,0,0,255"/>
-              <prop k="outline_color" v="255,255,255,255"/>
-              <prop k="size" v="1.8"/>
-            </layer>
+            <layer class="SvgMarker"><prop k="name" v="./icons/jb_4w.svg"/><prop k="size" v="6.0"/><prop k="outline_width" v="0.2"/></layer>
+          </symbol>
+          <symbol alpha="1" type="marker" name="1">
+            <layer class="SvgMarker"><prop k="name" v="./icons/jb_3w.svg"/><prop k="size" v="6.0"/><prop k="outline_width" v="0.2"/></layer>
+          </symbol>
+          <symbol alpha="1" type="marker" name="2">
+            <layer class="SvgMarker"><prop k="name" v="./icons/jb_2w.svg"/><prop k="size" v="6.0"/><prop k="outline_width" v="0.2"/></layer>
+          </symbol>
+          <symbol alpha="1" type="marker" name="3">
+            <layer class="SimpleMarker"><prop k="name" v="circle"/><prop k="color" v="255,0,0,255"/><prop k="outline_color" v="255,255,255,255"/><prop k="size" v="1.8"/></layer>
           </symbol>
         </symbols>
       </renderer-v2>
@@ -427,11 +551,23 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
       if (config && config.types) {
         Object.keys(config.types).forEach(typeKey => {
           const conf = config.types[typeKey];
-          const qgisShape = typeKey === 'HO' ? 'star' : 'hexagon';
           const color = hexToRgb(conf.color);
+          let symbolTag = '';
+
+          if (conf.shape && conf.shape.startsWith('<svg')) {
+             const svgName = `ss_${typeKey.toLowerCase()}.svg`;
+             // Inject the correct category color into the SVG if it uses a black fill
+             const coloredSvg = conf.shape.replace(/fill="#000000"/g, `fill="${conf.color}"`);
+             iconsFolder.file(svgName, coloredSvg);
+             symbolTag = `<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SvgMarker"><prop k="name" v="./icons/${svgName}"/><prop k="size" v="${(conf.baseSize || 12) / 3}"/><prop k="outline_width" v="0.2"/></layer></symbol>`;
+          } else {
+             const qgisShape = typeKey === 'HO' ? 'star' : 'hexagon';
+             symbolTag = `<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SimpleMarker"><prop k="name" v="${qgisShape}"/><prop k="color" v="${color}"/><prop k="outline_color" v="255,255,255,255"/><prop k="size" v="${(conf.baseSize || 12) / 3}"/></layer></symbol>`;
+          }
+
           const filter = `upper("ss_type") = '${typeKey.toUpperCase()}'`;
           rules.unshift(`<rule filter="${escapeXml(filter)}" symbol="${ruleIdx}" label="${escapeXml(conf.name || typeKey)}"/>`);
-          symbols.push(`<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SimpleMarker"><prop k="name" v="${qgisShape}"/><prop k="color" v="${color}"/><prop k="size" v="${(conf.baseSize || 12) / 3}"/></layer></symbol>`);
+          symbols.push(symbolTag);
           ruleIdx++;
         });
       }
@@ -439,14 +575,30 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
       // Voltage Rules
       if (config && config.voltages) {
         config.voltages.forEach((v, idx) => {
-          const qgisShape = v.shape === 'triangle' ? 'triangle' : v.shape === 'hexagon' ? 'hexagon' : v.shape === 'diamond' ? 'diamond' : v.shape === 'square' ? 'square' : 'circle';
           const color = hexToRgb(v.color);
-          const filter = idx === 0
+          let symbolTag = '';
+
+          if (v.shape && v.shape.startsWith('<svg')) {
+             const svgName = `ss_volt_${v.class}.svg`;
+             iconsFolder.file(svgName, v.shape);
+             symbolTag = `<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SvgMarker"><prop k="name" v="./icons/${svgName}"/><prop k="size" v="${(v.baseSize || 10) / 3}"/><prop k="outline_width" v="0.2"/></layer></symbol>`;
+          } else {
+             const qgisShape = v.shape === 'triangle' ? 'triangle' : v.shape === 'hexagon' ? 'hexagon' : v.shape === 'diamond' ? 'diamond' : v.shape === 'square' ? 'square' : 'circle';
+             symbolTag = `<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SimpleMarker"><prop k="name" v="${qgisShape}"/><prop k="color" v="${color}"/><prop k="outline_color" v="255,255,255,255"/><prop k="size" v="${(v.baseSize || 10) / 3}"/></layer></symbol>`;
+          }
+
+          let filter = idx === 0
             ? `to_int(left("volt_ratio", strpos("volt_ratio", '/')-1)) >= ${v.class}`
             : `to_int(left("volt_ratio", strpos("volt_ratio", '/')-1)) >= ${v.class} AND to_int(left("volt_ratio", strpos("volt_ratio", '/')-1)) < ${config.voltages[idx - 1].class}`;
 
+          // Avoid overlap: Don't show voltage marker if a type marker (HO, GENERATION) is already showing
+          if (config.types) {
+             const typeKeys = Object.keys(config.types).map(k => `'${k.toUpperCase()}'`).join(', ');
+             filter = `(${filter}) AND (upper("ss_type") NOT IN (${typeKeys}) OR "ss_type" IS NULL)`;
+          }
+
           rules.push(`<rule filter="${escapeXml(filter)}" symbol="${ruleIdx}" label="${v.class}kV Substation"/>`);
-          symbols.push(`<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SimpleMarker"><prop k="name" v="${qgisShape}"/><prop k="color" v="${color}"/><prop k="outline_color" v="255,255,255,255"/><prop k="size" v="${(v.baseSize || 10) / 3}"/></layer></symbol>`);
+          symbols.push(symbolTag);
           ruleIdx++;
         });
       }
@@ -484,7 +636,7 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
     </layer-tree-group>`).join('\n');
 
   const xml = `<!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis projectname="${escapeXml(projectName)}" version="3.22.0">
+<qgis projectname="${escapeXml(projectName)}" version="3.40.4">
   <title>${escapeXml(projectName)}</title>
   <projectlayers>
     ${mapLayersXml.join('\n')}

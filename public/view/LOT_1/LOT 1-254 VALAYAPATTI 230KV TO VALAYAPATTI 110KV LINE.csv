@@ -1,10 +1,7 @@
-Tower No,Tower Type & Supspension/Tenion,Tower Hight (Mtrs),Span Between Tower No.,As per Tower Shedule  Span Length (Mtrs),Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earthwire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-GANTRY,T,20,,,,,147,,11.13472,78.22333,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.22333 11.13472, 78.22328 11.1348)"
-1(26),T,28,GANTRY-1(26),10,10.406787867804,1.76,151,"149˚11'35""   RT",11.1348,78.22328,GOOD,GOOD,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.22328 11.1348, 78.22363 11.13462)"
-2,T,28,1(26)-2,42,43.1388594013828,0.96,151,"50˚59'50""     RT",11.13462,78.22363,GOOD,GOOD,,TAR ROAD CROSSING,,TRANSFORMER CROSSING SUBSTATION INSIDE TOWER,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.22363 11.13462, 78.2237 11.13428)"
-3,T,28,2-3,40,38.4071419081575,1.06,152,"32˚18'0""      RT",11.13428,78.2237,GOOD,GOOD,,TAR ROAD CROSSING,,SUBSTATION INSIDE TOWER,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.2237 11.13428, 78.22353 11.13382)"
-GANTRY,T,20,3-GANTRY,53,54.4731529144175,,152,,11.13382,78.22353,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,TOTAL,=SUM(E8:E11),=SUM(F8:F11),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Tower No,JOINT BOX,Tower Type & Supspension/Tenion,Tower Hight (Mtrs),Span Between Tower No.,As per Tower Shedule  Span Length (Mtrs),Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earthwire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+GANTRY,3W,T,20,,,,,147,,11.13472,78.22333,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.22333 11.13472, 78.22328 11.1348)"
+1(26),,T,28,GANTRY-1(26),10,10.40678787,1.76,151,"149˚11'35""   RT",11.1348,78.22328,GOOD,GOOD,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.22328 11.1348, 78.22363 11.13462)"
+2,,T,28,1(26)-2,42,43.1388594,0.96,151,"50˚59'50""     RT",11.13462,78.22363,GOOD,GOOD,,TAR ROAD CROSSING,,TRANSFORMER CROSSING SUBSTATION INSIDE TOWER,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.22363 11.13462, 78.2237 11.13428)"
+3,,T,28,02-Mar,40,38.40714191,1.06,152,"32˚18'0""      RT",11.13428,78.2237,GOOD,GOOD,,TAR ROAD CROSSING,,SUBSTATION INSIDE TOWER,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.2237 11.13428, 78.22353 11.13382)"
+GANTRY,2W,T,20,3-GANTRY,53,54.47315291,,152,,11.13382,78.22353,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,TOTAL,0,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

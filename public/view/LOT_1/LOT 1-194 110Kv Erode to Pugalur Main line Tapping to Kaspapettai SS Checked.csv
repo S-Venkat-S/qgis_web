@@ -1,13 +1,10 @@
-Tower No,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-32/1 LILO,T,26,,,5.2,179,,11.262863,77.75202,Good,Good,,,Plain,Tapping 110 kv  Kaspapettai SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.75202 11.262863, 77.74958 11.262633)"
-2,T,26,32/1 to 2,267.826404903368,4.8,190,"0°26'37"" LT",11.262633,77.74958,Good,Good,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.74958 11.262633, 77.74757 11.262428)"
-3,T,26,2 to 3,220.79734004374197,5.2,192,"20°23'15"" RT",11.262428,77.74757,Good,Good,,Car Track,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.74757 11.262428, 77.745398 11.262982)"
-4,T,24,3 to 4,245.1240971099437,3.8,192,"0°19'36"" RT",11.262982,77.745398,Good,Good,LT-line crossing ,Car Track,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.745398 11.262982, 77.743433 11.263495)"
-5,T,24,4 to 5,222.09240916669742,3.6,196,"0°49'48"" LT",11.263495,77.743433,Good,Good,,Tar road,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.743433 11.263495, 77.741521 11.263965)"
-6,T,26,5 to 6,215.29864047459657,2.1,197,"18°51'39"" RT",11.263965,77.741521,Good,Good,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.741521 11.263965, 77.739823 11.265047)"
-7,T,28,6 to 7,220.8353292221427,1,199,"67°37'9"" RT",11.265047,77.739823,Good,Good,,Tar road,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.739823 11.265047, 77.739852 11.265202)"
-Kaspapettai Gantry,T,20,7 to Gantry,17.4478588342153,0.68,196,,11.265202,77.739852,Good,Good,,,,In side the kaspapettai 110 kv ss,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-TOTAL SPAN LENGTH,,,,=SUM(E8:E14),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Tower No,JOINT BOX,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+32/1 LILO,,T,26,,,5.2,179,,11.262863,77.75202,Good,Good,,,Plain,Tapping 110 kv  Kaspapettai SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.75202 11.262863, 77.74958 11.262633)"
+2,,T,26,32/1 to 2,267.8264049,4.8,190,"0°26'37"" LT",11.262633,77.74958,Good,Good,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.74958 11.262633, 77.74757 11.262428)"
+3,,T,26,2 to 3,220.79734,5.2,192,"20°23'15"" RT",11.262428,77.74757,Good,Good,,Car Track,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.74757 11.262428, 77.745398 11.262982)"
+4,,T,24,3 to 4,245.1240971,3.8,192,"0°19'36"" RT",11.262982,77.745398,Good,Good,LT-line crossing ,Car Track,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.745398 11.262982, 77.743433 11.263495)"
+5,,T,24,4 to 5,222.0924092,3.6,196,"0°49'48"" LT",11.263495,77.743433,Good,Good,,Tar road,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.743433 11.263495, 77.741521 11.263965)"
+6,,T,26,5 to 6,215.2986405,2.1,197,"18°51'39"" RT",11.263965,77.741521,Good,Good,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.741521 11.263965, 77.739823 11.265047)"
+7,,T,28,6 to 7,220.8353292,1,199,"67°37'9"" RT",11.265047,77.739823,Good,Good,,Tar road,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.739823 11.265047, 77.739852 11.265202)"
+Kaspapettai Gantry,2W,T,20,7 to Gantry,17.44785883,0.68,196,,11.265202,77.739852,Good,Good,,,,In side the kaspapettai 110 kv ss,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL SPAN LENGTH,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

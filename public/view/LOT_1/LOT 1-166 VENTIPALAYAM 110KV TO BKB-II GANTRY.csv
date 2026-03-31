@@ -1,10 +1,7 @@
-Tower No,Tower Type & Supspension/Tenion,Tower Type & Supspension/Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span length             (As per tower schedule) ,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earthwire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-VENTIPALAYAM GANTRY,GANTRY,T,20,,,,,169,,11.3308,77.75691,,NO EARTHWIRE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.75691 11.3308, 77.75705 11.33096)"
-VBKB-II 03,D,T,28,V GANTRY-03,32,23.4009040897714,0.26,170,"27⁰58'54"" RT",11.33096,77.75705,GOOD,GOOD,,,FENCING CROSSING-1,TOWER IN VENTIPALAYAM 110KV SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.75705 11.33096, 77.75752 11.33114)"
-VBKB-II 02,D,T,28,03-02,60,55.0747411097397,0.18,169,"139⁰47'33"" RT",11.33114,77.75752,GOOD,GOOD,22KV LINE CROSSING-1,TAR ROAD CROSSING-1,HOTEL AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.75752 11.33114, 77.75699 11.33018)"
-VBKB-II 01,D,T,28,02-01,127,121.017989829271,0.99,169,"73⁰12'14"" LT",11.33018,77.75699,GOOD,GOOD,,CEMENT ROAD CROSSING-1,FENCING CROSSING-1,"TOWER INSIDE BKB II, POWER HAS BK-II OFFICE AREA",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.75699 11.33018, 77.75721 11.32996)"
-BKB-II GANTRY,GANTRY,T,20,01-GANTRY,35,34.2153438516104,,166,,11.32996,77.75721,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,TOTAL,=SUM(F8:F11),=SUM(G8:G11),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Tower No,JOINT BOX,Tower Type & Supspension/Tenion,Tower Type & Supspension/Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span length             (As per tower schedule) ,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earthwire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+VENTIPALAYAM GANTRY,2W,GANTRY,T,20,,,,,169,,11.3308,77.75691,,NO EARTHWIRE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.75691 11.3308, 77.75705 11.33096)"
+VBKB-II 03,,D,T,28,V GANTRY-03,32,23.40090409,0.26,170,"27⁰58'54"" RT",11.33096,77.75705,GOOD,GOOD,,,FENCING CROSSING-1,TOWER IN VENTIPALAYAM 110KV SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.75705 11.33096, 77.75752 11.33114)"
+VBKB-II 02,,D,T,28,03-Feb,60,55.07474111,0.18,169,"139⁰47'33"" RT",11.33114,77.75752,GOOD,GOOD,22KV LINE CROSSING-1,TAR ROAD CROSSING-1,HOTEL AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.75752 11.33114, 77.75699 11.33018)"
+VBKB-II 01,,D,T,28,02-Jan,127,121.0179898,0.99,169,"73⁰12'14"" LT",11.33018,77.75699,GOOD,GOOD,,CEMENT ROAD CROSSING-1,FENCING CROSSING-1,"TOWER INSIDE BKB II, POWER HAS BK-II OFFICE AREA",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.75699 11.33018, 77.75721 11.32996)"
+BKB-II GANTRY,2W,GANTRY,T,20,01-GANTRY,35,34.21534385,,166,,11.32996,77.75721,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,TOTAL,0,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

@@ -1,9 +1,6 @@
-S. No ,Tower No,Supspension/Tension,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Longitude,Latitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,T.NO 14 LILO CHELLAPAM PALAYAM,T,DC,26,,,3.17,394,,77.1363888888889,11.108305555555555,GOOD,GOOD,,,PLAIN,CHELLAPPAMPALAYAM LILO NEED JUNCTION BOX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.1363888888889 11.108305555555555, 77.1371388888889 11.107527777777777)"
-2,T.NO 2,T,DD,28,14-2,119.50313803411188,"4,27",394,"44°14'14""",77.1371388888889,11.107527777777777,GOOD,GOOD,HT,TAAR ROAD,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.1371388888889 11.107527777777777, 77.13716666666667 11.106583333333333)"
-3,T.NO 1,T,DD,28,2-3,104.01922899156675,7.76,388,"97°25'45""",77.13716666666667,11.106583333333333,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.13716666666667 11.106583333333333, 77.13733333333334 11.10661111111111)"
-4,Gantryt CHELLAPAM PALAYAM 110 kv SS,T,GT,20,3-GT,20.223748416156685,,392,,77.13733333333334,11.10661111111111,GOOD,MISSING,,,PLAIN,110KV CHELLAPPAMPALAYAM SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,TOTAL,244,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S. No ,Tower No,JOINT BOX,Supspension/Tension,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Longitude,Latitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,T.NO 14 LILO CHELLAPAM PALAYAM,,T,DC,26,,,3.17,394,,77.13638889,11.10830556,GOOD,GOOD,,,PLAIN,CHELLAPPAMPALAYAM LILO NEED JUNCTION BOX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.1363888888889 11.108305555555555, 77.1371388888889 11.107527777777777)"
+2,T.NO 2,,T,DD,28,14-Feb,119.503138,"4,27",394,"44°14'14""",77.13713889,11.10752778,GOOD,GOOD,HT,TAAR ROAD,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.1371388888889 11.107527777777777, 77.13716666666667 11.106583333333333)"
+3,T.NO 1,,T,DD,28,02-Mar,104.019229,7.76,388,"97°25'45""",77.13716667,11.10658333,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.13716666666667 11.106583333333333, 77.13733333333334 11.10661111111111)"
+4,Gantryt CHELLAPAM PALAYAM 110 kv SS,2W,T,GT,20,3-GT,20.22374842,,392,,77.13733333,11.10661111,GOOD,MISSING,,,PLAIN,110KV CHELLAPPAMPALAYAM SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,TOTAL,244,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
