@@ -1,4 +1,4 @@
 Tower No,JOINT BOX,Tower Type & Supspension/Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span length             (As per tower schedule) ,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earthwire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
 SOLA SIRAMANI GANTRY,2W,T,20,,,,,154,,11.24397,77.86658,,,22KV LINE CROSSING-3,"TAR ROAD CROSSING-1, FENCING CROSSING-1",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.86658 11.24397, 77.86691 11.24418)"
-BKB-01 LILO POINT,3W,T,28,Gantry to B.K.B-01 Lilo Point,51,42.9081631,1.97,154,,11.24418,77.86691,GOOD,GOOD,,SAND ROAD CROSSING-1,THRONE FOREST,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+BKB-01 LILO POINT,,T,28,Gantry to B.K.B-01 Lilo Point,51,42.9081631,1.97,154,,11.24418,77.86691,GOOD,GOOD,,SAND ROAD CROSSING-1,THRONE FOREST,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,TOTAL ,51,43,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

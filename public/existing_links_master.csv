@@ -4,9 +4,9 @@ sl,name
 3,Thiruvalam - Alamathy
 4,Sriperumpudur - SPKOIL
 5,SPKOIL - Villupuram
-6,Suguvarchatram- Nokia
+6,SUNGUVACHATHIRAM- Nokia
 7,LILO portion of SIPCOT  IN SVC - NOKIA
-8,NCTPS Stage II - Athipattu
+8,NCTPS II - Athipattu
 9,LILO portion of Oragadam  in  SPR - Sp Koil
 10,Nokia - Sriperumpudur
 11,230 KADAPERI - Kalivanthapattu
@@ -14,7 +14,7 @@ sl,name
 13,230 KADAPERI - Traction
 15,Manali-ETPS
 16,Manali - Korattur
-17,S.P.Koil- OMEGA
+17,SPKoil- OMEGA
 18,Manali- Tondiarpet
 19,Tondiarpet - Vyasarpadi
 20,Vyasarpadi - Basin Bridge
@@ -22,7 +22,7 @@ sl,name
 22,Basin bridge - Tondiarpet
 23,Basin bridge - Vyasarpadi
 24,Basin bridge - TNEB HQ
-25,Vyasarpadi - Vyasarapdi
+25,Vyasarpadi - VYASARPADI SS
 26,Basin bridge - Pulianthope
 27,Pulianthope - BBGTPH
 28,CMRL Central - Pulianthope
@@ -30,7 +30,7 @@ sl,name
 30,Sriperumpudur - Mosur (for thiruvalam link)
 31,Mosur - Thiruvalam
 32,Thiruvalam - Vellore RCE office
-33,Taramani - KITS PARK SS
+33,THARAMANI SS - KITS PARK SS
 34,KITS PARK SS - Sholinganallur
 35,Siruseri - Sholinganallur
 36,KITS PARK SS - Sholinganallur
@@ -48,14 +48,14 @@ sl,name
 48,Ambattur - TVKDU
 49,Koyambedu (AIS) - Koyambedu CMRL (GIS)
 50,Koyambedu CMRL (GIS) - Metrozone
-51,Koyambedu CMRL (GIS) - Chinmayanagar
+51,Koyambedu CMRL (GIS) - CHINMAYA NAGAR SS
 52,Metrozone - Thirumangalam
-53,S.P.Koil - Chengalpet
-54,NCTPS STAGE II - Vallur
+53,SPKoil - Chengalpet
+54,NCTPS II - Vallur
 55,NCTPS STAGE 1 - NCTPS STAGE 3
-56,MANALI (GIS) - Pulianthope GIS
+56,MANALI GIS SS - Pulianthope GIS
 57,ENNORE - KATHIVAKKAM TRACTION
-58,MANALI (GIS)- NCTPS STAGE 2
+58,MANALI GIS SS- NCTPS II
 59,ThiruvalamKV- Thiruvalam
 60,Koyambedu CMRL - Koyambedu AIS
 61,Kilpauk - TNEB HQ
@@ -90,9 +90,9 @@ sl,name
 90,Trichy kv -Erode kv
 91,Alundur - Paramathi PGCIL
 92,Pasumalai - K.Pudur RCE office
-94,400 Kamudhi - 400 Karaikudi
-95,Kamudhi - Thiruchuli
-96,Kamudhi - Kavanoor
+94,400 KAMUTHI - 400 Karaikudi
+95,KAMUTHI - Thiruchuli
+96,KAMUTHI - Kavanoor
 97,Kavanoor - Karaikudi
 98,Kayathar - Kanarpatti
 99,Kanarpatti - Abishegapatti
@@ -106,10 +106,10 @@ sl,name
 107,Virudhunagar 765 - Thennampatti | 400 Kayathar
 108,TTN Auto - Tuticorin RCE
 109,Veeranam - Kodikurichi
-110,Ottapidaram - Kamudhi
+110,Ottapidaram - KAMUTHI
 111,Ottapidaram - Meelavittan
 112,Pasumalai - CHECKKANURANI
-113,Pasumalai - 230 Trichy | Samayanallur | Alagarkoil | Mondipatty | Alundur
+113,Pasumalai - 230 Trichy | Samayanallur | Alagarkoil | MONDIPATTI | Alundur
 114,Thappagundu - Anaikadavu
 115,400 Karaikudi - Pugalur | Vellalavidhuthi
 116,400 Ottapidaram - (8.9201668839999, 78.0607148632407)
@@ -126,13 +126,13 @@ sl,name
 129,Pugalur -Karaikudi
 130,Pugalur -Alagapuram
 131,MTPS III - Karamadai - Arasur
-132,LILO of MTPS - Arasur to Gobi
+132,Arasur - Gobi | MTPS
 133,Gobi -SE/Gobi office (Old & New)
 134,Kundah PH1-Kundah PH2
 135,Kundah PH2 -Kundah PH 3
 136,Kundah PH3- Kundah PH4
 137,Kundah PH1-Kundah PH5
-138,Kundah PH5- Kundah PH 6- Ooty-Sandynallah
+138,Kundah PH5- Kundah PH 6- OOTY SS-Sandynallah
 139,Kundah PH 6-Sandynallah
 140,PUSHEP - Karamadai
 141,Sandynallah - PUSHEPH-Singara PH
@@ -162,7 +162,7 @@ sl,name
 165,Aliyar Nagar- Navamalai
 166,Aliyar Nagar-Sarkarpathy
 167,Anappadi- Prambikulam
-168,Aliyar Nagar-Attakatty. Iyyarpadi
+168,Aliyar Nagar-Attakatty- Iyyarpadi
 169,Valparai Town-Chinchona
 170,Valparai Town-Mudis
 171,Mudis-Sholayar nagar
@@ -173,3 +173,4 @@ sl,name
 177,K.Pudur RCE office - Industrial Estate SS
 178,110 Pasumalai - 230 Pasumalai
 179,SLDC ERODE - ERODE SS
+180,N T Gudi - Karaikkudi

@@ -219,25 +219,26 @@ export const updatedLots = [
 export const APP_VERSION = packageJson.version;
 
 // Helper to fit map bounds dynamically
-export const ChangeView = ({ bounds, center }) => {
+export const ChangeView = ({ bounds, center, zoom }) => {
   const map = useMap();
-  const lastBoundsRef = React.useRef(null);
-  const lastCenterRef = React.useRef(null);
+  const lastBounds = React.useRef(null);
+  const lastCenter = React.useRef(null);
 
   useEffect(() => {
-    if (center && center !== lastCenterRef.current) {
-      // Jump to point. Keep current zoom if it's already high (> 18), otherwise zoom to 18.
-      map.setView([center.lat, center.lng], Math.max(map.getZoom(), 18), { animate: true });
-      lastCenterRef.current = center;
-    }
-  }, [center, map]);
-
-  useEffect(() => {
-    if (bounds && bounds !== lastBoundsRef.current) {
-      map.fitBounds(bounds, { padding: [50, 50], animate: true, maxZoom: 19 });
-      lastBoundsRef.current = bounds;
+    if (bounds && bounds !== lastBounds.current) {
+      map.fitBounds(bounds, { animate: true });
+      lastBounds.current = bounds;
+      setTimeout(() => map.invalidateSize(), 250);
     }
   }, [bounds, map]);
+
+  useEffect(() => {
+    if (center && center !== lastCenter.current) {
+      map.setView(center, zoom || 15, { animate: true });
+      lastCenter.current = center;
+      setTimeout(() => map.invalidateSize(), 250);
+    }
+  }, [center, zoom, map]);
 
   return null;
 };

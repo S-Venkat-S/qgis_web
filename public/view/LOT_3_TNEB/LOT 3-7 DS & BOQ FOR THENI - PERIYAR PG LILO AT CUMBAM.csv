@@ -1,14 +1,11 @@
-S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),,Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken, etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain / Hilly/  Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1, CB1 ( 51A ) ,T,DB,28,,,0.8,"=IF(H6>15,0)",472.824706999999,,9.737805555555555,77.26155555555556,GOOD,AVAILABLE,,ROAD,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.26155555555556 9.737805555555555, 77.26375 9.73697222222222)"
-2, CB2,S,DA,26, CB1- CB2,258.5426896694221,0.58,"=IF(H7>15,0)",467.761475,,9.73697222222222,77.26375,GOOD,AVAILABLE,LT,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.26375 9.73697222222222, 77.26644444444445 9.736277777777778)"
-3, CB3,T,DB,28, CB2- CB3,306.1070856079078,0.88,"=IF(H8>15,0)",462.064301,"3°45'36"" R",9.736277777777778,77.26644444444445,GOOD,AVAILABLE,,Village Road,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.26644444444445 9.736277777777778, 77.26897222222222 9.735777777777777)"
-4, CB4,T,DB,28, CB3- CB4,280.987340098375,6.97,"=IF(H9>15,0)",455.104553,"5°55'12"" R",9.735777777777777,77.26897222222222,GOOD,AVAILABLE,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.26897222222222 9.735777777777777, 77.27194444444444 9.7355)"
-5, CB05,T,DC,28, CB4- CB05,328.2101051036888,1.59,"=IF(H10>15,0)",450.030884,"53°7'12"" L",9.7355,77.27194444444444,GOOD,AVAILABLE,LT,Village Road,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.27194444444444 9.7355, 77.27258333333333 9.734499999999999)"
-6, CB06,T,DC,28, CB05- CB06,132.46798848904987,1.17,"=IF(H11>15,0)",450.596649,"57°29'24"" L",9.734499999999999,77.27258333333333,GOOD,AVAILABLE,,Village Road,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.27258333333333 9.734499999999999, 77.27238888888888 9.734138888888888)"
-7,CUMBAM SS,T,H-Pole,12, CB06- CBGY,45.80633609813122,,"=IF(H12>15,0)",450.306641,,9.734138888888888,77.27238888888888,GOOD,NO E/W,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-TOTAL ,,,,,,=SUM(G6:G12),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-Note    :     Shut down will be required in where earth wires are missing.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S.No,Tower No.,Joint Box,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),,Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken, etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain / Hilly/  Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1, CB1 ( 51A ) ,3W,T,DB,28,,,0.8,FALSE,472.824707,,9.737805556,77.26155556,GOOD,AVAILABLE,,ROAD,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.26155555555556 9.737805555555555, 77.26375 9.73697222222222)"
+2, CB2,,S,DA,26, CB1- CB2,258.5426897,0.58,FALSE,467.761475,,9.736972222,77.26375,GOOD,AVAILABLE,LT,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.26375 9.73697222222222, 77.26644444444445 9.736277777777778)"
+3, CB3,,T,DB,28, CB2- CB3,306.1070856,0.88,FALSE,462.064301,"3°45'36"" R",9.736277778,77.26644444,GOOD,AVAILABLE,,Village Road,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.26644444444445 9.736277777777778, 77.26897222222222 9.735777777777777)"
+4, CB4,,T,DB,28, CB3- CB4,280.9873401,6.97,FALSE,455.104553,"5°55'12"" R",9.735777778,77.26897222,GOOD,AVAILABLE,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.26897222222222 9.735777777777777, 77.27194444444444 9.7355)"
+5, CB05,,T,DC,28, CB4- CB05,328.2101051,1.59,FALSE,450.030884,"53°7'12"" L",9.7355,77.27194444,GOOD,AVAILABLE,LT,Village Road,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.27194444444444 9.7355, 77.27258333333333 9.734499999999999)"
+6, CB06,,T,DC,28, CB05- CB06,132.4679885,1.17,FALSE,450.596649,"57°29'24"" L",9.7345,77.27258333,GOOD,AVAILABLE,,Village Road,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.27258333333333 9.734499999999999, 77.27238888888888 9.734138888888888)"
+7,CUMBAM SS,2W,T,H-Pole,12, CB06- CBGY,45.8063361,,FALSE,450.306641,,9.734138889,77.27238889,GOOD,NO E/W,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL ,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note    :     Shut down will be required in where earth wires are missing.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

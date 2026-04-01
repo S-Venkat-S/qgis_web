@@ -384,6 +384,7 @@ const SingleFileView = () => {
 
             <div className="flex-grow bg-gray-900 relative">
                 <MapContainer
+                    key={fileName || 'initial'}
                     center={[11.0, 77.0]}
                     zoom={13}
                     bounds={bounds}

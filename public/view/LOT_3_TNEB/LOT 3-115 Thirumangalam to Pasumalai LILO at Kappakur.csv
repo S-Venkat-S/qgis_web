@@ -1,10 +1,7 @@
-S.No,Tower No.,Tower Suspension/Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),,Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken, etc)","Condition of Earth wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/ Forest/ Water Logged),REMARKS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,LILO : 39,T,DC,28,,,0.2,"=IF(H6>15,0)",149,,9.866666666666667,78.01666666666667,Good,,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.01666666666667 9.866666666666667, 78.0183888888889 9.86561111111111)"
-2,39/1,S,DA,26,LILO : 39 - 39/1,223,1.2,"=IF(H7>15,0)",149,,9.86561111111111,78.0183888888889,Good,Available,LT,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.0183888888889 9.86561111111111, 78.02002777777777 9.864666666666666)"
-3,39/2,T,DC,28,39/1 - 39/2,208,0.38,"=IF(H8>15,0)",148,"67°37'55"" R",9.864666666666666,78.02002777777777,Good,Available,"11KV -2No, LT",,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.02002777777777 9.864666666666666, 78.01997222222222 9.864388888888888)"
-4,Gantry ( Kappalur SS),Gantry,H-Pole,12,39/2 - Gantry,35,,,149,,9.864388888888888,78.01997222222222,Good,NO E/W,,,SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-Total,,,,,,=SUM(G6:G9),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-Note : 1. Shut down will be required in where  earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S.No,Tower No.,Joint Box,Tower Suspension/Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),,Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken, etc)","Condition of Earth wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/ Forest/ Water Logged),REMARKS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,LILO : 39,3W,T,DC,28,,,0.2,FALSE,149,,9.866666667,78.01666667,Good,,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.01666666666667 9.866666666666667, 78.0183888888889 9.86561111111111)"
+2,39/1,,S,DA,26,LILO : 39 - 39/1,223,1.2,FALSE,149,,9.865611111,78.01838889,Good,Available,LT,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.0183888888889 9.86561111111111, 78.02002777777777 9.864666666666666)"
+3,39/2,,T,DC,28,39/1 - 39/2,208,0.38,FALSE,148,"67°37'55"" R",9.864666667,78.02002778,Good,Available,"11KV -2No, LT",,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.02002777777777 9.864666666666666, 78.01997222222222 9.864388888888888)"
+4,Gantry ( Kappalur SS),2W,Gantry,H-Pole,12,39/2 - Gantry,35,,,149,,9.864388889,78.01997222,Good,NO E/W,,,SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Total,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note : 1. Shut down will be required in where  earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

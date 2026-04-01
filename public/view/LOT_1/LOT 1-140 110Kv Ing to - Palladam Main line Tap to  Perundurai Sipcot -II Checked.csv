@@ -1,5 +1,5 @@
 S. No ,Tower No,Joint Box, Supspension/Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,TAPPING 5,3W,T,26,,,8.91,303,,11.2365,77.57876,GOOD,GOOD,,,,GANGA SCHOOL BACK SIDE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.57876 11.2365, 77.57722 11.23532)"
+1,TAPPING 5,,T,26,,,8.91,303,,11.2365,77.57876,GOOD,GOOD,,,,GANGA SCHOOL BACK SIDE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.57876 11.2365, 77.57722 11.23532)"
 2,6,,T,24,05-Jun,213.0032146,15.7,292,"1⁰8'44"" RT",11.23532,77.57722,GOOD,GOOD,,SAND ROAD/ COMPOUND WALL,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.57722 11.23532, 77.57571 11.23421)"
 3,7,,S,26,06-Jul,205.7046663,14.27,296,,11.23421,77.57571,GOOD,GOOD,LT,SAND ROAD/ FENCING,HOUSING AREA,AGRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.57571 11.23421, 77.57425 11.23312)"
 4,8,,S,26,07-Aug,200.0065903,6.53,296, ,11.23312,77.57425,GOOD,GOOD,,,,AGRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.57425 11.23312, 77.57274 11.23205)"

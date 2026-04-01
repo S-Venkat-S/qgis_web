@@ -1,9 +1,6 @@
-SL.NO,TOWER NO,TOWER T/S,DEVIATION OF  ANGLE ,TOWER TYPE,TOWER HEIGHT (Mtrs),SPAN BETWEEN TOWER ,SPAN LENGTH (Mtrs),EARTH FOOTING RESISTANCE OF TOWER (OHMS),GROUND ELEVATION,Latitude,Longitude,CONDITION OF EARTH WIRE (Missing Broken etc;),CROSSING DETAILS,,CONDITION OF AREA (Plain/Hills/Forest/Water logged),REMARKS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-,,,,,,,,,,9.34722157412465,77.5481698662042,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.5481698662042 9.34722157412465, 77.54982 9.347721)"
-1,LILO 178 A,T,,KC,24,PERIYAR-SURULIYAR MAIN LINE LILO178 A,0,3.21,132,9.347721,77.54982,AVAILABLE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.54982 9.347721, 77.550447 9.34784)"
-2,T1,T,,KC,24,LILO-T1,270,2.56,132,9.34784,77.550447,AVAILABLE,"11KV LINE, LT LINE",,PLAIN LAND,"DC LINE,11kv LINE,lt line,plain land.",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.550447 9.34784, 77.550842 9.347829)"
-PERUMALPATTY GANTRY,,,,,,TI - GANTRY,60,,132,9.347829,77.550842,,,,,GANTRY PERUMALPATTY,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,TOTAL,,=SUM(H7:H9),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+SL.NO,TOWER NO,Joint Box,TOWER T/S,DEVIATION OF  ANGLE ,TOWER TYPE,TOWER HEIGHT (Mtrs),SPAN BETWEEN TOWER ,SPAN LENGTH (Mtrs),EARTH FOOTING RESISTANCE OF TOWER (OHMS),GROUND ELEVATION,Latitude,Longitude,CONDITION OF EARTH WIRE (Missing Broken etc;),CROSSING DETAILS,,CONDITION OF AREA (Plain/Hills/Forest/Water logged),REMARKS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+,,3W,,,,,,,,,9.347221574,77.54816987,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.5481698662042 9.34722157412465, 77.54982 9.347721)"
+1,LILO 178 A,,T,,KC,24,PERIYAR-SURULIYAR MAIN LINE LILO178 A,0,3.21,132,9.347721,77.54982,AVAILABLE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.54982 9.347721, 77.550447 9.34784)"
+2,T1,,T,,KC,24,LILO-T1,270,2.56,132,9.34784,77.550447,AVAILABLE,"11KV LINE, LT LINE",,PLAIN LAND,"DC LINE,11kv LINE,lt line,plain land.",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.550447 9.34784, 77.550842 9.347829)"
+PERUMALPATTY GANTRY,,2W,,,,,TI - GANTRY,60,,132,9.347829,77.550842,,,,,GANTRY PERUMALPATTY,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,TOTAL,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

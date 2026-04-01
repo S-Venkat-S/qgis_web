@@ -1,9 +1,6 @@
-SL.NO,TOWER NO,Tower Suspension/ Tension,DIVATIONN OF  ANGLE ('),TOWER TYPE,TOWER HEIGHT (Mtrs),SPAN BETWEEN TOWER LENGTH (Mtrs),SPAN LENGTH (Mtrs),FOOTING RESIDENCE OF TOWER (OHMS),GROUND ELEVATION,Latitude,Longitude,CONDITION OF EARTH WIRE (Missing Broken etc;),CROSSING OBJECTS,,CONDITION OF AREA ( Plain/Hills/Forest/ Water logged),REMARKS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,Gantry (Malaiyankulam) ,,,Gantry,,,,,139,9.156500475856362,77.60726563597177,AVAILABLE,,,,GANTRY,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.60726563597177 9.156500475856362, 77.60706816 9.156530169)"
-2,1,T,,KCR,24,Gantry (Malaiyankulam) -T1,21.769836586431477,0.53,140,9.156530169,77.60706816,AVAILABLE,,ROAD,PLAIN LAND,"Dc Line,road,fencing,plain land. ( earth 0.53 )",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.60706816 9.156530169, 77.60561273 9.156621857)"
-3,2,T,"40°28'01""LT",KCR+3,27,T1-T2,160.38703927999669,0.73,139,9.156621857,77.60561273,AVAILABLE,11KV LINE-2NOS,,PLAIN LAND,"Dc line, 11kv line-2,plain land. (earth 0.73 )",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.60561273 9.156621857, 77.60410935 9.158069334)"
-4,3,T,,KCR+3,27,T2-T3,230.2137921954173,3.03,137,9.158069334,77.60410935,AVAILABLE,LT LINE,,WATER LOGGED AREA,"Dc line, lt line, water logged area (earth 3.03 )",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,=SUM(H7:H9)/1000,KM,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+SL.NO,TOWER NO,,Tower Suspension/ Tension,DIVATIONN OF  ANGLE ('),TOWER TYPE,TOWER HEIGHT (Mtrs),SPAN BETWEEN TOWER LENGTH (Mtrs),SPAN LENGTH (Mtrs),FOOTING RESIDENCE OF TOWER (OHMS),GROUND ELEVATION,Latitude,Longitude,CONDITION OF EARTH WIRE (Missing Broken etc;),CROSSING OBJECTS,,CONDITION OF AREA ( Plain/Hills/Forest/ Water logged),REMARKS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,Gantry (Malaiyankulam) ,2W,,,Gantry,,,,,139,9.156500476,77.60726564,AVAILABLE,,,,GANTRY,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.60726563597177 9.156500475856362, 77.60706816 9.156530169)"
+2,1,,T,,KCR,24,Gantry (Malaiyankulam) -T1,21.76983659,0.53,140,9.156530169,77.60706816,AVAILABLE,,ROAD,PLAIN LAND,"Dc Line,road,fencing,plain land. ( earth 0.53 )",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.60706816 9.156530169, 77.60561273 9.156621857)"
+3,2,,T,"40°28'01""LT",KCR+3,27,T1-T2,160.3870393,0.73,139,9.156621857,77.60561273,AVAILABLE,11KV LINE-2NOS,,PLAIN LAND,"Dc line, 11kv line-2,plain land. (earth 0.73 )",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.60561273 9.156621857, 77.60410935 9.158069334)"
+4,3,3W,T,,KCR+3,27,T2-T3,230.2137922,3.03,137,9.158069334,77.60410935,AVAILABLE,LT LINE,,WATER LOGGED AREA,"Dc line, lt line, water logged area (earth 3.03 )",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,0,KM,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

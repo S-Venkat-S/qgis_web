@@ -1,11 +1,8 @@
-S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,LILO : 01,DC,GANTRY,27,,,,106,,10.5963129736483,78.0837184097617,GOOD,,,,PLAIN,LILO KOVILUR,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.0837184097617 10.5963129736483, 78.0828948039561 10.5982034280896)"
-2,55,SC,S,25,"=B6&"" - ""&B7",230.89970845308497,3.91,106,,10.5982034280896,78.0828948039561,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.0828948039561 10.5982034280896, 78.0818925797939 10.6005137320607)"
-3,56,SC,S,25,"=B7&"" - ""&B8",281.32783241725235,1.93,100,,10.6005137320607,78.0818925797939,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.0818925797939 10.6005137320607, 78.0815683677792 10.6012572068721)"
-4,57,DC,T,27,"=B8&"" - ""&B9",92.64125101580521,2.41,96,35°43'45''LT,10.6012572068721,78.0815683677792,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.0815683677792 10.6012572068721, 78.0816347524523 10.6015650741755)"
-5,GANTRY AT KOVILUR,GANTRY,GANTRY,15,"=B9&"" - ""&B10",37.85004811021739,3.16,98,,10.6015650741755,78.0816347524523,GOOD,NO E/W,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-TOTAL,,,,,,=SUM(G7:G10),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-Note : 1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S.No,Tower No.,Joint Box,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,LILO : 01,3W,DC,GANTRY,27,,,,106,,10.59631297,78.08371841,GOOD,,,,PLAIN,LILO KOVILUR,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.0837184097617 10.5963129736483, 78.0828948039561 10.5982034280896)"
+2,55,,SC,S,25,GANTRY AT KOVILUR - ,230.8997085,3.91,106,,10.59820343,78.0828948,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.0828948039561 10.5982034280896, 78.0818925797939 10.6005137320607)"
+3,56,,SC,S,25, - ,281.3278324,1.93,100,,10.60051373,78.08189258,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.0818925797939 10.6005137320607, 78.0815683677792 10.6012572068721)"
+4,57,,DC,T,27, - ,92.64125102,2.41,96,35°43'45''LT,10.60125721,78.08156837,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.0815683677792 10.6012572068721, 78.0816347524523 10.6015650741755)"
+5,GANTRY AT KOVILUR,2W,GANTRY,GANTRY,15, - ,37.85004811,3.16,98,,10.60156507,78.08163475,GOOD,NO E/W,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note : 1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

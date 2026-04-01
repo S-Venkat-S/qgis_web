@@ -1,8 +1,5 @@
-S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),,Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,LILO : 33,T,D,26,,,10.85,"=IF(H6>15,0)",135.437942999999,,9.9,78.14505555555556,GOOD,,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.14505555555556 9.9, 78.14519444444446 9.900222222222222)"
-2,Gantry (Anuppanadi SS),Gantry,H-POLE,12,33-Gantry,30,,,136,,9.900222222222222,78.14519444444446,GOOD,NO E/W,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-TOTAL,,,,,,=SUM(G6:G7),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-Note : 1 . Shut down will be required in where earth wier are missing ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S.No,Tower No.,Joint Box,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),,Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,LILO : 33,3W,T,D,26,,,10.85,FALSE,135.437943,,9.9,78.14505556,GOOD,,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.14505555555556 9.9, 78.14519444444446 9.900222222222222)"
+2,Gantry (Anuppanadi SS),2W,Gantry,H-POLE,12,33-Gantry,30,,,136,,9.900222222,78.14519444,GOOD,NO E/W,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note : 1 . Shut down will be required in where earth wier are missing ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

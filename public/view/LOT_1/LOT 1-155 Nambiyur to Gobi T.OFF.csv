@@ -1,5 +1,5 @@
 S. No ,Tower No,Joint Box, Supspension/Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1, 231(Lilo),3W,T,26,,,15.93,245,,11.43689,77.33856,GOOD,GOOD,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.33856 11.43689, 77.33852 11.43653)"
+1, 231(Lilo),,T,26,,,15.93,245,,11.43689,77.33856,GOOD,GOOD,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.33856 11.43689, 77.33852 11.43653)"
 2,1,,T,24,231-01,40.07721414,1551(1000),241,"11⁰56'44"" LT",11.43653,77.33852,GOOD,GOOD,LT,SAND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.33852 11.43653, 77.33872 11.43455)"
 3,2,,S,26,01-Feb,220.1974883,1514(1000),241,,11.43455,77.33872,GOOD,GOOD,11 KV,SAND,,AGRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.33872 11.43455, 77.33897 11.43186)"
 4,3,,S,26,02-Mar,298.9314477,1592(1000),242,,11.43186,77.33897,GOOD,GOOD,LT,,,AGRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.33897 11.43186, 77.33922 11.42939)"

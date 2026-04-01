@@ -1,5 +1,5 @@
 S. No ,Tower No,Joint Box, Supspension/Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,Sipcot - II Gantry,2W,T,20,,,,290,,11.22025,77.55035,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.55035 11.22025, 77.55042 11.2201)"
+1,Sipcot - II Gantry,,T,20,,,,290,,11.22025,77.55035,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.55035 11.22025, 77.55042 11.2201)"
 2,254,,T,28,Gantry - 254,18.27894622,14.75,292,"80⁰16'43"" RT",11.2201,77.55042,GOOD,NO,SUB STATION,,,Tapping to Periyandipalayam,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.55042 11.2201, 77.54918 11.21926)"
 3,253,,T,24,254-253,164.3203055,12.65,290,"6⁰32'43"" RT",11.21926,77.54918,GOOD,GOOD,,TAR ROAD,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.54918 11.21926, 77.54744 11.21835)"
 4,252,,T,24,253-252,215.154254,9.83,288,"0⁰17'24"" LT",11.21835,77.54744,GOOD,GOOD,LT/11 KV,TAR ROAD,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.54744 11.21835, 77.54557 11.21736)"

@@ -1,10 +1,7 @@
-S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,199/10,T,DC,45,,,,177.342468,,9.918444444444443,77.97086111111112,Good,,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.97086111111112 9.918444444444443, 77.97063888888889 9.918972222222221)"
-2,199/10A,T,DC,28,199/10 - 199/10A,66,1.56,177,"42°50'5"" L",9.918972222222221,77.97063888888889,Good,Available,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.97063888888889 9.918972222222221, 77.97075 9.91936111111111)"
-3,GANTRY (110KV KINNIMANGALAM SS ),Gantry,H-Pole,12,199/10A - Gantry,44,NIL,176,,9.91936111111111,77.97075,Good,NO E/W,,,SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-TOTAL,,,,,,=G7+G8,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-Note : 1. Shut down will be required in where  earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S.No,Tower No.,Join Box,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,199/10,3W,T,DC,45,,,,177.342468,,9.918444444,77.97086111,Good,,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.97086111111112 9.918444444444443, 77.97063888888889 9.918972222222221)"
+2,199/10A,,T,DC,28,199/10 - 199/10A,66,1.56,177,"42°50'5"" L",9.918972222,77.97063889,Good,Available,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.97063888888889 9.918972222222221, 77.97075 9.91936111111111)"
+3,GANTRY (110KV KINNIMANGALAM SS ),2W,Gantry,H-Pole,12,199/10A - Gantry,44,NIL,176,,9.919361111,77.97075,Good,NO E/W,,,SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note : 1. Shut down will be required in where  earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

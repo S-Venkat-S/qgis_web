@@ -1,9 +1,6 @@
-S.No,Tower No.,Tower Suspension / Tension,D,M,S,,,,,Deviation Angle,Tower Type,Tower Height (m),,,Span Between Tower No.,Span Length (m),Footing Resistance of Tower ( Ohms),,Ground Elevation (m),Deviation Angle,Latitude,Longitude,"Condition of  Tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/  Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,line_geom
-1,122 LILO,T,,,,,,,,,DB+0,25,,,,,3.8,"=IF(R6>15,0)",266.408935546875,,10.1610974036157,77.7372552081942,Good,Good,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.7372552081942 10.1610974036157, 77.7367600891739 10.1611020974814)"
-2,DP 1,T,,,,25,33,56,"=IF(H7>0,""RT"",""LT"")",35°39'5''RT,DP ,12,T 84,T  1,122 LILO - DP 1,65,NIL,"=IF(R7>15,0)",266.649291992187,56°11'56''RT,10.1611020974814,77.7367600891739,Good,Good,230 KV SOLAR,,,NEAR BY SS,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.7367600891739 10.1611020974814, 77.7361482102423 10.1620266214013)"
-3,DP 2,T,23,40,54.26920442309893,,,,,20°41'55''RT,DP ,12,T 1,T  2,DP1 -DP 2,135,NIL,"=IF(R8>15,0)",261.6025390625,29°36'16''RT,10.1620266214013,77.7361482102423,Good,Good,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.7361482102423 10.1620266214013, 77.7361130900681 10.1625722832977)"
-4,GANTRY,T,,,,,,,,33°34'40''RT,GANTRY,12,T 2,T  3,DP 2- GANTRY,60,NIL,,257.99755859375,96°43'53''LT,10.1625722832977,77.7361130900681,NO E/W,Good,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,TOTOL KM,,,,=SUM(Q6:Q9),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S.No,Tower No.,Joint Box,Tower Suspension / Tension,D,M,S,,,,,Deviation Angle,Tower Type,Tower Height (m),,,Span Between Tower No.,Span Length (m),Footing Resistance of Tower ( Ohms),,Ground Elevation (m),Deviation Angle,Latitude,Longitude,"Condition of  Tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/  Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,line_geom
+1,122 LILO,3W,T,,,,,,,,,DB+0,25,,,,,3.8,FALSE,266.4089355,,10.1610974,77.73725521,Good,Good,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.7372552081942 10.1610974036157, 77.7367600891739 10.1611020974814)"
+2,DP 1,,T,,,,25,33,56,LT,35°39'5''RT,DP ,12,T 84,T  1,122 LILO - DP 1,65,NIL,FALSE,266.649292,56°11'56''RT,10.1611021,77.73676009,Good,Good,230 KV SOLAR,,,NEAR BY SS,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.7367600891739 10.1611020974814, 77.7361482102423 10.1620266214013)"
+3,DP 2,,T,23,40,54.26920442,,,,,20°41'55''RT,DP ,12,T 1,T  2,DP1 -DP 2,135,NIL,FALSE,261.6025391,29°36'16''RT,10.16202662,77.73614821,Good,Good,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.7361482102423 10.1620266214013, 77.7361130900681 10.1625722832977)"
+4,GANTRY,2W,T,,,,,,,,33°34'40''RT,GANTRY,12,T 2,T  3,DP 2- GANTRY,60,NIL,,257.9975586,96°43'53''LT,10.16257228,77.73611309,NO E/W,Good,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,TOTOL KM,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

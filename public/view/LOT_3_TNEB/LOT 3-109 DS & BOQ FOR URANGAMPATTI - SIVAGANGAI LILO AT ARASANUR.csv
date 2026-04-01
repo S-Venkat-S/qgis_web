@@ -1,11 +1,8 @@
-S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),,Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,LILO : 91,T,DC,,,,3.26,"=IF(H6>15,0)",110.763381999999,,9.856222222222222,78.34605555555555,GOOD,,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.34605555555555 9.856222222222222, 78.34605555555555 9.854)"
-2,1,T,DC,26,91-1,247.8066229749738,2.32,"=IF(H7>15,0)",109.621201,"19°8'14"" R",9.854,78.34605555555555,GOOD,Available,,POND,Water Logged,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.34605555555555 9.854, 78.34566666666666 9.85286111111111)"
-3,2,T,DC,26,1-2,131.38903461337284,1.18,"=IF(H8>15,0)",110.346924,"9°52'14"" L",9.85286111111111,78.34566666666666,GOOD,Available,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.34566666666666 9.85286111111111, 78.34561111111111 9.852638888888889)"
-4,Gantry (Arasanur SS),Gantry,H-POLE,12,2-Gantry,27.029902448582394,,,112.672531,,9.852638888888889,78.34561111111111,GOOD,NO E/W,,,PLAIN,SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-TOTAL,,,,,,=SUM(G7:G9),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-Note : 1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S.No,Tower No.,Joint Box,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),,Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,LILO : 91,3W,T,DC,,,,3.26,FALSE,110.763382,,9.856222222,78.34605556,GOOD,,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.34605555555555 9.856222222222222, 78.34605555555555 9.854)"
+2,1,,T,DC,26,91-1,247.806623,2.32,FALSE,109.621201,"19°8'14"" R",9.854,78.34605556,GOOD,Available,,POND,Water Logged,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.34605555555555 9.854, 78.34566666666666 9.85286111111111)"
+3,2,,T,DC,26,01-Feb,131.3890346,1.18,FALSE,110.346924,"9°52'14"" L",9.852861111,78.34566667,GOOD,Available,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.34566666666666 9.85286111111111, 78.34561111111111 9.852638888888889)"
+4,Gantry (Arasanur SS),3W,Gantry,H-POLE,12,2-Gantry,27.02990245,,,112.672531,,9.852638889,78.34561111,GOOD,NO E/W,,,PLAIN,SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note : 1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

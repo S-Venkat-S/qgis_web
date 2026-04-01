@@ -1,12 +1,9 @@
-S.No,Tower No.,Tower Suspension / Tension,TOWER MODEL,Tower  Type,Tower Height (m),Span Between Tower No.,Span Length (m),Footing Resistance of Tower ( Ohms),,Ground Elevation(m),"Deviation Angle 
+S.No,Tower No.,Joint Box,Tower Suspension / Tension,TOWER MODEL,Tower  Type,Tower Height (m),Span Between Tower No.,Span Length (m),Footing Resistance of Tower ( Ohms),,Ground Elevation(m),"Deviation Angle 
 Degrees",Latitude,Longitude,"Condition of  Tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/  Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,379 LILO THADIKOMBU,T,,DB+3,25,,,5.78,"=IF(I6>15,0)",235,,10.4698442202061,77.9248225037008,Good,Good,,,Plain,LILO THADIKOMBU,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.9248225037008 10.4698442202061, 77.926266118884 10.4680695198476)"
-2,1,T,KCR,DC+3,25,379 LILO THADIKOMBU-1,261,6.91,"=IF(I7>15,0)",252,15°19'6''LT,10.4680695198476,77.926266118884,Good,Good,,THAR ROAD,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.926266118884 10.4680695198476, 77.9284418933093 10.4665138386189)"
-3,2,T,KCR,DB+0,22,1-2,303,7.12,"=IF(I8>15,0)",243,3°40'1''LT,10.4665138386189,77.9284418933093,Good,Good,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.9284418933093 10.4665138386189, 77.9300025198608 10.4655419569462)"
-4,3,T,GCR,DD+0,24,2-3,210,7.01,"=IF(I9>15,0)",252,98°54'31''LT,10.4655419569462,77.9300025198608,Good,Good,LT,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.9300025198608 10.4655419569462, 77.9304129816591 10.4664866812527)"
-5,4,T,GCR+3,DD+0,24,3-4,123,5.78,"=IF(I10>15,0)",269,98°13'41''RT,10.4664866812527,77.9304129816591,Good,Good,2-22KV,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.9304129816591 10.4664866812527, 77.9305944498628 10.466376626864)"
-6,GANTRY,T,,BAY,12,4-GANTRY,32,NIL,,253,,10.466376626864,77.9305944498628,Good,NO E/W,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,TOTAL (M),=SUM(H6:H11),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+1,379 LILO THADIKOMBU,3W,T,,DB+3,25,,,5.78,FALSE,235,,10.46984422,77.9248225,Good,Good,,,Plain,LILO THADIKOMBU,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.9248225037008 10.4698442202061, 77.926266118884 10.4680695198476)"
+2,1,,T,KCR,DC+3,25,379 LILO THADIKOMBU-1,261,6.91,0,252,15°19'6''LT,10.46806952,77.92626612,Good,Good,,THAR ROAD,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.926266118884 10.4680695198476, 77.9284418933093 10.4665138386189)"
+3,2,,T,KCR,DB+0,22,01-Feb,303,7.12,FALSE,243,3°40'1''LT,10.46651384,77.92844189,Good,Good,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.9284418933093 10.4665138386189, 77.9300025198608 10.4655419569462)"
+4,3,,T,GCR,DD+0,24,02-Mar,210,7.01,FALSE,252,98°54'31''LT,10.46554196,77.93000252,Good,Good,LT,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.9300025198608 10.4655419569462, 77.9304129816591 10.4664866812527)"
+5,4,,T,GCR+3,DD+0,24,03-Apr,123,5.78,FALSE,269,98°13'41''RT,10.46648668,77.93041298,Good,Good,2-22KV,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.9304129816591 10.4664866812527, 77.9305944498628 10.466376626864)"
+6,GANTRY,2W,T,,BAY,12,4-GANTRY,32,NIL,,253,,10.46637663,77.93059445,Good,NO E/W,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,TOTAL (M),0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

@@ -1,10 +1,7 @@
-S. No ,Tower No,Type,Supspension/ Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts, broken, etc)","Condition of Earht wire (Missing, Broken etc)",GROUND EARTH AVAILABLE,Crossing Objects,,,Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,T.NO-50/51 LILO 110KV NARANAPURAM,DB,T,24,,,2.99,189,,9.25823095,77.4006236,GOOD,,NO,,,PLAINLAND,"NEED 3WAY JUNCTION BOX.2EARTH WIRE ON THIS TOWER.ONE IS CONTINUE TO OUR T.NO-51,ANOTHER EARTH WIRE CONNECTED TO PULIYANKUDI -WISHANATHAPERI TOWER",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.4006236 9.25823095, 77.40252932 9.25754941)"
-2,T.NO-51,DA,S,26,50/51-51,222.6566864030811,1.94,186,,9.25754941,77.40252932,GOOD,GOOD,NO,,CANAL,PLAINLAND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.40252932 9.25754941, 77.40477813 9.25648599)"
-3,T.NO-52,DD,T,28,51-52,273.7882393383616,2.32,180,"35°46'50.11""",9.25648599,77.40477813,GOOD,GOOD,YES,"11KV,LT",,PLAINLAND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.40477813 9.25648599, 77.40511512 9.25654699)"
-4,GANTRY 110KV NARANAPURAM,GANTRY,GANTRY,20,52-GANTRY,37.656340767525464,1.82,182,,9.25654699,77.40511512,GOOD,MISSING,NO,,,SUBSTATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,TOTAL,=SUM(G6:G9),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-"NOTES:(0˚-2˚ A-TYPE , 2˚-15˚ B-TYPE, 15˚-30˚C-TYPE,            30˚< D-TYPE)                                          ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S. No ,Tower No,Joint Box,Type,Supspension/ Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts, broken, etc)","Condition of Earht wire (Missing, Broken etc)",GROUND EARTH AVAILABLE,Crossing Objects,,,Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,T.NO-50/51 LILO 110KV NARANAPURAM,3W,DB,T,24,,,2.99,189,,9.25823095,77.4006236,GOOD,,NO,,,PLAINLAND,"NEED 3WAY JUNCTION BOX.2EARTH WIRE ON THIS TOWER.ONE IS CONTINUE TO OUR T.NO-51,ANOTHER EARTH WIRE CONNECTED TO PULIYANKUDI -WISHANATHAPERI TOWER",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.4006236 9.25823095, 77.40252932 9.25754941)"
+2,T.NO-51,,DA,S,26,50/51-51,222.6566864,1.94,186,,9.25754941,77.40252932,GOOD,GOOD,NO,,CANAL,PLAINLAND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.40252932 9.25754941, 77.40477813 9.25648599)"
+3,T.NO-52,,DD,T,28,51-52,273.7882393,2.32,180,"35°46'50.11""",9.25648599,77.40477813,GOOD,GOOD,YES,"11KV,LT",,PLAINLAND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.40477813 9.25648599, 77.40511512 9.25654699)"
+4,GANTRY 110KV NARANAPURAM,2W,GANTRY,GANTRY,20,52-GANTRY,37.65634077,1.82,182,,9.25654699,77.40511512,GOOD,MISSING,NO,,,SUBSTATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,TOTAL,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+"NOTES:(0˚-2˚ A-TYPE , 2˚-15˚ B-TYPE, 15˚-30˚C-TYPE,            30˚< D-TYPE)                                          ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

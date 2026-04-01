@@ -1,16 +1,13 @@
-S. No ,Tower No,Type,Supspension/ Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts, broken, etc)","Condition of Earht wire (Missing, Broken etc)",GROUND EARTH AVAILABLE,Crossing Objects,,Condition of Area (Plain/Hilly/ Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,GANTRY ACHAMPUTHUR 110KV SS,GANTRY,GANTRY,20,,,,193,,9.04561563,77.29640485,GOOD,,NO,,,SUBSTATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.29640485 9.04561563, 77.29648817 9.0458501)"
-2,T.NO-9,DB,T,24,GANTRY-9,27.51363298439521,4.15,183,"0°20'5.43""",9.0458501,77.29648817,GOOD,MISSING,YES,,,INSIDE SS,NO EARTH WIRE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.29648817 9.0458501, 77.29682155 9.04680605)"
-3,T.NO-8,DD,T,31,9-8,111.94641575325224,3.51,184,"69°38'40.81""",9.04680605,77.29682155,GOOD,GOOD,NO,,,PLAIN LAND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.29682155 9.04680605, 77.29943137 9.04686198)"
-4,T.NO-7,DB,T,24,8-7,287.1114766079545,3.82,185,"2°22'21.30""",9.04686198,77.29943137,GOOD,GOOD,NO,11KV ,TAAR ROAD,CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.29943137 9.04686198, 77.30165984 9.04700164)"
-5,T.NO-6,DA,S,26,7-6,245.58908770545975,9.12,181,,9.04700164,77.30165984,GOOD,GOOD,NO,,,CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.30165984 9.04700164, 77.30427063 9.04721118)"
-6,T.NO-5,DD,T,31,6-5,288.08679247754486,INSIDE POND ,181,"36°45'47.22""",9.04721118,77.30427063,GOOD,GOOD,NO,,,WATER LOGGED,INSIDE POND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.30427063 9.04721118, 77.30638976 9.04588732)"
-7,T.NO-4,DB,T,30,5-4,275.2834902423318,AT PRESENT WATER,179,"0°57'1.67""",9.04588732,77.30638976,GOOD,GOOD,NO,,POND,CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.30638976 9.04588732, 77.30829125 9.04465521)"
-8,T.NO-3,DA,S,26,4-3,249.64975465639858,4.78,181,,9.04465521,77.30829125,GOOD,GOOD,NO,2nos LT,,CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.30829125 9.04465521, 77.30979476 9.04375097)"
-9,T.NO-2,DA,S,26,3-2,193.27959023135372,8.64,180,,9.04375097,77.30979476,GOOD,GOOD,NO,,,CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.30979476 9.04375097, 77.31094456 9.04298453)"
-10,T.NO-1 LILO 110KV ACHAMPUTHUR,DA,T,26,2-1,152.26621424334422,4.11,179,,9.04298453,77.31094456,GOOD,GOOD,NO,LT,,PLAIN LAND,NEED 3 WAY JUNCTION BOX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,TOTAL,=SUM(G6:G15),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-"NOTES:(0˚-2˚ A-TYPE , 2˚-15˚ B-TYPE, 15˚-30˚C-TYPE,            30˚< D-TYPE)                                          ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S. No ,Tower No,Joint Box,Type,Supspension/ Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts, broken, etc)","Condition of Earht wire (Missing, Broken etc)",GROUND EARTH AVAILABLE,Crossing Objects,,Condition of Area (Plain/Hilly/ Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,GANTRY ACHAMPUTHUR 110KV SS,2W,GANTRY,GANTRY,20,,,,193,,9.04561563,77.29640485,GOOD,,NO,,,SUBSTATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.29640485 9.04561563, 77.29648817 9.0458501)"
+2,T.NO-9,,DB,T,24,GANTRY-9,27.51363298,4.15,183,"0°20'5.43""",9.0458501,77.29648817,GOOD,MISSING,YES,,,INSIDE SS,NO EARTH WIRE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.29648817 9.0458501, 77.29682155 9.04680605)"
+3,T.NO-8,,DD,T,31,09-Aug,111.9464158,3.51,184,"69°38'40.81""",9.04680605,77.29682155,GOOD,GOOD,NO,,,PLAIN LAND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.29682155 9.04680605, 77.29943137 9.04686198)"
+4,T.NO-7,,DB,T,24,08-Jul,287.1114766,3.82,185,"2°22'21.30""",9.04686198,77.29943137,GOOD,GOOD,NO,11KV ,TAAR ROAD,CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.29943137 9.04686198, 77.30165984 9.04700164)"
+5,T.NO-6,,DA,S,26,07-Jun,245.5890877,9.12,181,,9.04700164,77.30165984,GOOD,GOOD,NO,,,CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.30165984 9.04700164, 77.30427063 9.04721118)"
+6,T.NO-5,,DD,T,31,06-May,288.0867925,INSIDE POND ,181,"36°45'47.22""",9.04721118,77.30427063,GOOD,GOOD,NO,,,WATER LOGGED,INSIDE POND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.30427063 9.04721118, 77.30638976 9.04588732)"
+7,T.NO-4,,DB,T,30,05-Apr,275.2834902,AT PRESENT WATER,179,"0°57'1.67""",9.04588732,77.30638976,GOOD,GOOD,NO,,POND,CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.30638976 9.04588732, 77.30829125 9.04465521)"
+8,T.NO-3,,DA,S,26,04-Mar,249.6497547,4.78,181,,9.04465521,77.30829125,GOOD,GOOD,NO,2nos LT,,CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.30829125 9.04465521, 77.30979476 9.04375097)"
+9,T.NO-2,,DA,S,26,03-Feb,193.2795902,8.64,180,,9.04375097,77.30979476,GOOD,GOOD,NO,,,CULTIVATION,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.30979476 9.04375097, 77.31094456 9.04298453)"
+10,T.NO-1 LILO 110KV ACHAMPUTHUR,3W,DA,T,26,02-Jan,152.2662142,4.11,179,,9.04298453,77.31094456,GOOD,GOOD,NO,LT,,PLAIN LAND,NEED 3 WAY JUNCTION BOX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,TOTAL,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+"NOTES:(0˚-2˚ A-TYPE , 2˚-15˚ B-TYPE, 15˚-30˚C-TYPE,            30˚< D-TYPE)                                          ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

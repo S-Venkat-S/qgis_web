@@ -1,12 +1,9 @@
-S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),,Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,LILO : 50/1,T,DC,26,,,2.27,"=IF(H6>15,0)",140.522522,,9.914277777777778,78.16772222222222,GOOD,,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.16772222222222 9.914277777777778, 78.16825 9.914805555555557)"
-2,50/2,T,DC,26,50/1-50/2,80.12699318402319,4.16,"=IF(H7>15,0)",136.838103999999,"17°57'25"" R",9.914805555555557,78.16825,GOOD,Available,,Canal,Water Logged,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.16825 9.914805555555557, 78.1696388888889 9.915527777777777)"
-3,50/3,T,DC,26,50/2-50/3,173.87610219960354,5.62,"=IF(H8>15,0)",137,"13°21'18"" L",9.915527777777777,78.1696388888889,GOOD,Available,,Canal,Water Logged,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.1696388888889 9.915527777777777, 78.17116666666666 9.916805555555555)"
-4,50/4,T,DC,26,50/3-50/4,217.23153285175786,1.22,"=IF(H9>15,0)",137,"49°53'46"" R",9.916805555555555,78.17116666666666,GOOD,Available,"HT-3NO,LT",NH,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.17116666666666 9.916805555555555, 78.17147222222222 9.916749999999999)"
-5,50/5,T,DC,26,50/4-50/5,35.8109117576873,1.24,"=IF(H10>15,0)",137.232238999999,"89°27'37"" R",9.916749999999999,78.17147222222222,GOOD,Available,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.17147222222222 9.916749999999999, 78.17144444444445 9.916583333333334)"
-6,Gantry (Vandiyur SS),Gantry,H-POLE,12,50/5-Gantry,17.356197343101726,,,137.494353999999,,9.916583333333334,78.17144444444445,GOOD,NO E/W,,,SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-TOTAL,,,,,,=SUM(G6:G11),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-Note : 1 . Shut down will be required in where earth wier are missing ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S.No,Tower No.,Joint Box,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),,Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,LILO : 50/1,3W,T,DC,26,,,2.27,FALSE,140.522522,,9.914277778,78.16772222,GOOD,,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.16772222222222 9.914277777777778, 78.16825 9.914805555555557)"
+2,50/2,,T,DC,26,50/1-50/2,80.12699318,4.16,FALSE,136.838104,"17°57'25"" R",9.914805556,78.16825,GOOD,Available,,Canal,Water Logged,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.16825 9.914805555555557, 78.1696388888889 9.915527777777777)"
+3,50/3,,T,DC,26,50/2-50/3,173.8761022,5.62,FALSE,137,"13°21'18"" L",9.915527778,78.16963889,GOOD,Available,,Canal,Water Logged,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.1696388888889 9.915527777777777, 78.17116666666666 9.916805555555555)"
+4,50/4,,T,DC,26,50/3-50/4,217.2315329,1.22,FALSE,137,"49°53'46"" R",9.916805556,78.17116667,GOOD,Available,"HT-3NO,LT",NH,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.17116666666666 9.916805555555555, 78.17147222222222 9.916749999999999)"
+5,50/5,,T,DC,26,50/4-50/5,35.81091176,1.24,FALSE,137.232239,"89°27'37"" R",9.91675,78.17147222,GOOD,Available,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.17147222222222 9.916749999999999, 78.17144444444445 9.916583333333334)"
+6,Gantry (Vandiyur SS),2W,Gantry,H-POLE,12,50/5-Gantry,17.35619734,,,137.494354,,9.916583333,78.17144444,GOOD,NO E/W,,,SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note : 1 . Shut down will be required in where earth wier are missing ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

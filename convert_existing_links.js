@@ -393,17 +393,16 @@ function convert(masterCsvPath, ssCsvPath, outputDir) {
 
         const validPoints = points.filter(p => p[0] !== null);
         
-        let displayTitle = title;
-        let slSuffix = "";
         if (minScore < 0.8) {
-            displayTitle += "X";
-            slSuffix = "X";
+            console.log(`  ⚠  Skipping '[${sl}] ${title}' – confidence below 80% (${(minScore * 100).toFixed(1)}%)`);
+            skipped++;
+            continue;
         }
 
-        const fname = `EXISTING E-${sl}${slSuffix} - ${safeFilename(title)}.csv`;
+        const fname = `EXISTING E-${sl} - ${safeFilename(title)}.csv`;
         const fpath = path.join(outputDir, fname);
 
-        const ok = writeLinkCsv(fpath, validPoints, displayTitle);
+        const ok = writeLinkCsv(fpath, validPoints, title);
         if (ok) {
             created++;
             console.log(`[${sl}] ✓ Created: ${fname}`);

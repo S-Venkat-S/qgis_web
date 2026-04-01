@@ -1,7 +1,4 @@
-S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length (m),Footing Resistance of Tower ( Ohms),Ground Elevation (m),Deviation Angle,Latitude,Longitude,"Condition of  Tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/  Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,LILO TO.NO.1,T,DB+0,22,,,2.87,270,8°1'41''RT,10.329510639126012,77.927027588763,Good,NO E/W,,,Plain,LILO SEMPATTI TO TRICHY UPTO AYYALUR  LINE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.927027588763 10.329510639126012, 77.927086 10.329839)"
-2,GANTRY,T,BAY,12,LILO T.NO 1 -GANTRY,49,NIL,272,,10.329839,77.927086,Good,NO E/W,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,TOTOL KM,,=SUM(G6:G7),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S.No,Tower No.,Joint Box,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length (m),Footing Resistance of Tower ( Ohms),Ground Elevation (m),Deviation Angle,Latitude,Longitude,"Condition of  Tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/  Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,LILO TO.NO.1,3W,T,DB+0,22,,,2.87,270,8°1'41''RT,10.32951064,77.92702759,Good,NO E/W,,,Plain,LILO SEMPATTI TO TRICHY UPTO AYYALUR  LINE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.927027588763 10.329510639126012, 77.927086 10.329839)"
+2,GANTRY,2W,T,BAY,12,LILO T.NO 1 -GANTRY,49,NIL,272,,10.329839,77.927086,Good,NO E/W,,,Plain,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,TOTOL KM,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

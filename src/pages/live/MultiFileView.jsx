@@ -186,12 +186,25 @@ const MultiFileView = () => {
         const loadLots = async () => {
             const isCustom = lotIds === 'custom';
             // Only load lots that aren't already in memory
+            // Only load lots that have indices available and haven't been loaded yet
             const lotsToLoad = isCustom 
                 ? Array.from(new Set(searchParams.get('files')?.split(',').map(f => f.split('|')[0])))
-                : selectedLotIds.filter(id => !multiMapData[id]);
+                : selectedLotIds.filter(id => lotFiles[id] && (!multiMapData[id] || Object.keys(multiMapData[id]).length === 0));
 
             if (lotsToLoad.length === 0) {
-                if (!bounds && Object.keys(multiMapData).length > 0) recalculateBounds(multiMapData);
+                // Initial fit only if nothing has been set yet
+                if (!bounds && Object.keys(multiMapData).length > 0) {
+                    const allPts = [];
+                    Object.values(multiMapData).forEach(lFiles => {
+                        Object.values(lFiles).forEach(pts => {
+                            if (pts.length > 0) {
+                                allPts.push([pts[0].lat, pts[0].lng]);
+                                allPts.push([pts[pts.length - 1].lat, pts[pts.length - 1].lng]);
+                            }
+                        });
+                    });
+                    if (allPts.length > 0) setBounds(L.latLngBounds(allPts));
+                }
                 setIsLoading(false);
                 return;
             }
@@ -290,9 +303,10 @@ const MultiFileView = () => {
         }
     }, [selectedLotIds, lotFiles, urlFileName, searchParams]);
 
-    // Handle URL-based file and range centering (only for initial navigation, doesn't force persistent focus)
+    // Handle URL-based file and range centering (only once when data is first ready)
+    const [initialCenteringDone, setInitialCenteringDone] = useState(false);
     useEffect(() => {
-        if (!urlFileName || Object.keys(multiMapData).length === 0) return;
+        if (initialCenteringDone || !urlFileName || Object.keys(multiMapData).length === 0) return;
 
         const rangeMatch = urlFileName.match(/@(\d+):(\d+)$/);
         const actualFileName = rangeMatch ? urlFileName.substring(0, rangeMatch.index) : urlFileName;
@@ -305,7 +319,7 @@ const MultiFileView = () => {
             }
         }
 
-        if (foundPts) {
+        if (foundPts && foundPts.length > 0) {
             let ptsToUse = foundPts;
             if (rangeMatch) {
                 const start = parseInt(rangeMatch[1]);
@@ -313,15 +327,17 @@ const MultiFileView = () => {
                 ptsToUse = foundPts.slice(start - 1, end);
             }
             
-            // Just center the map, don't force adding to persistent focusedLines state on load/refresh
-            const lineBounds = L.latLngBounds(ptsToUse.map(p => [p.lat, p.lng]));
-            setBounds(lineBounds);
+            if (ptsToUse.length > 0) {
+                const lineBounds = L.latLngBounds(ptsToUse.map(p => [p.lat, p.lng]));
+                setBounds(lineBounds);
 
-            if (searchParams.get('hl') === 'true') {
-                setSearchLine(ptsToUse);
+                if (searchParams.get('hl') === 'true') {
+                    setSearchLine(ptsToUse);
+                }
+                setInitialCenteringDone(true);
             }
         }
-    }, [urlFileName, multiMapData]);
+    }, [urlFileName, multiMapData, initialCenteringDone]);
 
     const toggleLot = (id) => {
         setSelectedLotIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
@@ -578,8 +594,13 @@ const MultiFileView = () => {
                     </div>
                 </div>
 
-            <div className="flex-grow bg-gray-900 relative">
-                <MapContainer center={[11.0, 77.0]} zoom={13} bounds={bounds} className="h-full w-full">
+            <div className="flex-grow relative bg-gray-100">
+                <MapContainer
+                    center={[20.5937, 78.9629]}
+                    zoom={5}
+                    style={{ height: '100%', width: '100%' }}
+                    preferCanvas={true}
+                >
                     <ChangeView bounds={bounds} center={searchCenter} />
                     <ZoomHandler onZoom={setZoomLevel} />
                     <CopyCoordsHandler />

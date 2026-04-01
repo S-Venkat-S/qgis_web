@@ -1,10 +1,7 @@
-S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),,Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken, etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain / Hilly/  Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1, V02 (167A),T,DC,28,,,1.54,"=IF(H6>15,0)",330.186096,,9.975222222222222,77.44336111111112,GOOD,,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.44336111111112 9.975222222222222, 77.44319444444444 9.97475)"
-2, V1,T,DC,28, V02- V1,53.99456844510259,5.68,"=IF(H7>15,0)",329.917206,"14°41'60"" R",9.97475,77.44319444444444,GOOD,AVAILABLE,,Mill,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.44319444444444 9.97475, 77.44319444444444 9.974555555555556)"
-3,Veerapandi SS,T,H-Pole,12, V1- H pole,23.228126741578084,,,327.693541999999,,9.974555555555556,77.44319444444444,GOOD,No E/W,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-TOTAL ,,,,,,=SUM(G7:G8),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-Note: Shut down will be required in where earth wires are missing.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S.No,Tower No.,Joint Box,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),,Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken, etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain / Hilly/  Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1, V02 (167A),3W,T,DC,28,,,1.54,FALSE,330.186096,,9.975222222,77.44336111,GOOD,,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.44336111111112 9.975222222222222, 77.44319444444444 9.97475)"
+2, V1,,T,DC,28, V02- V1,53.99456845,5.68,FALSE,329.917206,"14°41'60"" R",9.97475,77.44319444,GOOD,AVAILABLE,,Mill,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(77.44319444444444 9.97475, 77.44319444444444 9.974555555555556)"
+3,Veerapandi SS,2W,T,H-Pole,12, V1- H pole,23.22812674,,,327.693542,,9.974555556,77.44319444,GOOD,No E/W,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL ,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note: Shut down will be required in where earth wires are missing.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
