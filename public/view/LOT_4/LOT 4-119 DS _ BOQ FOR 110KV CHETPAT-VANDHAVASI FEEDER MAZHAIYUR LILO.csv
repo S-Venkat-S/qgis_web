@@ -1,10 +1,7 @@
-S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Longitude,Latitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,T.NO 48 MAZHAIYUR LILO ,T,DC,26,,,,134,,79.45619444444445,12.492916666666666,GOOD,GOOD,,,PLAIN,MAZHAIYUR LILO NEED 3WAY JUNCTION BOX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.45619444444445 12.492916666666666, 79.4565 12.492555555555555)"
-2,T.NO 49,T,DD,28,48-1,50.44799302251776,17.88,132,"31°21'53""",79.4565,12.492555555555555,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.4565 12.492555555555555, 79.45658333333334 12.491972222222222)"
-3,GANTRY 110KV MAZHAIYUR SS,T,GT,15,1-GT,64.6297145282261,,134,,79.45658333333334,12.491972222222222,GOOD,MISSING,,,PLAIN,NO EARTH WIRE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-TOTAL,,,,,,=SUM(G6:G8),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-Note : 1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S.No,Tower No.,Joint Box,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Longitude,Latitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,T.NO 48 MAZHAIYUR LILO ,3W,T,DC,26,,,,134,,79.45619444,12.49291667,GOOD,GOOD,,,PLAIN,MAZHAIYUR LILO NEED 3WAY JUNCTION BOX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.45619444444445 12.492916666666666, 79.4565 12.492555555555555)"
+2,T.NO 49,,T,DD,28,48-1,50.44799302,17.88,132,"31°21'53""",79.4565,12.49255556,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.4565 12.492555555555555, 79.45658333333334 12.491972222222222)"
+3,GANTRY 110KV MAZHAIYUR SS,2W,T,GT,15,1-GT,64.62971453,,134,,79.45658333,12.49197222,GOOD,MISSING,,,PLAIN,NO EARTH WIRE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note : 1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

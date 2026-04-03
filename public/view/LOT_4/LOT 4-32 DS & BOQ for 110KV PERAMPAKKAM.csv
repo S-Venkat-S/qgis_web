@@ -1,12 +1,9 @@
 S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,LILO-89,T,DC,30,,,4.11,70,,13.046167,79.801477,Good,24F&48F,,,Plain,"Existing 24fiber/48fiber available in this Tower, Need 3way Joint Box",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.801477 13.046167, 79.803603 13.046945)"
-2,T.NO-88,T,DC,26,LILO 89-88,246.142235303087,3.01,72,17°14'2''LT,13.046945,79.803603,Good,24F Available,LT,Taar road ,Cultivation,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.803603 13.046945, 79.806 13.047065)"
-3,T.NO-87,S,DC,28,88-87,260.276775759959,-,72,,13.047065,79.806,Good,24F Available,"2nos LT,11KV",,Cultivation,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.806 13.047065, 79.809108 13.047106)"
-4,T.NO-86,S,DC,28,87-86,337.013352851189,4.19,70,,13.047106,79.809108,Good,24F Available,,Mud Road,Cultivation,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.809108 13.047106, 79.812077 13.047147)"
-5,T.NO-85,S,DC,28,86-85,322.013974852024,5.07,71,,13.047147,79.812077,Good,24F Available,,,Cultivation,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.812077 13.047147, 79.814539 13.047176)"
-6,T.NO-84,S,DC,28,85-84,267.007490531633,6.17,73,,13.047176,79.814539,Good,24F Available,"LT,11kv",Taar road ,Cultivation,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.814539 13.047176, 79.816715 13.047195)"
-7,T.NO-83,T,DC,28,84-83,236.002118634558,3.01,73,,13.047195,79.816715,Good ,24F Available,,,Cultivation,Existing Joint Box Available ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-TOTAL,,,,,,=SUM(G6:G12),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+1,LILO-89,3W,DC,30,,,4.11,70,,13.046167,79.801477,Good,24F&48F,,,Plain,"Existing 24fiber/48fiber available in this Tower, Need 3way Joint Box",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.801477 13.046167, 79.803603 13.046945)"
+2,T.NO-88,T,DC,26,LILO 89-88,246.1422353,3.01,72,17°14'2''LT,13.046945,79.803603,Good,24F Available,LT,Taar road ,Cultivation,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.803603 13.046945, 79.806 13.047065)"
+3,T.NO-87,S,DC,28,88-87,260.2767758,-,72,,13.047065,79.806,Good,24F Available,"2nos LT,11KV",,Cultivation,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.806 13.047065, 79.809108 13.047106)"
+4,T.NO-86,S,DC,28,87-86,337.0133529,4.19,70,,13.047106,79.809108,Good,24F Available,,Mud Road,Cultivation,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.809108 13.047106, 79.812077 13.047147)"
+5,T.NO-85,S,DC,28,86-85,322.0139749,5.07,71,,13.047147,79.812077,Good,24F Available,,,Cultivation,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.812077 13.047147, 79.814539 13.047176)"
+6,T.NO-84,S,DC,28,85-84,267.0074905,6.17,73,,13.047176,79.814539,Good,24F Available,"LT,11kv",Taar road ,Cultivation,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.814539 13.047176, 79.816715 13.047195)"
+7,T.NO-83,3W,DC,28,84-83,236.0021186,3.01,73,,13.047195,79.816715,Good ,24F Available,,,Cultivation,Existing Joint Box Available ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

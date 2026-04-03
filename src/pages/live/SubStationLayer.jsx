@@ -123,7 +123,7 @@ const SubStationLayer = ({ showLabels = true }) => {
 
         const size = baseSize * scale;
         const strokeWidth = 1.5;
-        
+
         // Check if shape is a custom SVG string
         if (shape.trim().startsWith('<svg')) {
             // Inject color into the custom SVG and ensure it fills the container
@@ -147,7 +147,7 @@ const SubStationLayer = ({ showLabels = true }) => {
         }
 
         let svgContent = "";
-        
+
         // Premium SVG Templates
         if (shape === 'star') {
             // Star for HO
@@ -213,7 +213,7 @@ const SubStationLayer = ({ showLabels = true }) => {
                             </div>
                         </div>
                     </Popup>
-                    {showLabels && zoomLevel >= 14 && (
+                    {showLabels && zoomLevel >= 10 && (
                         <Tooltip
                             permanent
                             direction="top"
@@ -225,7 +225,8 @@ const SubStationLayer = ({ showLabels = true }) => {
                     )}
                 </Marker>
             ))}
-            <style dangerouslySetInnerHTML={{ __html: `
+            <style dangerouslySetInnerHTML={{
+                __html: `
                 .ss-tooltip-label {
                     background: transparent !important;
                     border: none !important;

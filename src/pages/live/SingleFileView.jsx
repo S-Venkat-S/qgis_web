@@ -64,6 +64,7 @@ const SingleFileView = () => {
         localStorage.setItem(SHOW_SS_LABELS_KEY, JSON.stringify(showSSLabels));
     }, [showSSLabels]);
 
+
     useEffect(() => {
         const lot = updatedLots.find(l => l.id === lotId);
         if (!lot || !fileName) return;
@@ -333,13 +334,13 @@ const SingleFileView = () => {
                             </div>
                             <span className="text-[10px] font-bold text-gray-400 group-hover:text-yellow-600 transition-colors uppercase">DIST</span>
                         </div>
-
                         <div className="flex items-center gap-2 cursor-pointer select-none group" title="Toggle Sub-Station Labels" onClick={() => setShowSSLabels(!showSSLabels)}>
                             <div className={`w-8 h-4 rounded-full relative transition-all duration-200 ${showSSLabels ? 'bg-amber-500' : 'bg-gray-300'}`}>
                                 <div className={`absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full transition-transform ${showSSLabels ? 'translate-x-4' : 'translate-x-0'}`}></div>
                             </div>
                             <span className="text-[10px] font-bold text-gray-400 group-hover:text-amber-500 transition-colors uppercase">STATIONS</span>
                         </div>
+
                     </div>
 
                     <div className="flex flex-col relative group">
@@ -394,7 +395,7 @@ const SingleFileView = () => {
                     <ChangeView bounds={bounds} center={searchCenter} />
                     <ZoomHandler onZoom={setZoomLevel} />
                     <CopyCoordsHandler />
-                    
+
                     {searchMarker && (
                         <CircleMarker
                             center={[searchMarker.lat, searchMarker.lng]}
@@ -411,7 +412,7 @@ const SingleFileView = () => {
                                 <div className="text-[11px] p-1">
                                     <div className="font-black text-primary-blue uppercase mb-1">Search Result</div>
                                     <div className="font-medium text-gray-700 mb-2">{searchMarker.name}</div>
-                                    <button 
+                                    <button
                                         onClick={() => setSearchMarker(null)}
                                         className="w-full py-1 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded text-[9px] font-bold transition-colors"
                                     >
@@ -424,9 +425,9 @@ const SingleFileView = () => {
                             </Tooltip>
                         </CircleMarker>
                     )}
-                    
+
                     {searchLine && (
-                        <Polyline 
+                        <Polyline
                             positions={searchLine.map(p => [p.lat, p.lng])}
                             pathOptions={{
                                 color: '#00ffff',
@@ -518,7 +519,7 @@ const SingleFileView = () => {
                     })()}
                 </MapContainer>
             </div>
-        </div>
+        </div >
     );
 };
 

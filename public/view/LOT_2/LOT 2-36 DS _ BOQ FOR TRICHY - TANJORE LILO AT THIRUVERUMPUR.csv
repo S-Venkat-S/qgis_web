@@ -1,9 +1,6 @@
-S.No,Tower No.,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,joint_box,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1, 69B/1,T,DC,26,,,4.03,96,,10.747333333333332,78.77941666666666,GOOD,,,,PLAIN,,2W,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.77941666666666 10.747333333333332, 78.77969444444444 10.747277777777777)"
-2,Gantry (Thiruverumpur SS),Gantry,H-POLE,12, 69B/1-Gantry,31.594767670020207,,90,,10.747277777777777,78.77969444444444,GOOD,NO E/W,,,PLAIN,,G,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-TOTAL,,,,,,=SUM(G7:G7),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-Note : 1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+S.No,Tower No.,Tower Suspension / Tension,JOINT BOX,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,joint_box,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1, 69B/1,T,3W,DC,26,,,4.03,96,,10.74733333,78.77941667,GOOD,,,,PLAIN,,2W,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.77941666666666 10.747333333333332, 78.77969444444444 10.747277777777777)"
+2,Gantry (Thiruverumpur SS),Gantry,2W,H-POLE,12, 69B/1-Gantry,31.59476767,,90,,10.74727778,78.77969444,GOOD,NO E/W,,,PLAIN,,G,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note : 1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

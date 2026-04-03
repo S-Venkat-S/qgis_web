@@ -33,75 +33,75 @@ export const parseCoords = (input) => {
  * Geodesic distance between two points in meters (Haversine formula)
  */
 export const getGeodesicDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371e3; // meters
-    const phi1 = lat1 * Math.PI / 180;
-    const phi2 = lat2 * Math.PI / 180;
-    const deltaPhi = (lat2 - lat1) * Math.PI / 180;
-    const deltaLambda = (lon2 - lon1) * Math.PI / 180;
+  const R = 6371e3; // meters
+  const phi1 = lat1 * Math.PI / 180;
+  const phi2 = lat2 * Math.PI / 180;
+  const deltaPhi = (lat2 - lat1) * Math.PI / 180;
+  const deltaLambda = (lon2 - lon1) * Math.PI / 180;
 
-    const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
-        Math.cos(phi1) * Math.cos(phi2) *
-        Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+    Math.cos(phi1) * Math.cos(phi2) *
+    Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-    return R * c; // meters
+  return R * c; // meters
 };
 
 /**
  * Utility to find joint boxes overlapping within a 20m radius
  */
 export const checkJointBoxOverlap = (multiMapData) => {
-    const allJBs = [];
-    Object.entries(multiMapData).forEach(([lid, files]) => {
-        Object.entries(files).forEach(([fName, pts]) => {
-            pts.forEach((p, idx) => {
-                if (p.jointBox) {
-                    allJBs.push({ ...p, lid, fName, seqIdx: idx + 1 });
-                }
-            });
-        });
-    });
-
-    console.log(`[JB SCANNER] Analyzing ${allJBs.length} JV locations across all lots...`);
-    const results = [];
-    for (let i = 0; i < allJBs.length; i++) {
-        for (let j = i + 1; j < allJBs.length; j++) {
-            const jb1 = allJBs[i];
-            const jb2 = allJBs[j];
-            const dist = getGeodesicDistance(jb1.lat, jb1.lng, jb2.lat, jb2.lng);
-
-            if (dist < 20) {
-                results.push({
-                    "Distance (m)": parseFloat(dist.toFixed(2)),
-                    "Lot A": jb1.lid.toUpperCase(),
-                    "File A": jb1.fName,
-                    "Tower A": jb1.towerNo || 'N/A',
-                    "Type A": jb1.jointBox,
-                    "Lot B": jb2.lid.toUpperCase(),
-                    "File B": jb2.fName,
-                    "Tower B": jb2.towerNo || 'N/A',
-                    "Type B": jb2.jointBox,
-                    "Coords A": `${jb1.lat.toFixed(6)}, ${jb1.lng.toFixed(6)}`,
-                    "Coords B": `${jb2.lat.toFixed(6)}, ${jb2.lng.toFixed(6)}`
-                });
-            }
+  const allJBs = [];
+  Object.entries(multiMapData).forEach(([lid, files]) => {
+    Object.entries(files).forEach(([fName, pts]) => {
+      pts.forEach((p, idx) => {
+        if (p.jointBox) {
+          allJBs.push({ ...p, lid, fName, seqIdx: idx + 1 });
         }
-    }
+      });
+    });
+  });
 
-    if (results.length === 0) {
-        console.log("%c✓ NO DUPLICATE JOINT BOXES FOUND", "color: #10b981; font-weight: bold; font-size: 11px;");
-    } else {
-        console.group(`%c⚠ FOUND ${results.length} POTENTIAL DUPLICATES (< 20m RADIUS)`, "color: #ef4444; font-weight: bold; font-size: 12px;");
-        console.table(results);
-        console.groupEnd();
+  console.log(`[JB SCANNER] Analyzing ${allJBs.length} JV locations across all lots...`);
+  const results = [];
+  for (let i = 0; i < allJBs.length; i++) {
+    for (let j = i + 1; j < allJBs.length; j++) {
+      const jb1 = allJBs[i];
+      const jb2 = allJBs[j];
+      const dist = getGeodesicDistance(jb1.lat, jb1.lng, jb2.lat, jb2.lng);
+
+      if (dist < 20) {
+        results.push({
+          "Distance (m)": parseFloat(dist.toFixed(2)),
+          "Lot A": jb1.lid.toUpperCase(),
+          "File A": jb1.fName,
+          "Tower A": jb1.towerNo || 'N/A',
+          "Type A": jb1.jointBox,
+          "Lot B": jb2.lid.toUpperCase(),
+          "File B": jb2.fName,
+          "Tower B": jb2.towerNo || 'N/A',
+          "Type B": jb2.jointBox,
+          "Coords A": `${jb1.lat.toFixed(6)}, ${jb1.lng.toFixed(6)}`,
+          "Coords B": `${jb2.lat.toFixed(6)}, ${jb2.lng.toFixed(6)}`
+        });
+      }
     }
-    return results;
+  }
+
+  if (results.length === 0) {
+    console.log("%c✓ NO DUPLICATE JOINT BOXES FOUND", "color: #10b981; font-weight: bold; font-size: 11px;");
+  } else {
+    console.group(`%c⚠ FOUND ${results.length} POTENTIAL DUPLICATES (< 20m RADIUS)`, "color: #ef4444; font-weight: bold; font-size: 12px;");
+    console.table(results);
+    console.groupEnd();
+  }
+  return results;
 };
 
 // Centralized CSV coordinate/tower extraction logic
 export const extractPointsFromCSV = (data, fileName = 'Unknown File') => {
   if (!Array.isArray(data) || data.length === 0) return [];
-  
+
   const keys = Object.keys(data[0]);
   const hasJointBox = keys.some(k => k.toLowerCase().replace(/[^a-z]/g, '') === 'jointbox');
 
@@ -135,7 +135,7 @@ export const extractPointsFromCSV = (data, fileName = 'Unknown File') => {
     const lng = lngKey ? parseFloat(row[lngKey]) : NaN;
 
     const jbValue = jointBoxKey ? (row[jointBoxKey] || '').toString().trim().toUpperCase() : null;
-    
+
     // Check for invalid values and push to a separate error collection (handled after map)
     if (jointBoxKey && row[jointBoxKey] && (row[jointBoxKey] || '').toString().trim() !== '' && !['2W', '3W', '4W'].includes(jbValue)) {
       validationErrors.push(`Tower ${towerNoKey ? row[towerNoKey] : 'N/A'} (Value: "${row[jointBoxKey]}")`);
@@ -556,14 +556,14 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
           let symbolTag = '';
 
           if (conf.shape && conf.shape.startsWith('<svg')) {
-             const svgName = `ss_${typeKey.toLowerCase()}.svg`;
-             // Inject the correct category color into the SVG if it uses a black fill
-             const coloredSvg = conf.shape.replace(/fill="#000000"/g, `fill="${conf.color}"`);
-             iconsFolder.file(svgName, coloredSvg);
-             symbolTag = `<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SvgMarker"><prop k="name" v="./icons/${svgName}"/><prop k="size" v="${(conf.baseSize || 12) / 3}"/><prop k="outline_width" v="0.2"/></layer></symbol>`;
+            const svgName = `ss_${typeKey.toLowerCase()}.svg`;
+            // Inject the correct category color into the SVG if it uses a black fill
+            const coloredSvg = conf.shape.replace(/fill="#000000"/g, `fill="${conf.color}"`);
+            iconsFolder.file(svgName, coloredSvg);
+            symbolTag = `<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SvgMarker"><prop k="name" v="./icons/${svgName}"/><prop k="size" v="${(conf.baseSize || 12) / 3}"/><prop k="outline_width" v="0.2"/></layer></symbol>`;
           } else {
-             const qgisShape = typeKey === 'HO' ? 'star' : 'hexagon';
-             symbolTag = `<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SimpleMarker"><prop k="name" v="${qgisShape}"/><prop k="color" v="${color}"/><prop k="outline_color" v="255,255,255,255"/><prop k="size" v="${(conf.baseSize || 12) / 3}"/></layer></symbol>`;
+            const qgisShape = typeKey === 'HO' ? 'star' : 'hexagon';
+            symbolTag = `<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SimpleMarker"><prop k="name" v="${qgisShape}"/><prop k="color" v="${color}"/><prop k="outline_color" v="255,255,255,255"/><prop k="size" v="${(conf.baseSize || 12) / 3}"/></layer></symbol>`;
           }
 
           const filter = `upper("ss_type") = '${typeKey.toUpperCase()}'`;
@@ -580,12 +580,12 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
           let symbolTag = '';
 
           if (v.shape && v.shape.startsWith('<svg')) {
-             const svgName = `ss_volt_${v.class}.svg`;
-             iconsFolder.file(svgName, v.shape);
-             symbolTag = `<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SvgMarker"><prop k="name" v="./icons/${svgName}"/><prop k="size" v="${(v.baseSize || 10) / 3}"/><prop k="outline_width" v="0.2"/></layer></symbol>`;
+            const svgName = `ss_volt_${v.class}.svg`;
+            iconsFolder.file(svgName, v.shape);
+            symbolTag = `<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SvgMarker"><prop k="name" v="./icons/${svgName}"/><prop k="size" v="${(v.baseSize || 10) / 3}"/><prop k="outline_width" v="0.2"/></layer></symbol>`;
           } else {
-             const qgisShape = v.shape === 'triangle' ? 'triangle' : v.shape === 'hexagon' ? 'hexagon' : v.shape === 'diamond' ? 'diamond' : v.shape === 'square' ? 'square' : 'circle';
-             symbolTag = `<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SimpleMarker"><prop k="name" v="${qgisShape}"/><prop k="color" v="${color}"/><prop k="outline_color" v="255,255,255,255"/><prop k="size" v="${(v.baseSize || 10) / 3}"/></layer></symbol>`;
+            const qgisShape = v.shape === 'triangle' ? 'triangle' : v.shape === 'hexagon' ? 'hexagon' : v.shape === 'diamond' ? 'diamond' : v.shape === 'square' ? 'square' : 'circle';
+            symbolTag = `<symbol alpha="1" type="marker" name="${ruleIdx}"><layer class="SimpleMarker"><prop k="name" v="${qgisShape}"/><prop k="color" v="${color}"/><prop k="outline_color" v="255,255,255,255"/><prop k="size" v="${(v.baseSize || 10) / 3}"/></layer></symbol>`;
           }
 
           let filter = idx === 0
@@ -594,8 +594,8 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
 
           // Avoid overlap: Don't show voltage marker if a type marker (HO, GENERATION) is already showing
           if (config.types) {
-             const typeKeys = Object.keys(config.types).map(k => `'${k.toUpperCase()}'`).join(', ');
-             filter = `(${filter}) AND (upper("ss_type") NOT IN (${typeKeys}) OR "ss_type" IS NULL)`;
+            const typeKeys = Object.keys(config.types).map(k => `'${k.toUpperCase()}'`).join(', ');
+            filter = `(${filter}) AND (upper("ss_type") NOT IN (${typeKeys}) OR "ss_type" IS NULL)`;
           }
 
           rules.push(`<rule filter="${escapeXml(filter)}" symbol="${ruleIdx}" label="${v.class}kV Substation"/>`);

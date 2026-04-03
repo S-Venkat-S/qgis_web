@@ -30,34 +30,34 @@
             "shape": "diamond",
             "color": "#b91c1c",
             "minZoom": 0,
-            "baseSize": 12
+            "baseSize": 14
         },
         {
             "class": 230,
             "shape": "square",
             "color": "#c2410c",
             "minZoom": 10,
-            "baseSize": 10
+            "baseSize": 14
         },
         {
             "class": 110,
             "shape": "circle",
             "color": "#1d4ed8",
-            "minZoom": 12,
-            "baseSize": 8
+            "minZoom": 10,
+            "baseSize": 12
         },
         {
             "class": 0,
             "shape": "triangle",
             "color": "#6b7280",
             "minZoom": 14,
-            "baseSize": 7
+            "baseSize": 8
         }
     ],
     "default": {
         "shape": "triangle",
         "color": "#374151",
         "minZoom": 14,
-        "baseSize": 7
+        "baseSize": 8
     }
 }
