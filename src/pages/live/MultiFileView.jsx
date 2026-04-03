@@ -23,7 +23,8 @@ import {
     extractPointsFromCSV,
     fetchAndUnzip,
     parseIndexFile,
-    checkJointBoxOverlap
+    checkJointBoxOverlap,
+    getGeodesicDistance
 } from './MapUtils';
 import SubStationLayer from './SubStationLayer';
 
@@ -85,14 +86,368 @@ const MultiFileView = () => {
     const [searchMarker, setSearchMarker] = useState(null); // Persistent marker for search
     const [searchLine, setSearchLine] = useState(null); // Highlighting line
 
-    // Expose utility function to console
+    // Expose utility functions to console
     useEffect(() => {
         window.checkJointBoxDuplicates = () => checkJointBoxOverlap(multiMapData);
-        console.log("%c[UTILITY] Joint Box duplicate checker registered. Call 'checkJointBoxDuplicates()' in console to run.", "color: #3b82f6; font-size: 10px; font-weight: bold;");
+
+        window.getLinesBySSCodes = (codesA, codesB) => {
+            if (!subStations || subStations.length === 0) {
+                console.warn("[SS LINK FINDER] Substation data not yet loaded.");
+                return [];
+            }
+
+            const listA = Array.isArray(codesA) ? codesA.map(String) : [String(codesA)];
+            const listB = Array.isArray(codesB) ? codesB.map(String) : [String(codesB)];
+            const results = [];
+            const ssThreshold = 300; // Strict: 100m limit
+            const linkThreshold = 100; // Strict: 100m jump
+
+            // 1. Build the Connectivity Graph
+            const allFiles = []; // Array of { lid, fName, start, end, towers }
+            Object.entries(multiMapData).forEach(([lid, files]) => {
+                if (!selectedLotIds.includes(lid)) return;
+                Object.entries(files).forEach(([fName, pts]) => {
+                    if (pts.length < 2) return;
+                    allFiles.push({
+                        id: `${lid}/${fName}`,
+                        lid, fName,
+                        start: pts[0],
+                        end: pts[pts.length - 1],
+                        towers: pts.length
+                    });
+                });
+            });
+
+            // 2. Targeted Branching BFS (200km limit)
+            const findPath = (startSS, endSS, useMidLineJump = false, seedFile = null) => {
+                const MAX_DIST = 200000;
+                const visitedFiles = new Set();
+                let queue = [];
+
+                if (seedFile) {
+                    const segmentLength = seedFile.towers * 300;
+                    // Properly initialize seed with substation as entry point
+                    const seedWithEntry = { ...seedFile, entryPt: startSS };
+                    queue.push({ node: seedFile.start, path: [{ ...seedWithEntry, exitPt: seedFile.start }], totalDist: segmentLength / 2 });
+                    queue.push({ node: seedFile.end, path: [{ ...seedWithEntry, exitPt: seedFile.end }], totalDist: segmentLength / 2 });
+                    visitedFiles.add(seedFile.id);
+                } else {
+                    queue.push({ node: startSS, path: [], totalDist: 0 });
+                }
+
+                let iterations = 0;
+                while (queue.length > 0 && iterations < 5000) {
+                    iterations++;
+                    const { node, path, totalDist } = queue.shift();
+
+                    // SYMMETRICAL SUCCESS CHECK
+                    let reachedTarget = getGeodesicDistance(node.lat, node.lng, endSS.lat, endSS.lng) < ssThreshold;
+
+                    if (!reachedTarget && path.length > 0 && useMidLineJump) {
+                        const lastSegment = path[path.length - 1];
+                        const lastPts = multiMapData[lastSegment.lid][lastSegment.fName];
+                        reachedTarget = lastPts.some(p => getGeodesicDistance(p.lat, p.lng, endSS.lat, endSS.lng) < ssThreshold);
+                    }
+
+                    if (reachedTarget) {
+                        // The last segment in path needs its exitPt updated to be the substation itself
+                        const finalPath = [...path];
+                        if (finalPath.length > 0) {
+                            const lastIdx = finalPath.length - 1;
+                            finalPath[lastIdx] = { ...finalPath[lastIdx], exitPt: endSS };
+                        }
+                        return { path: finalPath, totalDist };
+                    }
+
+                    for (const file of allFiles) {
+                        if (visitedFiles.has(file.id)) continue;
+
+                        let isConnected = false;
+                        let exitNode = null;
+                        let segmentLength = file.towers * 300;
+
+                        if (path.length === 0) {
+                            const pts = multiMapData[file.lid][file.fName];
+                            if (pts.some(p => getGeodesicDistance(p.lat, p.lng, startSS.lat, startSS.lng) < ssThreshold)) {
+                                queue.push({ node: file.start, path: [file], totalDist: segmentLength / 2 });
+                                queue.push({ node: file.end, path: [file], totalDist: segmentLength / 2 });
+                                visitedFiles.add(file.id);
+                                continue;
+                            }
+                        } else {
+                            if (useMidLineJump) {
+                                const pts = multiMapData[file.lid][file.fName];
+                                isConnected = pts.some(p => getGeodesicDistance(node.lat, node.lng, p.lat, p.lng) < linkThreshold);
+                            } else {
+                                const d1 = getGeodesicDistance(node.lat, node.lng, file.start.lat, file.start.lng);
+                                const d2 = getGeodesicDistance(node.lat, node.lng, file.end.lat, file.end.lng);
+                                if (d1 < linkThreshold) { isConnected = true; exitNode = file.end; }
+                                else if (d2 < linkThreshold) { isConnected = true; exitNode = file.start; }
+                            }
+                        }
+
+                        if (isConnected && totalDist + segmentLength <= MAX_DIST) {
+                            visitedFiles.add(file.id);
+                            const currentFileLabel = file.fName.split(' ')[1] || file.fName.split(' ')[0];
+                            const breadcrumbs = path.map(p => p.fName.split(' ')[1] || p.fName.split(' ')[0]).join(' → ');
+                            
+                            const segmentWithCoords = { 
+                                ...file, 
+                                entryPt: node, 
+                                exitPt: exitNode || node 
+                            };
+
+                            if (useMidLineJump) {
+                                console.log(`[TRACE] [${breadcrumbs}] 🔗 Mid-Line Connect: "${currentFileLabel}"`);
+                                queue.push({ node: file.start, path: [...path, { ...segmentWithCoords, exitPt: file.start }], totalDist: totalDist + segmentLength });
+                                queue.push({ node: file.end, path: [...path, { ...segmentWithCoords, exitPt: file.end }], totalDist: totalDist + segmentLength });
+                            } else {
+                                console.log(`[TRACE] [${breadcrumbs}] ➡ Main-Line Linked: "${currentFileLabel}"`);
+                                queue.push({ node: exitNode, path: [...path, { ...segmentWithCoords, exitPt: exitNode }], totalDist: totalDist + segmentLength });
+                            }
+                        }
+                    }
+                }
+                return null;
+            };
+
+            // 3. Process each pair in order
+            const maxIdx = Math.max(listA.length, listB.length);
+            for (let i = 0; i < maxIdx; i++) {
+                const cA = listA[i < listA.length ? i : listA.length - 1];
+                const cB = listB[i < listB.length ? i : listB.length - 1];
+
+                const ssA = subStations.find(s => String(s.ss_code) === cA);
+                const ssB = subStations.find(s => String(s.ss_code) === cB);
+
+                if (!ssA || !ssB) {
+                    results.push({
+                        "Order": i + 1, "Code A": cA, "Station A": ssA ? ssA.name : "MISSING",
+                        "Code B": cB, "Station B": ssB ? ssB.name : "MISSING",
+                        "Status": "SS NOT FOUND", "Dist (km)": "-", "Chain": "-", "Full Chain": "-", "Total Towers": 0
+                    });
+                    continue;
+                }
+
+                console.log(`%c[SS SEARCH #${i + 1}] ${ssA.name} [${cA}] ↔ ${ssB.name} [${cB}]`, "color: #3b82f6; font-weight: bold; font-size: 13px; text-decoration: underline;");
+
+                // Identify all entry points from SS_A
+                const entryPoints = allFiles.filter(f => {
+                    const pts = multiMapData[f.lid][f.fName];
+                    return pts.some(p => getGeodesicDistance(p.lat, p.lng, ssA.lat, ssA.lng) < ssThreshold);
+                });
+
+                console.log(`  🔍 Entry Discovery: Found ${entryPoints.length} files starting near ${ssA.name}.`);
+
+                let searchResult = null;
+
+                // FORWARD SEARCH (A to B) - Individual Path Discovery
+                for (let j = 0; j < entryPoints.length; j++) {
+                    const seed = entryPoints[j];
+                    console.log(`    %c[PATH ${j + 1}/${entryPoints.length}] Probing via "${seed.fName}"...`, "color: #a855f7; font-weight: bold;");
+
+                    // Try Main-Line first, then Jump
+                    let branchResult = findPath(ssA, ssB, false, seed);
+                    if (!branchResult) {
+                        console.log(`      ⚠ No main-line found on this branch. Retrying with Mid-Line jumping...`);
+                        branchResult = findPath(ssA, ssB, true, seed);
+                    }
+
+                    if (branchResult) {
+                        console.log(`      ✅ PATH RESOLVED via this branch!`);
+                        searchResult = branchResult;
+                        break;
+                    } else {
+                        console.log(`      ❌ Dead end. This branch does not reach ${ssB.name}.`);
+                    }
+                }
+
+                // REVERSE SEARCH (B to A) - If Forward Failed
+                if (!searchResult) {
+                    console.log(`  🔄 [REVERSE PROBE] Forward search failed. Attempting Reverse Search from ${ssB.name}...`);
+                    const reverseEntries = allFiles.filter(f => {
+                        const pts = multiMapData[f.lid][f.fName];
+                        return pts.some(p => getGeodesicDistance(p.lat, p.lng, ssB.lat, ssB.lng) < ssThreshold);
+                    });
+
+                    for (let j = 0; j < reverseEntries.length; j++) {
+                        const seed = reverseEntries[j];
+                        console.log(`    %c[REVERSE PATH ${j + 1}/${reverseEntries.length}] Probing via "${seed.fName}"...`, "color: #fb923c; font-weight: bold;");
+                        let branchResult = findPath(ssB, ssA, true, seed); // Full jump enabled for reverse
+                        if (branchResult) {
+                            console.log(`      ✅ REVERSE PATH RESOLVED!`);
+                            searchResult = branchResult;
+                            break;
+                        }
+                    }
+                }
+
+                if (searchResult) {
+                    const { path, totalDist } = searchResult;
+                    
+                    const detailedChain = path.map((segment) => {
+                        const pts = multiMapData[segment.lid][segment.fName];
+                        if (!pts || pts.length === 0) return `${segment.lid}/${segment.fName}`;
+
+                        // Precise indexing using the GPS points tracked during BFS
+                        let closestEntry = 0;
+                        let minDEntry = Infinity;
+                        let closestExit = pts.length - 1;
+                        let minDExit = Infinity;
+
+                        pts.forEach((p, pIdx) => {
+                            const dEn = getGeodesicDistance(p.lat, p.lng, segment.entryPt.lat, segment.entryPt.lng);
+                            const dEx = getGeodesicDistance(p.lat, p.lng, segment.exitPt.lat, segment.exitPt.lng);
+                            if (dEn < minDEntry) { minDEntry = dEn; closestEntry = pIdx; }
+                            if (dEx < minDExit) { minDExit = dEx; closestExit = pIdx; }
+                        });
+
+                        const sIdx = Math.min(closestEntry, closestExit) + 1;
+                        const eIdx = Math.max(closestEntry, closestExit) + 1;
+                        const baseName = segment.fName.includes('@') ? segment.fName.split('@')[0] : segment.fName;
+                        
+                        // Normalize LID format from lot1 to LOT_1
+                        let formattedLid = segment.lid.toUpperCase();
+                        if (/^LOT\d+$/.test(formattedLid)) {
+                             formattedLid = formattedLid.replace("LOT", "LOT_");
+                        }
+
+                        // If it's the full file, return without @range
+                        if (sIdx === 1 && eIdx === pts.length) {
+                             return `${formattedLid}/${baseName}`;
+                        }
+
+                        return `${formattedLid}/${baseName}@${sIdx}:${eIdx}`;
+                    });
+
+                    results.push({
+                        "Order": i + 1,
+                        "Code A": cA, "Station A": ssA.name,
+                        "Code B": cB, "Station B": ssB.name,
+                        "Status": "OK",
+                        "Dist (km)": (totalDist / 1000).toFixed(1),
+                        "Chain": path.map(p => p.fName.split(' ')[1] || p.fName.split(' ')[0]).join(' → '),
+                        "Full Chain": detailedChain.join('\n'),
+                        "Total Towers": path.reduce((sum, p) => sum + p.towers, 0),
+                        "Lots": [...new Set(path.map(p => p.lid.toUpperCase()))].join(', ')
+                    });
+                } else {
+                    // ENHANCED DIAGNOSIS FOR NO LINK
+                    console.log(`%c[DEBUG NO-LINK] Analyzing failure: ${ssA.name} [${cA}] → ${ssB.name} [${cB}]`, "color: #f43f5e; font-weight: bold; font-size: 11px;");
+
+                    const nearStart = [];
+                    const nearEnd = [];
+
+                    allFiles.forEach(file => {
+                        const pts = multiMapData[file.lid][file.fName];
+                        let dStart = Infinity;
+                        let dEnd = Infinity;
+
+                        pts.forEach(p => {
+                            const ds = getGeodesicDistance(p.lat, p.lng, ssA.lat, ssA.lng);
+                            const de = getGeodesicDistance(p.lat, p.lng, ssB.lat, ssB.lng);
+                            if (ds < dStart) dStart = ds;
+                            if (de < dEnd) dEnd = de;
+                        });
+
+                        if (dStart < 1500) nearStart.push({ fName: file.fName, dist: dStart, lid: file.lid });
+                        if (dEnd < 1500) nearEnd.push({ fName: file.fName, dist: dEnd, lid: file.lid });
+                    });
+
+                    console.log(`  🏠 Start Substation (${ssA.name}):`);
+                    if (nearStart.length === 0) {
+                        console.log("    ❌ NO FILES FOUND within 1.5km of start substation.");
+                    } else {
+                        nearStart.sort((a, b) => a.dist - b.dist).forEach(f => {
+                            const status = f.dist < 500 ? "✅ NEAR ( < 500m )" : "⚠️ DISTANT";
+                            console.log(`    ${status} [${f.dist.toFixed(0)}m] ${f.lid}/${f.fName}`);
+                        });
+                    }
+
+                    console.log(`  🏁 End Substation (${ssB.name}):`);
+                    if (nearEnd.length === 0) {
+                        console.log("    ❌ NO FILES FOUND within 1.5km of end substation.");
+                    } else {
+                        nearEnd.sort((a, b) => a.dist - b.dist).forEach(f => {
+                            const status = f.dist < 500 ? "✅ NEAR ( < 500m )" : "⚠️ DISTANT";
+                            console.log(`    ${status} [${f.dist.toFixed(0)}m] ${f.lid}/${f.fName}`);
+                        });
+                    }
+
+                    if (nearStart.length > 0 && nearEnd.length > 0) {
+                        console.log("  ⛓️ Connectivity Analysis:");
+                        console.log("    💡 Both ends have nearby files, but no bridge exists within 200km.");
+                    }
+
+                    results.push({
+                        "Order": i + 1, "Code A": cA, "Station A": ssA.name,
+                        "Code B": cB, "Station B": ssB.name,
+                        "Status": "NO LINK", "Dist (km)": "-", "Chain": "-", "Full Chain": "-", "Total Towers": 0
+                    });
+                }
+            }
+
+            setLastLinkResults(results);
+            window.lastLinkResults = results;
+            console.log(`%c[SS LINK FINDER] Results for ${maxIdx} pairs:`, "color: #10b981; font-weight: bold; font-size: 11px;");
+            console.table(results);
+
+            // Output clean list for copy-paste as requested
+            let allFilesFound = [...new Set(
+                results.flatMap(r => r.Status === 'OK' ? r["Full Chain"].split('\n') : [])
+                      .map(s => s.trim())
+                      .filter(s => s.length > 0)
+            )];
+
+            // PRIORITY FILTER: If a full file is present, remove its partial @slices
+            const fullFiles = allFilesFound.filter(s => !s.includes('@'));
+            allFilesFound = allFilesFound.filter(s => {
+                if (!s.includes('@')) return true;
+                const base = s.split('@')[0];
+                return !fullFiles.includes(base);
+            }).sort(); // Final alphabetic sort
+
+            if (allFilesFound.length > 0) {
+                console.log("%c[COPY-PASTE] All UNIQUE Full Filenames with slice recommendations:", "color: #10b981; font-weight: bold; font-size: 11px;");
+                console.log(allFilesFound.join('\n'));
+            }
+
+            console.log("%c[TIP] Run 'copyLinkResults()' OR click the blue 'Copy Results' button in the toolbar.", "color: #4b5563; font-style: italic; font-size: 9px;");
+            return results;
+        };
+
+        const handleCopyLinkResults = (data) => {
+            const resultsToCopy = data || window.lastLinkResults;
+            if (!resultsToCopy || resultsToCopy.length === 0) return;
+
+            const headers = Object.keys(resultsToCopy[0]).join('\t');
+            const rows = resultsToCopy.map(res => {
+                return Object.values(res).map(val => {
+                    const str = String(val);
+                    if (str.includes('-') || (str.length < 5 && /^\d+$/.test(str))) {
+                        return `="${str}"`; // Excel fix
+                    }
+                    return str;
+                }).join('\t');
+            }).join('\n');
+
+            const fullText = `${headers}\n${rows}`;
+            navigator.clipboard.writeText(fullText).then(() => {
+                alert("✓ Search results copied! You can now paste into Excel.");
+            });
+        };
+
+        window.copyLinkResults = () => handleCopyLinkResults();
+
+        console.log("%c[UTILITY] Tools: checkJointBoxDuplicates(), getLinesBySSCodes(A,B), copyLinkResults()", "color: #3b82f6; font-size: 10px; font-weight: bold;");
+
         return () => {
             delete window.checkJointBoxDuplicates;
+            delete window.getLinesBySSCodes;
+            delete window.copyLinkResults;
+            delete window.lastLinkResults;
         };
-    }, [multiMapData]);
+    }, [multiMapData, subStations, selectedLotIds]);
 
     // Clear search marker and line highlight after 4 seconds
     useEffect(() => {
@@ -124,6 +479,7 @@ const MultiFileView = () => {
     const [showTowerLabels, setShowTowerLabels] = useState(true);
     const [showDistLabels, setShowDistLabels] = useState(true);
     const [focusedLines, setFocusedLines] = useState([]); // Array of { lid, fName, pts }
+    const [lastLinkResults, setLastLinkResults] = useState(null); // Results from getLinesBySSCodes for copying
 
     useEffect(() => {
         document.title = selectedLotIds.length > 0 ? `Map: ${selectedLotIds.map(id => id.toUpperCase()).join(', ')}` : "Multi-Lot Map";
@@ -172,7 +528,8 @@ const MultiFileView = () => {
                         lat: parseFloat(match[2]),
                         lng: parseFloat(match[1]),
                         type: row.ss_type || 'substation',
-                        volt: row.volt_ratio
+                        volt: row.volt_ratio,
+                        ss_code: row.ss_code
                     } : null;
                 }).filter(s => s !== null);
                 setSubStations(parsed);
@@ -576,6 +933,16 @@ const MultiFileView = () => {
                             )}
                         </button>
 
+                        {lastLinkResults && (
+                            <button
+                                onClick={() => window.copyLinkResults()}
+                                className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-[10px] font-bold transition-all shadow-sm flex items-center gap-2 uppercase tracking-tight"
+                            >
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+                                Copy Results
+                            </button>
+                        )}
+
                         {exportProgress !== null && (
                             <div className="absolute -bottom-2 left-0 w-full h-1 bg-gray-100 rounded-full overflow-hidden">
                                 <div className="h-full bg-amber-600 transition-all duration-200" style={{ width: `${exportProgress}%` }}></div>
@@ -689,7 +1056,7 @@ const MultiFileView = () => {
                                                         <div className="flex flex-col gap-2 border-b pb-2 mb-3">
                                                             <div className="flex items-start gap-2">
                                                                 <div className="w-1.5 h-1.5 rounded-full bg-primary-blue mt-1 shrink-0"></div>
-                                                                <strong className="text-gray-800 text-[11px] font-black leading-tight uppercase tracking-normal break-words flex-grow">{fName}</strong>
+                                                                <strong className="text-gray-800 text-[11px] font-black leading-tight uppercase tracking-normal break-words flex-grow whitespace-pre-wrap">{fName}</strong>
                                                             </div>
                                                             {!pts.hasJointBox && (
                                                                 <div className="flex items-center gap-2 px-2 py-1 bg-amber-50 border border-amber-100 rounded-md text-amber-600 self-start group animate-pulse hover:animate-none transition-all">
@@ -752,7 +1119,7 @@ const MultiFileView = () => {
                                                                     <div className="text-black p-1">
                                                                         <div className="flex items-start gap-2 border-b mb-2 pb-1">
                                                                             <div className="w-1 h-1 rounded-full bg-primary-blue mt-1 shrink-0"></div>
-                                                                            <strong className="text-gray-800 text-[10px] font-black uppercase leading-tight tracking-tight break-words flex-grow">{fl.fName}</strong>
+                                                                            <strong className="text-gray-800 text-[10px] font-black uppercase leading-tight tracking-tight break-words flex-grow whitespace-pre-wrap">{fl.fName}</strong>
                                                                         </div>
                                                                         <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-1">
                                                                             <div className="flex flex-col">

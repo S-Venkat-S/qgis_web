@@ -99,7 +99,9 @@ async function deploy() {
         console.log("🔌 Connected to FTP.");
 
         process.stdout.write("📤 Uploading zip and extracter... ");
-        await client.uploadFrom(zipFilePath, path.join(remoteRootDir, zipName));
+        // Remote paths MUST use forward slashes (/) for FTP, even on Windows
+        const remoteZipPath = `${remoteRootDir.replace(/\\/g, '/')}/${zipName}`;
+        await client.uploadFrom(zipFilePath, remoteZipPath);
 
         // Prepare localized unzip script with the token
         let phpContent = fs.readFileSync(localUnzipPhpPath, 'utf8');
@@ -107,7 +109,8 @@ async function deploy() {
         const tempPhpPath = path.join(__dirname, 'unzip_temp.php');
         fs.writeFileSync(tempPhpPath, phpContent);
 
-        await client.uploadFrom(tempPhpPath, path.join(remoteRootDir, unzipPhpName));
+        const remotePhpPath = `${remoteRootDir.replace(/\\/g, '/')}/${unzipPhpName}`;
+        await client.uploadFrom(tempPhpPath, remotePhpPath);
         console.log("Done!");
         client.close();
         if (fs.existsSync(tempPhpPath)) fs.unlinkSync(tempPhpPath);

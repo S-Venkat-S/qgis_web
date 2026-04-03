@@ -265,7 +265,7 @@ const SingleFileView = () => {
                         <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     </button>
                     <div className="mr-6 border-r pr-6 border-gray-100">
-                        <h2 className="text-sm font-bold truncate max-w-[200px] md:max-w-md">{fileName}</h2>
+                        <h2 className="text-sm font-bold truncate max-w-[200px] md:max-w-md whitespace-pre-wrap">{fileName}</h2>
                         <span className="text-[10px] text-gray-400 font-mono uppercase tracking-wider">{lotId.toUpperCase()}</span>
                     </div>
 
@@ -458,7 +458,7 @@ const SingleFileView = () => {
                                     weight={5}
                                     opacity={1} // Ensuring drawn line is always fully opaque (relative to its own path)
                                 >
-                                    <Tooltip sticky permanent={false} direction="top" className="line-tooltip-label">
+                                    <Tooltip sticky permanent={false} direction="top" className="line-tooltip-label whitespace-pre-wrap">
                                         {fileName}
                                     </Tooltip>
                                 </Polyline>
@@ -488,7 +488,7 @@ const SingleFileView = () => {
                                             >
                                                 <Popup>
                                                     <div className="text-xs text-black min-w-[120px]">
-                                                        <strong className="block border-b mb-1 pb-1">{fileName}</strong>
+                                                        <strong className="block border-b mb-1 pb-1 whitespace-pre-wrap">{fileName}</strong>
                                                         <span className="block font-bold mt-1">Tower: {pt.towerNo}</span>
                                                         <span className="block font-mono text-[10px] opacity-70 mb-1">{pt.lat}, {pt.lng}</span>
                                                     </div>

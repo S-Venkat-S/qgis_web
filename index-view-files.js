@@ -69,7 +69,12 @@ async function processFolder(dir) {
                     zip.file(baseName, fileContent);
                     filesToIndex.push(line);
                 } else {
-                    console.warn(` [MISSING] ${line} (Checked in ${dir} and ${viewDir})`);
+                    console.error(`\n❌ FATAL ERROR: [MISSING LINK]`);
+                    console.error(`   Link: "${line}"`);
+                    console.error(`   Checked in: ${dir}`);
+                    console.error(`   Checked in: ${viewDir}`);
+                    console.error(`\n   The indexing operation has been aborted to prevent incomplete bundles.`);
+                    process.exit(1);
                 }
             }
         }
