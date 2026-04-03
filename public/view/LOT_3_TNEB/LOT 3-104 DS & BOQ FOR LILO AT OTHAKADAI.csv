@@ -1,0 +1,9 @@
+S.No,Tower No.,Joint Box,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),,Ground Elevation,Deviation Angle,Latitude,Longitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing, Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,LILO : 76,3W,T,DC,26,,,2.39,FALSE,143.426056,,9.956916667,78.19716667,GOOD,,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.19716666666667 9.956916666666666, 78.19752777777778 9.955666666666666)"
+2,76/1,,T,DC,26,76LILO-76/1,143.7779748,1.08,FALSE,147.400665,"58°18'15"" R",9.955666667,78.19752778,GOOD,Available,,NH,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.19752777777778 9.955666666666666, 78.19677777777778 9.95486111111111)"
+3,76/2,,T,DC,26,76/1-76/2,120.1768126,1.09,FALSE,148.169403,"91°33'33"" R",9.954861111,78.19677778,GOOD,Available,HT,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.19677777777778 9.95486111111111, 78.1966388888889 9.955)"
+4,76/3,,T,DC,26,76/2-76/3,21.44172482,1.14,FALSE,145.493622,"75°44'44"" L",9.955,78.19663889,GOOD,Available,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.1966388888889 9.955, 78.19630555555555 9.954333333333333)"
+5,76/4,2W,T,DC,26,76/3-76/4,82.64260626,1.16,FALSE,141.902527,"83°46'36"" L",9.954333333,78.19630556,GOOD,Available,"HT,LT",Othakadai Main Road,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.19630555555555 9.954333333333333, 78.19633333333334 9.954333333333333)"
+6,Gantry (Othakadai SS),,Gantry,H-POLE,12,76/4-Gantry,9,,,147.824768,,9.954333333,78.19633333,GOOD,NO E/W,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note : 1 . Shut down will be required in where earth wier are missing ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

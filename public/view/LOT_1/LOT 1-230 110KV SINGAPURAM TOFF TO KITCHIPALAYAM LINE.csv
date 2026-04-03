@@ -1,0 +1,9 @@
+SL NO,Tower No,JOINT BOX,Tower Type,Tower Type(S/T),Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation/ M,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,05-Feb,,DC,T,26,,,13.44,299,,11.63886,78.1694,GOOD,GOOD,,,,ALC Textiles factory  compound wall,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.1694 11.63886, 78.16927 11.63906)"
+2,05-Mar,,DB,(Tp),24,5/2 - '5/3,26.29636996,,299,"5⁰36'34"" LT",11.63906,78.16927,GOOD,NO,230KV Line Crossing (1) (Salem to Singarapet) T.NO 18-17,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.16927 11.63906, 78.16911 11.63926)"
+3,05-Apr,,DC,(Tp),26,5/3 - '5/4,28.19771146,,298,"24⁰50'43"" LT",11.63926,78.16911,GOOD,GOOD,,,,Tower In lake lake crossing(1),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.16911 11.63926, 78.16885 11.63939)"
+4,05-May,,DD,T,28,5/4 - '5/5,31.8150661,14.35,298,"38⁰22'45"" RT",11.63939,78.16885,GOOD,GOOD,,,,Lake Crossing (1)water compound wall ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.16885 11.63939, 78.16821 11.64076)"
+5,05-Jun,,DB,T,24,5/5 - '5/6,166.9757622,5.87,300,"9⁰11'51"" RT",11.64076,78.16821,GOOD,GOOD,,Lake crossing ,,"Compound wall-1 wire cable-5 ,LT Line -3",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.16821 11.64076, 78.16779 11.64225)"
+6,05-Jul,,DC,T,26,5/6 - '5/7,171.2011355,6.29,301,"26⁰20'2"" LT",11.64225,78.16779,GOOD,NO,,Tar Road Crossing -1,,Tower in SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.16779 11.64225, 78.16769 11.64236)"
+7,Kitchipalayam Gantry ,2W,GANTRY,T,20,5/7 - Gantry,16.35196422,,302,,11.64236,78.16769,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL SPAN LENGTH ,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

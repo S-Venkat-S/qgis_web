@@ -1,0 +1,14 @@
+S.No,Tower No.,Joint Box,Tower Suspension / Tension,Tower Type,Tower Height (m),Span Between Tower No.,Span Length,Footing Resistance of Tower ( Ohms),Ground Elevation,Deviation Angle,Longitude,Latitude,"Condition of  tower  (Missing  Parts, Broken,etc)","Condition of Earth wire (Missing,  Broken etc)",Crossing Objects,,Condition of Area (Plain/ Hilly/ Forest/ Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
+1,GANTRY VEERAPURAM 230KV S/S,2W,GT,GT,15,,,,61,,80.0021,12.7402,GOOD,NO EARTH WIRE,,,INSIDE SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(80.0021 12.7402, 80.0018 12.7403)"
+2,T.NO-9,,T,DD,30,GT-9,35.12833614,4.14,61,"77°2'56"" ",80.0018,12.7403,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(80.0018 12.7403, 80.002 12.7408)"
+3,T.NO-8 M/C,,T,DD,52,09-??????,61.98386887,5.71,61,"82°18'19"" ",80.002,12.7408,GOOD,GOOD,LT-1,CC-1,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(80.002 12.7408, 80.0007 12.7414)"
+4,T.NO-7 M/C LILO,,T,DD,52,08-????,150.7348666,4.27,61,"39°51'19"" ",80.0007,12.7414,GOOD,GOOD,110KV-1 XING BELOW,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(80.0007 12.7414, 80.0004 12.7421)"
+5,T.NO-6,3W,T,DD,28,07-????,91.28526716,5.29,62,"8°57'33"" ",80.0004,12.7421,GOOD,GOOD,,,PLAIN,"JOINT BOX AVAULABLE, NEED THREE WAY JUNCTION BOX,OPGW DONE FROM T.NO-6 TO T.NO-1",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(80.0004 12.7421, 79.9991 12.744)"
+6,T.NO-5,,T,DD,28,06-??,242.4046204,6.3,62,"38°40'56"" ",79.9991,12.744,GOOD,GOOD,,,PLAIN,INSIDE JUNGLE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.9991 12.744, 79.9993 12.7453)"
+7,T.NO-4,,T,DD,28,05-??????,145.5815922,5.32,62,"36°23'13"" ",79.9993,12.7453,GOOD,GOOD,,,PLAIN,INSIDE JUNGLE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.9993 12.7453, 79.9988 12.746)"
+8,T.NO-3,,T,DD,28,04-??????,98.27003612,4.21,62,"45°00'0"" ",79.9988,12.746,GOOD,GOOD,,,PLAIN,INSIDE JUNGLE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.9988 12.746, 79.9984 12.7461)"
+9,T.NO-2,,T,DD,28,03-????????,46.32493929,3.32,61,"23°36'7"" ",79.9984,12.7461,GOOD,GOOD,,,PLAIN,"INSIDE JUNGLE,OPWG CONNECTS TO NEARSET TOWER",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.9984 12.7461, 79.9977 12.746)"
+10,T.NO-1,,T,DD,28,02-?????,70.03570518,1.25,61,"1°38'21"" ",79.9977,12.746,GOOD,NO EARTH WIRE,,,INSIDE SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(79.9977 12.746, 79.997 12.7459)"
+11,GANTRY SP KOVIL 230KV S/S,2W,GT,GT,15,1-GT,83.86298349,,61,,79.997,12.7459,GOOD,,,,INSIDE SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+TOTAL,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Note : 1. Shut down will be required in where earth wiers are missing,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

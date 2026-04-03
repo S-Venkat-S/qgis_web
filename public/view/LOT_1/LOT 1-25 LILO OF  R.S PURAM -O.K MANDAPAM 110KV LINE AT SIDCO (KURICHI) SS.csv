@@ -1,7 +1,0 @@
-S. No ,Tower No,JOINT BOX,Supspension/Tenion,Tower Type,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Longitude,Latitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,T.NO 61/1 LILO SIDCO,,T,DB,33,,,5.18,390,,76.97247222,10.93186111,GOOD,GOOD,,,PLAIN,SIDCO LILO.NEED JUNCTION BOX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.97247222222222 10.931861111111111, 76.97425 10.933972222222222)"
-2,T.NO  2,,T,DB,33,61/1-2,304.2367499,2.07,403,"0°1'33""",76.97425,10.93397222,GOOD,GOOD,,"ELECT-RAILWAY,TAAR ROAD",PLAIN,NEED JUNCTION BOX,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.97425 10.933972222222222, 76.97575 10.935805555555556)"
-3,T.NO 3,,T,DD,28,02-Mar,261.5989297,6.12,394,"34°17'1""",76.97575,10.93580556,GOOD,GOOD,,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.97575 10.935805555555556, 76.97583333333334 10.936555555555556)"
-4,T.NO 4,,T,DB,24,03-Apr,83.29465769,6.72,394,"12°2'15""",76.97583333,10.93655556,GOOD,GOOD,LT,,PLAIN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(76.97583333333334 10.936555555555556, 76.97591666666666 10.936861111111112)"
-5,GANTRY SIDCO 110KV SS,2W,T,GANTRY,20,4-GANTRY,34.4818793,,393,,76.97591667,10.93686111,GOOD,MISSING,,,,SIDCO 110KV SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,TOTAL,684,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

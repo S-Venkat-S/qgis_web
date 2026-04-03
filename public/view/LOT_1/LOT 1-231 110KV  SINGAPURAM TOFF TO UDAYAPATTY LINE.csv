@@ -1,9 +1,0 @@
-SL NO ,Tower No,JOINT BOX,Tower Type(S/T),Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation/ M,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earht wire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-1,28 (TAP),,T,26,,,13.39,340,,11.65835,78.20731,GOOD,GOOD,,,HILLS AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.20731 11.65835, 78.2087 11.65975)"
-2,29(TAP),,T,28,28(TAP)-29(TAP),216.8529823,2.3,326,"106⁰45'47"" LT",11.65975,78.2087,GOOD,GOOD,,,,TOWER IN (SS),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.2087 11.65975, 78.20711 11.66057)"
-3,28A ,,T,24,29-28A,195.8111489,11.73,363,"2⁰1'38"" RT",11.66057,78.20711,GOOD,GOOD,,TAR ROAD,HILLS AREA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.20711 11.66057, 78.2067 11.6608)"
-4,1,,TP,26,28A-01,51.47650126,,326,"16⁰50'51"" RT",11.6608,78.2067,GOOD,NO,230KV LINE -1 (SALEM TO SINGARAPET) T.NO 33-34,,,TOWER IN (SS),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.2067 11.6608, 78.20644 11.66107)"
-5,2,,TP,26,01-Feb,41.21034172,,325,"27⁰2'5"" RT",11.66107,78.20644,GOOD,NO,,SAND ROAD,,TOWER IN (SS),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.20644 11.66107, 78.20638 11.66127)"
-6,3,,TP,28,02-Mar,23.08820844,,325,"33⁰20'36"" RT",11.66127,78.20638,GOOD,NO,,,,TOWER IN (SS),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.20638 11.66127, 78.20642 11.6614)"
-7,UDYAPATTY GANTRY,2W,T,20,03-GANTRY,15.03864225,,326,,11.6614,78.20642,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-TOTAL SPAN LENGTH ,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

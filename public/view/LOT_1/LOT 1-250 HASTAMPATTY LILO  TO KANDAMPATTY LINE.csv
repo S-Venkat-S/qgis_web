@@ -1,9 +1,0 @@
-S.NO,Tower No,JOINT BOX,Tower Type ,Tower Type & Supspension/Tenion,Tower Hight (Mtrs),Span Between Tower No.,Span Length (Mtrs),Footing Resistance of Tower (ohms),Ground Elevation,Horizontal Angle(˚),Latitude,Longitude,"Condition of    Tower  (Missing  parts,broken,etc)","Condition of Earthwire (Missing,Broken etc)",Crossing Objects,,Condition of Area (Plain/Hilly/Forest/Water Logged),Remarks,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,line_geom
-,,,,,,,,,,,11.64719445,78.09916664,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.099166643 11.647194449, 78.09956 11.64884)"
-2,2,,,T,26,lilo 1--2,184.8635173,6.24,276,"22⁰42'0"" RT",11.64884,78.09956,GOOD,GOOD,"LT LINE -2,22KV LINE",TAR ROAD CROSSING,,AGRI LAND,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.09956 11.64884, 78.10076 11.64975)"
-3,3,,,T,28,2--3,165.2286257,4.74,276,"50⁰9'1"" LT",11.64975,78.10076,GOOD,GOOD,LT LINE -2,TAR ROAD CROSSING,,FENCING ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.10076 11.64975, 78.10085 11.65198)"
-4,4,,,T,24,3--4,247.0833345,7.61,274,"5⁰34'22"" LT",11.65198,78.10085,GOOD,GOOD,LT LINE -2,SAND  ROAD CROSSING,,FENCING ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.10085 11.65198, 78.10077 11.65335)"
-5,5,,,T,28,4--5,151.9266851,5.44,278,"39⁰46'11"" RT",11.65335,78.10077,GOOD,GOOD,LT LINE -1,TAR ROAD CROSSING,,"FENCING,RESIDENCE AREA",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.10077 11.65335, 78.10125 11.65399)"
-6,6,,,T,28,5--6,88.11640386,5.12,280,"39⁰26'42"" LT",11.65399,78.10125,GOOD,NO E/W,,SAND  ROAD CROSSING,,TOWER IN SS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"LINESTRING(78.10125 11.65399, 78.10124 11.65418)"
-7,KANTHAPATTY GANDRY,2W,,T,20,6-GANTRY,21.06358938,,279,,11.65418,78.10124,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-TOTAL  LENGTH ,,,,,,,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

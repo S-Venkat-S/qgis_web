@@ -49,10 +49,19 @@ async function processFolder(dir) {
                     range = { start: parseInt(rangeMatch[1]), end: parseInt(rangeMatch[2]) };
                 }
 
-                // Try resolving relative to the current folder first, then relative to viewDir
+                // Try exact path first
                 let fullPath = path.resolve(dir, actualPath);
                 if (!fs.existsSync(fullPath)) {
                     fullPath = path.resolve(viewDir, actualPath);
+                }
+
+                // SPACE AGNOSTIC FALLBACK: Try normalized path (no double spaces)
+                if (!fs.existsSync(fullPath)) {
+                    const normalized = actualPath.replace(/  +/g, ' ');
+                    fullPath = path.resolve(dir, normalized);
+                    if (!fs.existsSync(fullPath)) {
+                        fullPath = path.resolve(viewDir, normalized);
+                    }
                 }
 
                 if (fs.existsSync(fullPath)) {
