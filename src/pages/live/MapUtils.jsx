@@ -212,6 +212,7 @@ export const updatedLots = [
   { id: 'lot4', name: 'LOT 4', basePath: '/view/LOT_4/', color: '#F43F5E' },
   { id: 'glease1', name: 'G LEASE 1', basePath: '/view/G_LEASE_1/', color: '#1310ccff' },
   { id: 'glease2', name: 'G LEASE 2', basePath: '/view/G_LEASE_2/', color: '#EC4899' },
+  { id: 'gcombined', name: 'G COMBINED', basePath: '/view/G_COMBINED/', color: '#fffc32ff' },
   { id: 'existing', name: 'Existing', basePath: '/view/EXISTING/', color: '#6B7280' }
 ];
 
