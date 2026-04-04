@@ -28,7 +28,7 @@ function App() {
             <Route path="/live" element={<Live />} />
             <Route path="/live/:lotIds/*" element={<MultiFileView />} />
             <Route path="/live/edit/:lotId/*" element={<CSVEditor />} />
-            <Route path="/live/lot/:lotIds" element={<MultiFileView />} />
+            <Route path="/live/lot/:lotIds/*" element={<MultiFileView />} />
 
             {/* Fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />

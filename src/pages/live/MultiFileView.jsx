@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { MapContainer, TileLayer, Polyline, CircleMarker, Marker, Popup, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
@@ -64,14 +64,13 @@ const MultiFileView = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
 
-    const initialSelectedIds = useMemo(() => {
+    const selectedLotIds = useMemo(() => {
         if (!lotIds) return [];
         if (lotIds === 'all') return updatedLots.map(l => l.id);
         if (lotIds === 'custom') return ['custom'];
+        if (lotIds === 'none') return [];
         return lotIds.split(',').filter(id => updatedLots.find(l => l.id === id));
     }, [lotIds]);
-
-    const [selectedLotIds, setSelectedLotIds] = useState(initialSelectedIds);
     const [multiMapData, setMultiMapData] = useState({});
     const [lotFiles, setLotFiles] = useState({});
     const [loadingProgress, setLoadingProgress] = useState(0);
@@ -85,6 +84,19 @@ const MultiFileView = () => {
     const [searchCenter, setSearchCenter] = useState(null); // Point to jump to
     const [searchMarker, setSearchMarker] = useState(null); // Persistent marker for search
     const [searchLine, setSearchLine] = useState(null); // Highlighting line
+    const [isLotDropdownOpen, setIsLotDropdownOpen] = useState(false);
+    const lotDropdownRef = useRef(null);
+
+    // Close lot dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (lotDropdownRef.current && !lotDropdownRef.current.contains(event.target)) {
+                setIsLotDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     // Expose utility functions to console
     useEffect(() => {
@@ -103,30 +115,78 @@ const MultiFileView = () => {
             const linkThreshold = 100; // Strict: 100m jump
 
             // 1. Build the Connectivity Graph
-            const allFiles = []; // Array of { lid, fName, start, end, towers }
+            const allFiles = []; // Array of { lid, fName, start, end, towers, bbox }
             Object.entries(multiMapData).forEach(([lid, files]) => {
                 if (!selectedLotIds.includes(lid)) return;
                 Object.entries(files).forEach(([fName, pts]) => {
                     if (pts.length < 2) return;
+
+                    // Pre-calculate Bounding Box for fast intersection checks
+                    let minLat = Infinity, maxLat = -Infinity, minLng = Infinity, maxLng = -Infinity;
+                    pts.forEach(p => {
+                        if (p.lat < minLat) minLat = p.lat;
+                        if (p.lat > maxLat) maxLat = p.lat;
+                        if (p.lng < minLng) minLng = p.lng;
+                        if (p.lng > maxLng) maxLng = p.lng;
+                    });
+
                     allFiles.push({
                         id: `${lid}/${fName}`,
                         lid, fName,
                         start: pts[0],
                         end: pts[pts.length - 1],
-                        towers: pts.length
+                        towers: pts.length,
+                        bbox: { minLat, maxLat, minLng, maxLng }
                     });
                 });
             });
 
+            const doBBoxesOverlap = (b1, b2, marginMeters) => {
+                const margin = marginMeters / 111320; // 1 degree ~ 111.32km
+                return !(b2.minLat > b1.maxLat + margin ||
+                    b2.maxLat < b1.minLat - margin ||
+                    b2.minLng > b1.maxLng + margin ||
+                    b2.maxLng < b1.minLng - margin);
+            };
+
+            const distToSegment = (p, v, w) => {
+                const l2 = Math.pow(v.lat - w.lat, 2) + Math.pow(v.lng - w.lng, 2);
+                if (l2 === 0) return getGeodesicDistance(p.lat, p.lng, v.lat, v.lng);
+                let t = ((p.lat - v.lat) * (w.lat - v.lat) + (p.lng - v.lng) * (w.lng - v.lng)) / l2;
+                t = Math.max(0, Math.min(1, t));
+                const projection = {
+                    lat: v.lat + t * (w.lat - v.lat),
+                    lng: v.lng + t * (w.lng - v.lng)
+                };
+                return getGeodesicDistance(p.lat, p.lng, projection.lat, projection.lng);
+            };
+
+            const checkProximity = (pts1, pts2, threshold) => {
+                // Check if any point in pts1 is near any segment in pts2
+                for (let i = 0; i < pts1.length; i++) {
+                    const p = pts1[i];
+                    for (let j = 0; j < pts2.length - 1; j++) {
+                        if (distToSegment(p, pts2[j], pts2[j + 1]) < threshold) return true;
+                    }
+                }
+                // Check if any point in pts2 is near any segment in pts1
+                for (let j = 0; j < pts2.length; j++) {
+                    const p = pts2[j];
+                    for (let i = 0; i < pts1.length - 1; i++) {
+                        if (distToSegment(p, pts1[i], pts1[i + 1]) < threshold) return true;
+                    }
+                }
+                return false;
+            };
+
             // 2. Targeted Branching BFS (200km limit)
-            const findPath = (startSS, endSS, useMidLineJump = false, seedFile = null) => {
+            const findPath = (startSS, endSS, useMidLineJump = false, useFullDivergence = false, seedFile = null) => {
                 const MAX_DIST = 200000;
                 const visitedFiles = new Set();
                 let queue = [];
 
                 if (seedFile) {
                     const segmentLength = seedFile.towers * 300;
-                    // Properly initialize seed with substation as entry point
                     const seedWithEntry = { ...seedFile, entryPt: startSS };
                     queue.push({ node: seedFile.start, path: [{ ...seedWithEntry, exitPt: seedFile.start }], totalDist: segmentLength / 2 });
                     queue.push({ node: seedFile.end, path: [{ ...seedWithEntry, exitPt: seedFile.end }], totalDist: segmentLength / 2 });
@@ -136,21 +196,20 @@ const MultiFileView = () => {
                 }
 
                 let iterations = 0;
-                while (queue.length > 0 && iterations < 5000) {
+                while (queue.length > 0 && iterations < 8000) {
                     iterations++;
                     const { node, path, totalDist } = queue.shift();
 
                     // SYMMETRICAL SUCCESS CHECK
                     let reachedTarget = getGeodesicDistance(node.lat, node.lng, endSS.lat, endSS.lng) < ssThreshold;
 
-                    if (!reachedTarget && path.length > 0 && useMidLineJump) {
+                    if (!reachedTarget && path.length > 0 && (useMidLineJump || useFullDivergence)) {
                         const lastSegment = path[path.length - 1];
                         const lastPts = multiMapData[lastSegment.lid][lastSegment.fName];
                         reachedTarget = lastPts.some(p => getGeodesicDistance(p.lat, p.lng, endSS.lat, endSS.lng) < ssThreshold);
                     }
 
                     if (reachedTarget) {
-                        // The last segment in path needs its exitPt updated to be the substation itself
                         const finalPath = [...path];
                         if (finalPath.length > 0) {
                             const lastIdx = finalPath.length - 1;
@@ -168,17 +227,33 @@ const MultiFileView = () => {
 
                         if (path.length === 0) {
                             const pts = multiMapData[file.lid][file.fName];
-                            if (pts.some(p => getGeodesicDistance(p.lat, p.lng, startSS.lat, startSS.lng) < ssThreshold)) {
+                            let ssConnected = false;
+                            for (let k = 0; k < pts.length - 1; k++) {
+                                if (distToSegment(startSS, pts[k], pts[k + 1]) < ssThreshold) { ssConnected = true; break; }
+                            }
+                            if (ssConnected) {
                                 queue.push({ node: file.start, path: [file], totalDist: segmentLength / 2 });
                                 queue.push({ node: file.end, path: [file], totalDist: segmentLength / 2 });
                                 visitedFiles.add(file.id);
                                 continue;
                             }
                         } else {
-                            if (useMidLineJump) {
+                            const lastSegment = path[path.length - 1];
+                            if (useFullDivergence) {
+                                // Full Divergence: Any-point/segment to Any-point/segment
+                                if (doBBoxesOverlap(lastSegment.bbox, file.bbox, linkThreshold)) {
+                                    const lastPts = multiMapData[lastSegment.lid][lastSegment.fName];
+                                    const nextPts = multiMapData[file.lid][file.fName];
+                                    isConnected = checkProximity(lastPts, nextPts, linkThreshold);
+                                }
+                            } else if (useMidLineJump) {
+                                // Mid-Line Jump: Node (Endpoint of Prev) to Any segment of Next
                                 const pts = multiMapData[file.lid][file.fName];
-                                isConnected = pts.some(p => getGeodesicDistance(node.lat, node.lng, p.lat, p.lng) < linkThreshold);
+                                for (let k = 0; k < pts.length - 1; k++) {
+                                    if (distToSegment(node, pts[k], pts[k + 1]) < linkThreshold) { isConnected = true; break; }
+                                }
                             } else {
+                                // Strict: Endpoint to Endpoint
                                 const d1 = getGeodesicDistance(node.lat, node.lng, file.start.lat, file.start.lng);
                                 const d2 = getGeodesicDistance(node.lat, node.lng, file.end.lat, file.end.lng);
                                 if (d1 < linkThreshold) { isConnected = true; exitNode = file.end; }
@@ -190,15 +265,16 @@ const MultiFileView = () => {
                             visitedFiles.add(file.id);
                             const currentFileLabel = file.fName.split(' ')[1] || file.fName.split(' ')[0];
                             const breadcrumbs = path.map(p => p.fName.split(' ')[1] || p.fName.split(' ')[0]).join(' → ');
-                            
-                            const segmentWithCoords = { 
-                                ...file, 
-                                entryPt: node, 
-                                exitPt: exitNode || node 
+
+                            const segmentWithCoords = {
+                                ...file,
+                                entryPt: node,
+                                exitPt: exitNode || node
                             };
 
-                            if (useMidLineJump) {
-                                console.log(`[TRACE] [${breadcrumbs}] 🔗 Mid-Line Connect: "${currentFileLabel}"`);
+                            if (useMidLineJump || useFullDivergence) {
+                                const modeText = useFullDivergence ? "Full-Diverge" : "Mid-Line Connect";
+                                console.log(`[TRACE] [${breadcrumbs}] 🔗 ${modeText}: "${currentFileLabel}"`);
                                 queue.push({ node: file.start, path: [...path, { ...segmentWithCoords, exitPt: file.start }], totalDist: totalDist + segmentLength });
                                 queue.push({ node: file.end, path: [...path, { ...segmentWithCoords, exitPt: file.end }], totalDist: totalDist + segmentLength });
                             } else {
@@ -234,12 +310,16 @@ const MultiFileView = () => {
                 // Identify all entry points from SS_A
                 const entryPoints = allFiles.filter(f => {
                     const pts = multiMapData[f.lid][f.fName];
-                    return pts.some(p => getGeodesicDistance(p.lat, p.lng, ssA.lat, ssA.lng) < ssThreshold);
+                    for (let k = 0; k < pts.length - 1; k++) {
+                        if (distToSegment(ssA, pts[k], pts[k + 1]) < ssThreshold) return true;
+                    }
+                    return false;
                 });
 
                 console.log(`  🔍 Entry Discovery: Found ${entryPoints.length} files starting near ${ssA.name}.`);
 
                 let searchResult = null;
+                let usedDivergence = false;
 
                 // FORWARD SEARCH (A to B) - Individual Path Discovery
                 for (let j = 0; j < entryPoints.length; j++) {
@@ -247,10 +327,10 @@ const MultiFileView = () => {
                     console.log(`    %c[PATH ${j + 1}/${entryPoints.length}] Probing via "${seed.fName}"...`, "color: #a855f7; font-weight: bold;");
 
                     // Try Main-Line first, then Jump
-                    let branchResult = findPath(ssA, ssB, false, seed);
+                    let branchResult = findPath(ssA, ssB, false, false, seed);
                     if (!branchResult) {
                         console.log(`      ⚠ No main-line found on this branch. Retrying with Mid-Line jumping...`);
-                        branchResult = findPath(ssA, ssB, true, seed);
+                        branchResult = findPath(ssA, ssB, true, false, seed);
                     }
 
                     if (branchResult) {
@@ -267,13 +347,16 @@ const MultiFileView = () => {
                     console.log(`  🔄 [REVERSE PROBE] Forward search failed. Attempting Reverse Search from ${ssB.name}...`);
                     const reverseEntries = allFiles.filter(f => {
                         const pts = multiMapData[f.lid][f.fName];
-                        return pts.some(p => getGeodesicDistance(p.lat, p.lng, ssB.lat, ssB.lng) < ssThreshold);
+                        for (let k = 0; k < pts.length - 1; k++) {
+                            if (distToSegment(ssB, pts[k], pts[k + 1]) < ssThreshold) return true;
+                        }
+                        return false;
                     });
 
                     for (let j = 0; j < reverseEntries.length; j++) {
                         const seed = reverseEntries[j];
                         console.log(`    %c[REVERSE PATH ${j + 1}/${reverseEntries.length}] Probing via "${seed.fName}"...`, "color: #fb923c; font-weight: bold;");
-                        let branchResult = findPath(ssB, ssA, true, seed); // Full jump enabled for reverse
+                        let branchResult = findPath(ssB, ssA, true, false, seed);
                         if (branchResult) {
                             console.log(`      ✅ REVERSE PATH RESOLVED!`);
                             searchResult = branchResult;
@@ -282,9 +365,25 @@ const MultiFileView = () => {
                     }
                 }
 
+                // ULTIMATE SEARCH (Full Divergence) - If No Path Found Within 200km
+                if (!searchResult) {
+                    console.log(`  🌐 [ULTIMATE PROBE] Forward & Reverse failed. Reinitiating with FULL mid-portion divergence fallback...`);
+                    for (let j = 0; j < entryPoints.length; j++) {
+                        const seed = entryPoints[j];
+                        console.log(`    %c[ULTIMATE PATH ${j + 1}/${entryPoints.length}] Probing via "${seed.fName}" with Full Divergence...`, "color: #ef4444; font-weight: bold;");
+                        let branchResult = findPath(ssA, ssB, true, true, seed);
+                        if (branchResult) {
+                            console.log(`      ✅ ULTIMATE PATH RESOLVED via Full Divergence!`);
+                            searchResult = branchResult;
+                            usedDivergence = true;
+                            break;
+                        }
+                    }
+                }
+
                 if (searchResult) {
                     const { path, totalDist } = searchResult;
-                    
+
                     const detailedChain = path.map((segment) => {
                         const pts = multiMapData[segment.lid][segment.fName];
                         if (!pts || pts.length === 0) return `${segment.lid}/${segment.fName}`;
@@ -304,27 +403,32 @@ const MultiFileView = () => {
 
                         const sIdx = Math.min(closestEntry, closestExit) + 1;
                         const eIdx = Math.max(closestEntry, closestExit) + 1;
+
+                        // Filter out links with single tower (@x:x) or just two towers (@x:x+1)
+                        if (eIdx - sIdx <= 1) return null;
+
                         const baseName = segment.fName.includes('@') ? segment.fName.split('@')[0] : segment.fName;
-                        
+
                         // Normalize LID format from lot1 to LOT_1
                         let formattedLid = segment.lid.toUpperCase();
                         if (/^LOT\d+$/.test(formattedLid)) {
-                             formattedLid = formattedLid.replace("LOT", "LOT_");
+                            formattedLid = formattedLid.replace("LOT", "LOT_");
                         }
 
                         // If it's the full file, return without @range
                         if (sIdx === 1 && eIdx === pts.length) {
-                             return `${formattedLid}/${baseName}`;
+                            return `${formattedLid}/${baseName}`;
                         }
 
                         return `${formattedLid}/${baseName}@${sIdx}:${eIdx}`;
-                    });
+                    }).filter(Boolean);
 
                     results.push({
                         "Order": i + 1,
                         "Code A": cA, "Station A": ssA.name,
                         "Code B": cB, "Station B": ssB.name,
                         "Status": "OK",
+                        "Divergent": usedDivergence ? "YES" : "NO",
                         "Dist (km)": (totalDist / 1000).toFixed(1),
                         "Chain": path.map(p => p.fName.split(' ')[1] || p.fName.split(' ')[0]).join(' → '),
                         "Full Chain": detailedChain.join('\n'),
@@ -395,8 +499,8 @@ const MultiFileView = () => {
             // Output clean list for copy-paste as requested
             let allFilesFound = [...new Set(
                 results.flatMap(r => r.Status === 'OK' ? r["Full Chain"].split('\n') : [])
-                      .map(s => s.trim())
-                      .filter(s => s.length > 0)
+                    .map(s => s.trim())
+                    .filter(s => s.length > 0)
             )];
 
             // PRIORITY FILTER: If a full file is present, remove its partial @slices
@@ -424,6 +528,10 @@ const MultiFileView = () => {
             const rows = resultsToCopy.map(res => {
                 return Object.values(res).map(val => {
                     const str = String(val);
+                    // Standard TSV quoting for special characters (excel-friendly)
+                    if (str.includes('\n') || str.includes('\t') || str.includes('"')) {
+                        return `"${str.replace(/"/g, '""')}"`;
+                    }
                     if (str.includes('-') || (str.length < 5 && /^\d+$/.test(str))) {
                         return `="${str}"`; // Excel fix
                     }
@@ -698,7 +806,15 @@ const MultiFileView = () => {
     }, [urlFileName, multiMapData, initialCenteringDone]);
 
     const toggleLot = (id) => {
-        setSelectedLotIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+        let next;
+        if (selectedLotIds.includes(id)) {
+            next = selectedLotIds.filter(x => x !== id);
+        } else {
+            next = [...selectedLotIds, id];
+        }
+
+        const lotPath = next.length === 0 ? 'none' : next.join(',');
+        navigate(`/live/lot/${lotPath}${urlFileName ? `/${urlFileName}` : ''}`);
     };
 
     const zoomToFile = (lid, fName, pts) => {
@@ -707,6 +823,15 @@ const MultiFileView = () => {
         setBounds(lineBounds);
         setSearchQuery(""); // Clear search after zooming
         setSearchLine(pts);
+
+        // Ensure lot is selected while maintaining others
+        if (!selectedLotIds.includes(lid)) {
+            const next = [...selectedLotIds, lid];
+            navigate(`/live/lot/${next.join(',')}/${encodeURIComponent(fName)}`);
+        } else {
+            const lotStr = selectedLotIds.length > 0 ? selectedLotIds.join(',') : 'none';
+            navigate(`/live/lot/${lotStr}/${encodeURIComponent(fName)}`);
+        }
     };
 
     const searchResults = useMemo(() => {
@@ -732,8 +857,10 @@ const MultiFileView = () => {
 
         // 3. Search Substations
         subStations.forEach(ss => {
-            if (ss.name.toLowerCase().includes(query.toLowerCase())) {
-                results.push({ type: 'ss', lat: ss.lat, lng: ss.lng, name: ss.name, volt: ss.volt, category: ss.type });
+            const hasNameMatch = ss.name.toLowerCase().includes(query.toLowerCase());
+            const hasCodeMatch = ss.ss_code && String(ss.ss_code).toLowerCase().includes(query.toLowerCase());
+            if (hasNameMatch || hasCodeMatch) {
+                results.push({ type: 'ss', lat: ss.lat, lng: ss.lng, name: ss.name, ss_code: ss.ss_code, volt: ss.volt, category: ss.type });
             }
         });
 
@@ -794,22 +921,55 @@ const MultiFileView = () => {
                     <button onClick={handleBack} className="mr-3 p-2 rounded-full hover:bg-gray-100 transition-colors">
                         <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     </button>
-                    <div className="flex gap-2 overflow-x-auto no-scrollbar py-1">
+                    <div className="flex items-center gap-2 py-1">
                         {lotIds === 'custom' ? (
                             <div className="px-4 py-1.5 text-[10px] font-black rounded-full border bg-emerald-600 text-white border-emerald-700 ring-2 ring-emerald-100 shadow-sm uppercase tracking-wider">
                                 {searchParams.get('name') || "Custom Group"}
                             </div>
                         ) : (
-                            updatedLots.map(l => (
+                            <div className="relative" ref={lotDropdownRef}>
                                 <button
-                                    key={l.id}
-                                    onClick={() => toggleLot(l.id)}
-                                    className={`px-4 py-1.5 text-[10px] font-black rounded-full border transition-all whitespace-nowrap shadow-sm uppercase tracking-wider ${selectedLotIds.includes(l.id) ? 'text-white border-transparent ring-2' : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'}`}
-                                    style={selectedLotIds.includes(l.id) ? { backgroundColor: l.color, ringColor: `${l.color}33` } : {}}
+                                    onClick={() => setIsLotDropdownOpen(!isLotDropdownOpen)}
+                                    className={`flex items-center gap-2.5 px-4 py-2 bg-white border border-gray-200 rounded-lg text-[10px] font-black text-gray-500 hover:border-primary-blue/30 hover:bg-gray-50 transition-all shadow-sm uppercase tracking-widest ${isLotDropdownOpen ? 'border-primary-blue ring-4 ring-primary-blue/5' : ''}`}
                                 >
-                                    {l.name}
+                                    <svg className={`w-4 h-4 transition-transform duration-200 ${isLotDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" /></svg>
+                                    <span>Select Lots ({selectedLotIds.length})</span>
                                 </button>
-                            ))
+
+                                {isLotDropdownOpen && (
+                                    <div className="absolute left-0 top-full mt-2 w-72 bg-white rounded-2xl shadow-2xl border border-gray-100 z-[2001] py-2 animate-in fade-in zoom-in-95 duration-150 origin-top-left">
+                                        <div className="px-4 py-2 border-b border-gray-50 mb-1 flex justify-between items-center">
+                                            <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Available Groups</span>
+                                            <button
+                                                onClick={() => {
+                                                    navigate('/live/lot/all');
+                                                    setIsLotDropdownOpen(false);
+                                                }}
+                                                className="text-[9px] font-black text-primary-blue hover:underline uppercase tracking-widest"
+                                            >
+                                                Show All
+                                            </button>
+                                        </div>
+                                        <div className="max-h-80 overflow-y-auto px-1">
+                                            {updatedLots.map(l => (
+                                                <div
+                                                    key={l.id}
+                                                    onClick={() => toggleLot(l.id)}
+                                                    className={`flex items-center gap-3 p-2.5 rounded-xl cursor-pointer transition-all ${selectedLotIds.includes(l.id) ? 'bg-primary-blue/5' : 'hover:bg-gray-50'}`}
+                                                >
+                                                    <div className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center transition-all ${selectedLotIds.includes(l.id) ? 'bg-primary-blue border-transparent' : 'border-gray-200'}`}>
+                                                        {selectedLotIds.includes(l.id) && <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                                                    </div>
+                                                    <div className="flex items-center gap-2.5 min-w-0 flex-grow">
+                                                        <div className="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm" style={{ backgroundColor: l.color }}></div>
+                                                        <span className={`text-[10px] font-bold uppercase tracking-tight truncate ${selectedLotIds.includes(l.id) ? 'text-primary-blue' : 'text-gray-600'}`}>{l.name}</span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         )}
                     </div>
                 </div>
@@ -826,7 +986,7 @@ const MultiFileView = () => {
                         <svg className="w-3.5 h-3.5 absolute left-2.5 top-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
 
                         {searchResults.length > 0 && (
-                            <div className="absolute top-full right-0 mt-2 w-72 max-h-60 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-xl z-[2000] no-scrollbar">
+                            <div className="absolute top-full right-0 mt-2 w-72 max-h-60 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-xl z-[2000]">
                                 <div className="p-2 border-b bg-gray-50 uppercase text-[9px] font-bold text-gray-400 sticky top-0">Search Results ({searchResults.length})</div>
                                 {searchResults.map((res, i) => (
                                     <div
@@ -843,7 +1003,10 @@ const MultiFileView = () => {
                                                 {res.type === 'coord' && <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>}
                                             </div>
                                             <div className="min-w-0 flex-grow">
-                                                <div className="text-[11px] font-bold text-gray-700 group-hover:text-primary-blue transition-colors truncate uppercase tracking-tight whitespace-pre-wrap">{res.name}</div>
+                                                <div className="text-[11px] font-bold text-gray-700 group-hover:text-primary-blue transition-colors truncate uppercase tracking-tight whitespace-pre-wrap">
+                                                    {res.name}
+                                                    {res.ss_code && <span className="ml-2 text-primary-blue/60 text-[9px]">[{res.ss_code}]</span>}
+                                                </div>
                                                 <div className="text-[9px] text-gray-400 font-medium truncate">
                                                     {res.type === 'line' && `${res.lid.toUpperCase()} • ${res.pts.length} Towers`}
                                                     {res.type === 'ss' && `${res.volt || res.category || 'Substation'} • ${res.lat.toFixed(4)}, ${res.lng.toFixed(4)}`}

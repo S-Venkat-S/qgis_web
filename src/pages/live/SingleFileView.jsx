@@ -146,7 +146,8 @@ const SingleFileView = () => {
                         lat: parseFloat(match[2]),
                         lng: parseFloat(match[1]),
                         type: row.ss_type || 'substation',
-                        volt: row.volt_ratio
+                        volt: row.volt_ratio,
+                        ss_code: row.ss_code
                     } : null;
                 }).filter(s => s !== null);
                 setSubStations(parsed);
@@ -177,8 +178,10 @@ const SingleFileView = () => {
 
         // 3. Search Substations
         subStations.forEach(ss => {
-            if (ss.name.toLowerCase().includes(query.toLowerCase())) {
-                results.push({ type: 'ss', lat: ss.lat, lng: ss.lng, name: ss.name, volt: ss.volt, category: ss.type });
+            const hasNameMatch = ss.name.toLowerCase().includes(query.toLowerCase());
+            const hasCodeMatch = ss.ss_code && String(ss.ss_code).toLowerCase().includes(query.toLowerCase());
+            if (hasNameMatch || hasCodeMatch) {
+                results.push({ type: 'ss', lat: ss.lat, lng: ss.lng, name: ss.name, ss_code: ss.ss_code, volt: ss.volt, category: ss.type });
             }
         });
 
@@ -298,7 +301,10 @@ const SingleFileView = () => {
                                                 {res.type === 'coord' && <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>}
                                             </div>
                                             <div className="min-w-0 flex-grow">
-                                                <div className="text-[11px] font-bold text-gray-700 group-hover:text-primary-blue transition-colors truncate uppercase tracking-tight">{res.name}</div>
+                                                <div className="text-[11px] font-bold text-gray-700 group-hover:text-primary-blue transition-colors truncate uppercase tracking-tight">
+                                                    {res.name}
+                                                    {res.ss_code && <span className="ml-2 text-primary-blue/60 text-[9px]">[{res.ss_code}]</span>}
+                                                </div>
                                                 <div className="text-[9px] text-gray-400 font-medium truncate">
                                                     {res.type === 'line' && `${res.lid.toUpperCase()}`}
                                                     {res.type === 'ss' && `${res.volt || res.category || 'Substation'} • ${res.lat.toFixed(4)}, ${res.lng.toFixed(4)}`}

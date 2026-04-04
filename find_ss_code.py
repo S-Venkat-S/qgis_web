@@ -2,30 +2,62 @@ import csv
 import re
 import os
 import argparse
-from difflib import SequenceMatcher
+import math
 
-def normalize_name(name):
-    """Normalize substation name for matching."""
-    if not name:
-        return ""
-    # Remove "SS", "(", ")", "Gantry", and extra spaces
-    name = name.upper()
-    # If the name has a voltage at the end (e.g. "Udumalpet 110"), remove it for name matching
-    name = re.sub(r'\s+\d+(KV)?$', '', name)
-    name = re.sub(r'\(.*?\)', '', name)  # Remove content in parentheses
-    name = name.replace('SS', '').replace('GANTRY', '').replace('-', ' ')
-    name = re.sub(r'\s+', ' ', name).strip()
-    return name
+def haversine(lat1, lon1, lat2, lon2):
+    """Calculate the great circle distance in meters between two points."""
+    R = 6371000 # Radius of Earth in meters
+    phi1, phi2 = math.radians(lat1), math.radians(lat2)
+    dphi = math.radians(lat2 - lat1)
+    dlambda = math.radians(lon2 - lon1)
+    
+    a = math.sin(dphi/2)**2 + math.cos(phi1)*math.cos(phi2)*math.sin(dlambda/2)**2
+    return 2 * R * math.atan2(math.sqrt(a), math.sqrt(1-a))
 
-def extract_voltage(name):
-    """Extract voltage from name if present (e.g. '110', '230', '400')."""
-    match = re.search(r'(\d{2,3})(KV)?', name, re.IGNORECASE)
+def dms_to_dd(dms_str):
+    """Convert DMS string or numeric string to Decimal Degrees."""
+    if not dms_str: return None
+    if isinstance(dms_str, (int, float)): return float(dms_str)
+    
+    dms_str = str(dms_str).strip()
+    
+    # Case 1: Simple float (e.g. "12.4546")
+    try:
+        return float(dms_str)
+    except ValueError:
+        pass
+        
+    # Case 2: DMS format (e.g. 12°24'43.8" or 12d 24m 43.8s)
+    # Matches: [degrees] [°d] [minutes] ['m] [seconds] ["s]
+    match = re.search(r'(\d+)\s*[°d]?\s*(\d+)\s*[\'m]?\s*([\d.]+)\s*["s]?', dms_str, re.IGNORECASE)
     if match:
-        return match.group(1)
+        try:
+            degrees = float(match.group(1))
+            minutes = float(match.group(2))
+            seconds = float(match.group(3))
+            dd = degrees + (minutes / 60) + (seconds / 3600)
+            
+            # Simple handling for South/West if symbols present (not in example but good practice)
+            if any(c in dms_str.upper() for c in ['S', 'W']):
+                dd = -dd
+            return dd
+        except:
+            pass
+            
     return None
 
-def fuzzy_ratio(a, b):
-    return SequenceMatcher(None, a, b).ratio()
+def parse_wkt_point(wkt):
+    """Extract lat, lng from Point (LNG LAT) string."""
+    if not wkt: return None, None
+    match = re.search(r'POINT\s*\((.*?)\)', wkt, re.IGNORECASE)
+    if match:
+        coords = match.group(1).strip().split()
+        if len(coords) >= 2:
+            try:
+                return float(coords[1]), float(coords[0]) # lat, lng
+            except:
+                pass
+    return None, None
 
 def load_master_stations(master_csv_path):
     stations = []
@@ -33,67 +65,80 @@ def load_master_stations(master_csv_path):
         with open(master_csv_path, mode='r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f)
             for row in reader:
+                name = row.get('ss_name', '').strip()
+                if not name:
+                    continue
+                
+                lat, lng = parse_wkt_point(row.get('wkt_geom', ''))
+                if lat is None or lng is None:
+                    continue
+
                 stations.append({
-                    'ss_name': row['ss_name'],
+                    'ss_name': name,
                     'volt_ratio': row.get('volt_ratio', ''),
                     'ss_code': row['ss_code'],
-                    'norm_name': normalize_name(row['ss_name'])
+                    'ss_type': row.get('ss_type', '').upper(),
+                    'lat': lat,
+                    'lng': lng
                 })
     except Exception as e:
         print(f"Error loading master CSV: {e}")
     return stations
 
-def find_best_match(query_name, master_stations):
-    norm_query = normalize_name(query_name)
-    query_volt = extract_voltage(query_name)
+def find_nearest_station(query_lat, query_lng, master_stations):
+    if not master_stations: return None
     
-    matches = []
+    best_match = None
+    min_dist = float('inf')
     
-    # First try exact normalized match
-    matches = [s for s in master_stations if s['norm_name'] == norm_query]
-    
-    if not matches:
-        # Try substring match
-        matches = [s for s in master_stations if norm_query in s['norm_name'] or s['norm_name'] in norm_query]
-    
-    if not matches:
-        # Try fuzzy match if still no results
-        for s in master_stations:
-            score = fuzzy_ratio(norm_query, s['norm_name'])
-            if score > 0.8: # Threshold
-                matches.append(s)
-    
-    if not matches:
-        return None
-
-    # If multiple matches, prioritize voltage ratio
-    if len(matches) > 1 and query_volt:
-        volt_matches = [m for m in matches if query_volt in m['volt_ratio']]
-        if volt_matches:
-            return volt_matches[0]
+    for s in master_stations:
+        dist = haversine(query_lat, query_lng, s['lat'], s['lng'])
+        if dist < min_dist:
+            min_dist = dist
+            best_match = s
             
-    # Return first match (or highest score if we had scores)
-    return matches[0]
+    if best_match:
+        # Create a copy and add distance
+        res = best_match.copy()
+        res['distance'] = min_dist
+        return res
+    return None
 
-def update_ss_list(input_file, master_stations):
+def update_ss_list_by_coords(input_file, master_stations):
     output_rows = []
     updated_count = 0
     
     try:
         with open(input_file, mode='r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f)
-            fieldnames = reader.fieldnames
-            if 'ss_code' not in fieldnames:
-                fieldnames.append('ss_code')
+            fieldnames = list(reader.fieldnames)
+            
+            # Ensure required result columns exist
+            for col in ['ss_code', 'name', 'volt_ratio', 'dist_m']:
+                if col not in fieldnames:
+                    fieldnames.append(col)
             
             for row in reader:
-                name = row['ss_name']
-                match = find_best_match(name, master_stations)
-                if match:
-                    row['ss_code'] = match['ss_code']
-                    updated_count += 1
+                # Try to get lat/long from various possible column names
+                lat_raw = row.get('lat') or row.get('latitude') or row.get('LAT')
+                lng_raw = row.get('long') or row.get('longitude') or row.get('lng') or row.get('LNG') or row.get('LONG') or row.get('lon') or row.get('LON')
+                
+                lat = dms_to_dd(lat_raw)
+                lng = dms_to_dd(lng_raw)
+                
+                if lat is not None and lng is not None:
+                    match = find_nearest_station(lat, lng, master_stations)
+                    if match:
+                        row['ss_code'] = match['ss_code']
+                        row['name'] = match['ss_name']
+                        row['volt_ratio'] = match['volt_ratio']
+                        row['dist_m'] = round(match['distance'], 2)
+                        updated_count += 1
+                    else:
+                        row['ss_code'] = 'NOT FOUND'
                 else:
-                    row['ss_code'] = 'NOT FOUND'
+                    row['ss_code'] = 'INVALID COORDS'
+                    
                 output_rows.append(row)
         
         # Write back to the same file
@@ -102,13 +147,22 @@ def update_ss_list(input_file, master_stations):
             writer.writeheader()
             writer.writerows(output_rows)
             
-        print(f"Updated {updated_count} / {len(output_rows)} rows in {input_file}.")
+        print(f"Updated {updated_count} / {len(output_rows)} rows in {input_file} based on coordinates.")
+        
+        # Print codes split in half
+        codes = [row['ss_code'] for row in output_rows if row['ss_code'] not in ['NOT FOUND', 'INVALID COORDS', 'MISSING COORDS']]
+        if codes:
+            half = (len(codes) + 1) // 2
+            part1 = ", ".join(codes[:half])
+            part2 = ", ".join(codes[half:])
+            print(f"\n[{part1}],[{part2}]")
+            
     except Exception as e:
         print(f"Error updating CSV: {e}")
 
 def main():
-    parser = argparse.ArgumentParser(description="Find ss_code for substations and update CSV.")
-    parser.add_argument("input_file", help="CSV file to update (must have ss_name column)")
+    parser = argparse.ArgumentParser(description="Find nearest ss_code based on coordinates.")
+    parser.add_argument("input_file", help="CSV file to update (must have lat/long columns)")
     parser.add_argument("--master", default="public/view/All Sub Station.csv", help="Master substation CSV")
     args = parser.parse_args()
 
@@ -119,7 +173,7 @@ def main():
     master_stations = load_master_stations(args.master)
     print(f"Loaded {len(master_stations)} stations from master.")
 
-    update_ss_list(args.input_file, master_stations)
+    update_ss_list_by_coords(args.input_file, master_stations)
 
 if __name__ == "__main__":
     main()
