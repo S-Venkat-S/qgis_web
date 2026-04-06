@@ -1115,3 +1115,4 @@ Sl.NO,wkt_geom,gid,ss_name,volt_ratio,ss_type,ss_code,cir_code,region_id,cir_nam
 ,Point(78.44547143811128 10.687146640531203),,TNPL,110/33,NON-GRID,100103,,,,Y
 ,Point(80.2085045 12.8971233),,Perumbakkam,110/33,NON-GRID,100106,,,,Y
 ,Point(79.603329 12.989937),,Punnai,110/33,NON-GRID,100107,,,,Y
+,Point(80.1628 13.1071),,Control S,230/110,GRID,100108,,,,Y
