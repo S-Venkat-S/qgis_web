@@ -9,6 +9,8 @@ import Live from './pages/Live';
 import SingleFileView from './pages/live/SingleFileView';
 import MultiFileView from './pages/live/MultiFileView';
 import CSVEditor from './pages/live/CSVEditor';
+import Learn from './pages/Learn';
+import LocalView from './pages/LocalView';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/docs" element={<Docs />} />
+            <Route path="/learn" element={<Learn />} />
+            <Route path="/local-view" element={<LocalView />} />
             <Route path="/convert" element={<Convert />} />
 
             {/* New Specialized Map Routes */}

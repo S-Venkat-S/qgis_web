@@ -82,7 +82,7 @@ const MultiFileView = () => {
     const [zoomLevel, setZoomLevel] = useState(13);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchCenter, setSearchCenter] = useState(null); // Point to jump to
-    const [searchMarker, setSearchMarker] = useState(null); // Persistent marker for search
+    const [searchMarkers, setSearchMarkers] = useState([]); // Persistent markers for search
     const [searchLine, setSearchLine] = useState(null); // Highlighting line
     const [isLotDropdownOpen, setIsLotDropdownOpen] = useState(false);
     const lotDropdownRef = useRef(null);
@@ -557,17 +557,17 @@ const MultiFileView = () => {
         };
     }, [multiMapData, subStations, selectedLotIds]);
 
-    // Clear search marker and line highlight after 4 seconds
+    // Clear search markers and line highlight after 4 seconds
     useEffect(() => {
-        if (searchMarker || searchLine) {
+        if (searchMarkers.length > 0 || searchLine) {
             const timer = setTimeout(() => {
-                setSearchMarker(null);
+                setSearchMarkers([]);
                 setSearchCenter(null);
                 setSearchLine(null);
             }, 4000);
             return () => clearTimeout(timer);
         }
-    }, [searchMarker, searchLine]);
+    }, [searchMarkers, searchLine]);
     const [mapOpacity, setMapOpacity] = useState(() => {
         const saved = localStorage.getItem(OPACITY_KEY);
         return saved !== null ? parseFloat(saved) : DEFAULT_OPACITY;
@@ -846,7 +846,34 @@ const MultiFileView = () => {
             results.push({ type: 'coord', lat: coords.lat, lng: coords.lng, name: `Go to: ${coords.lat.toFixed(5)}, ${coords.lng.toFixed(5)} ` });
         }
 
-        // 2. Search Survey Lines
+        // 2. Check for comma separated SS search
+        if (query.includes(',')) {
+            const parts = query.split(',').map(p => p.trim()).filter(p => p.length > 0);
+            if (parts.length >= 2) {
+                const foundSS = [];
+                for (const part of parts) {
+                    const match = subStations.find(ss =>
+                        String(ss.ss_code).toLowerCase() === part.toLowerCase() ||
+                        ss.name.toLowerCase() === part.toLowerCase()
+                    ) || subStations.find(ss =>
+                        (ss.ss_code && String(ss.ss_code).toLowerCase().includes(part.toLowerCase())) ||
+                        ss.name.toLowerCase().includes(part.toLowerCase())
+                    );
+                    if (match) foundSS.push(match);
+                }
+
+                if (foundSS.length >= 2) {
+                    const names = foundSS.map(s => s.name).join(' ↔ ');
+                    results.push({
+                        type: 'ss_multi',
+                        ssList: foundSS,
+                        name: `View Stations: ${names}`
+                    });
+                }
+            }
+        }
+
+        // 3. Search Survey Lines
         Object.entries(multiMapData).forEach(([lid, lData]) => {
             Object.entries(lData).forEach(([fName, pts]) => {
                 if (fName.toLowerCase().includes(query.toLowerCase())) {
@@ -855,7 +882,7 @@ const MultiFileView = () => {
             });
         });
 
-        // 3. Search Substations
+        // 4. Search Substations
         subStations.forEach(ss => {
             const hasNameMatch = ss.name.toLowerCase().includes(query.toLowerCase());
             const hasCodeMatch = ss.ss_code && String(ss.ss_code).toLowerCase().includes(query.toLowerCase());
@@ -870,12 +897,20 @@ const MultiFileView = () => {
     const handleSearchResultClick = (res) => {
         if (res.type === 'line') {
             zoomToFile(res.lid, res.fName, res.pts);
-            setSearchMarker(null);
+            setSearchMarkers([]);
             setSearchCenter(null);
         } else if (res.type === 'coord' || res.type === 'ss') {
             setSearchCenter({ lat: res.lat, lng: res.lng });
-            setSearchMarker({ lat: res.lat, lng: res.lng, name: res.name });
+            setSearchMarkers([{ lat: res.lat, lng: res.lng, name: res.name }]);
             setSearchLine(null);
+            setSearchQuery("");
+        } else if (res.type === 'ss_multi') {
+            const pts = res.ssList.map(s => [s.lat, s.lng]);
+            const b = L.latLngBounds(pts);
+            setBounds(b.pad(0.3)); // Add some padding for the zoom
+            setSearchMarkers(res.ssList.map(s => ({ lat: s.lat, lng: s.lng, name: s.name })));
+            setSearchLine(null);
+            setSearchCenter(null);
             setSearchQuery("");
         }
     };
@@ -885,9 +920,11 @@ const MultiFileView = () => {
         const qCoord = getCoordinateFromParams(searchParams);
         if (qCoord) {
             setSearchCenter({ lat: qCoord.lat, lng: qCoord.lng });
-            setSearchMarker({ lat: qCoord.lat, lng: qCoord.lng, name: 'Target Location' });
+            setSearchMarkers([{ lat: qCoord.lat, lng: qCoord.lng, name: 'Target Location' }]);
         }
     }, [searchParams]);
+
+    const mapRef = useRef(null);
 
     const handleExport = async () => {
         const layers = [];
@@ -902,7 +939,8 @@ const MultiFileView = () => {
         if (layers.length > 0) {
             setExportProgress(0);
             try {
-                await exportQGISProject(layers, "MultiLot_Survey", setExportProgress);
+                const currentBounds = mapRef.current ? mapRef.current.getBounds() : bounds;
+                await exportQGISProject(layers, "MultiLot_Survey", setExportProgress, currentBounds);
             } catch (e) {
                 console.error("Export error:", e);
             } finally {
@@ -1129,6 +1167,7 @@ const MultiFileView = () => {
 
             <div className="flex-grow relative bg-gray-100">
                 <MapContainer
+                    ref={mapRef}
                     center={[20.5937, 78.9629]}
                     zoom={5}
                     style={{ height: '100%', width: '100%' }}
@@ -1138,9 +1177,10 @@ const MultiFileView = () => {
                     <ZoomHandler onZoom={setZoomLevel} />
                     <CopyCoordsHandler />
 
-                    {searchMarker && (
+                    {searchMarkers.map((m, idx) => (
                         <CircleMarker
-                            center={[searchMarker.lat, searchMarker.lng]}
+                            key={`search-marker-${idx}-${m.lat}-${m.lng}`}
+                            center={[m.lat, m.lng]}
                             radius={8}
                             pathOptions={{
                                 color: '#00ffff',
@@ -1153,9 +1193,9 @@ const MultiFileView = () => {
                             <Popup>
                                 <div className="text-[11px] p-1">
                                     <div className="font-black text-primary-blue uppercase mb-1">Search Result</div>
-                                    <div className="font-medium text-gray-700 mb-2">{searchMarker.name}</div>
+                                    <div className="font-medium text-gray-700 mb-2">{m.name}</div>
                                     <button
-                                        onClick={() => setSearchMarker(null)}
+                                        onClick={() => setSearchMarkers(prev => prev.filter((_, i) => i !== idx))}
                                         className="w-full py-1 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded text-[9px] font-bold transition-colors"
                                     >
                                         CLEAR POINTER
@@ -1163,10 +1203,10 @@ const MultiFileView = () => {
                                 </div>
                             </Popup>
                             <Tooltip permanent direction="top" className="search-tooltip">
-                                Search Point
+                                {m.name}
                             </Tooltip>
                         </CircleMarker>
-                    )}
+                    ))}
                     {searchLine && (
                         <Polyline
                             positions={searchLine.map(p => [p.lat, p.lng])}

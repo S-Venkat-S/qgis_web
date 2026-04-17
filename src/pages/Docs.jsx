@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, ArrowRight, Zap, Target, Download, Share2, Map as MapIcon } from 'lucide-react';
 import docContent from '../docs/guide.md?raw';
 
 function AccordionItem({ title, children, isOpen, onClick }) {
@@ -150,6 +150,32 @@ function Docs() {
                 <div className="text-center mb-10">
                     <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Documentation</h1>
                     <p className="text-lg text-gray-600">User guides, tutorials, and technical reference.</p>
+                </div>
+
+                {/* Visual Workflow */}
+                <div className="mb-12 bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100">
+                    <h2 className="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
+                        <Zap className="text-primary-blue" size={20} />
+                        Survey-to-GIS Workflow
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
+                        {[
+                            { step: 1, title: 'Convert', icon: Zap, color: 'bg-amber-50 text-amber-600', desc: 'Excel to CSV' },
+                            { step: 2, title: 'Verify', icon: Target, color: 'bg-emerald-50 text-emerald-600', desc: 'Check in Viewer' },
+                            { step: 3, title: 'Upload', icon: Download, color: 'bg-blue-50 text-blue-600', desc: 'Sync with Server' },
+                            { step: 4, title: 'Export', icon: Share2, color: 'bg-purple-50 text-purple-600', desc: 'Ready for QGIS' },
+                        ].map((item, idx) => (
+                            <div key={idx} className="relative flex flex-col items-center text-center p-4 rounded-2xl hover:bg-gray-50 transition-colors">
+                                <div className={`w-12 h-12 ${item.color} rounded-xl flex items-center justify-center mb-3 shadow-sm`}>
+                                    <item.icon size={24} />
+                                </div>
+                                <div className="text-xs font-black text-gray-400 mb-1 uppercase tracking-widest">Step {item.step}</div>
+                                <div className="font-bold text-gray-900 mb-1">{item.title}</div>
+                                <div className="text-[11px] text-gray-500 leading-tight">{item.desc}</div>
+                                {idx < 3 && <ArrowRight className="hidden md:block absolute top-10 -right-4 text-gray-200" size={20} />}
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 {parsedContent.map((section, sIdx) => (

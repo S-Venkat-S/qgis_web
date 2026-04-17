@@ -210,9 +210,9 @@ export const updatedLots = [
   { id: 'lot2', name: 'LOT 2', basePath: '/view/LOT_2/', color: '#10B981' },
   { id: 'lot3', name: 'LOT 3', basePath: '/view/LOT_3_TNEB/', color: '#F59E0B' },
   { id: 'lot4', name: 'LOT 4', basePath: '/view/LOT_4/', color: '#F43F5E' },
-  { id: 'glease1', name: 'G LEASE 1', basePath: '/view/G_LEASE_1/', color: '#1310ccff' },
+  { id: 'glease1', name: 'G LEASE 1', basePath: '/view/G_LEASE_1/', color: '#1310CC' },
   { id: 'glease2', name: 'G LEASE 2', basePath: '/view/G_LEASE_2/', color: '#EC4899' },
-  { id: 'gcombined', name: 'G COMBINED', basePath: '/view/G_COMBINED/', color: '#fffc32ff' },
+  { id: 'gcombined', name: 'G COMBINED', basePath: '/view/G_COMBINED/', color: '#FFFC32' },
   { id: 'existing', name: 'Existing', basePath: '/view/EXISTING/', color: '#6B7280' }
 ];
 
@@ -376,19 +376,67 @@ const escapeXml = (unsafe) => {
 };
 
 const hexToRgb = (hex) => {
-  if (!hex || !hex.startsWith('#') || hex.length !== 7) return '0,0,0,255';
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return `${r},${g},${b},255`;
+  if (!hex || !hex.startsWith('#')) return '0,0,0,255';
+  
+  if (hex.length === 7) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `${r},${g},${b},255`;
+  }
+  
+  if (hex.length === 9) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    const a = parseInt(hex.slice(7, 9), 16);
+    return `${r},${g},${b},${a}`;
+  }
+  
+  return '0,0,0,255';
 };
 
 /**
  * Generates a QGIS .qgs project XML string and triggers download
  */
-export const exportQGISProject = async (layers, projectName = "survey_project", onProgress) => {
+export const exportQGISProject = async (layers, projectName = "survey_project", onProgress, mapExtent = null) => {
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
   const zipFileName = `${projectName}_${timestamp}.zip`;
+
+  // Calculate project extent
+  let xmin, ymin, xmax, ymax;
+  if (mapExtent && typeof mapExtent.getWest === 'function') {
+    xmin = mapExtent.getWest();
+    ymin = mapExtent.getSouth();
+    xmax = mapExtent.getEast();
+    ymax = mapExtent.getNorth();
+  } else {
+    let minLat = Infinity, maxLat = -Infinity, minLng = Infinity, maxLng = -Infinity;
+    layers.forEach(l => {
+      l.pts.forEach(p => {
+        if (p.lat < minLat) minLat = p.lat;
+        if (p.lat > maxLat) maxLat = p.lat;
+        if (p.lng < minLng) minLng = p.lng;
+        if (p.lng > maxLng) maxLng = p.lng;
+      });
+    });
+    if (minLat !== Infinity) {
+      const pad = 0.005;
+      xmin = minLng - pad; ymin = minLat - pad;
+      xmax = maxLng + pad; ymax = maxLat + pad;
+    }
+  }
+
+  const mapCanvasXml = xmin !== undefined ? `
+  <mapcanvas>
+    <units>degrees</units>
+    <extent>
+      <xmin>${xmin}</xmin>
+      <ymin>${ymin}</ymin>
+      <xmax>${xmax}</xmax>
+      <ymax>${ymax}</ymax>
+    </extent>
+  </mapcanvas>` : '';
 
   // Fetch config to mirror symbology
   let config = null;
@@ -432,79 +480,115 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
     // Use ID for unique filenames to avoid collisions
     const safeBaseName = id.replace(/[^a-z0-9_-]/gi, '_');
 
+    // ─── 0. PREPARE ENRICHED CSV (Standardized & De-duplicated) ────
+    let combinedCsvData = "";
+    const lineLabel = name.split(' ')[1] || name.split(' ')[0];
+
+    // Handle split files like "file.csv@1:58"
+    const rangeMatch = name.match(/@(\d+):(\d+)$/);
+    const actualFileName = rangeMatch ? name.substring(0, rangeMatch.index) : name;
+
     try {
-      const fetchUrl = lotDef.basePath ? resolveFileUrl(lotDef.basePath, name) : null;
+      const fetchUrl = lotDef.basePath ? resolveFileUrl(lotDef.basePath, actualFileName) : null;
       if (fetchUrl) {
         const res = await fetch(fetchUrl);
         if (res.ok) {
           const fileData = await res.text();
-          dataFolder.file(`${safeBaseName}_raw.csv`, fileData);
+          let parsed = Papa.parse(fileData, { header: true, skipEmptyLines: true });
+          
+          if (parsed.data && parsed.data.length > 0) {
+            // Apply range slicing if @start:end is present
+            if (rangeMatch) {
+              const start = parseInt(rangeMatch[1]);
+              const end = parseInt(rangeMatch[2]);
+              parsed.data = parsed.data.slice(start - 1, end);
+            }
+
+            const rKeys = Object.keys(parsed.data[0] || {});
+            const towerNoKey = rKeys.find(k => {
+              const low = k.toLowerCase().replace(/[^a-z0-9]/g, '');
+              return (low.includes('towerno') || low.includes('tno') || low === 'tower') && !low.includes('sno') && !low.includes('slno');
+            });
+            const jointBoxKey = rKeys.find(k => k.toLowerCase().replace(/[^a-z]/g, '') === 'jointbox');
+            const latKey = rKeys.find(k => {
+              const low = k.toLowerCase().replace(/[^a-z]/g, '');
+              return low === 'latitude' || low === 'lat';
+            });
+            const lngKey = rKeys.find(k => {
+              const low = k.toLowerCase().replace(/[^a-z]/g, '');
+              return low === 'longitude' || low === 'lng' || low === 'long' || low === 'lon';
+            });
+
+            const enriched = parsed.data.map((row, idx) => {
+              const newRow = { ...row };
+              
+              // Standardize existing headers to avoid duplication
+              if (latKey && latKey !== "Latitude") { newRow["Latitude"] = row[latKey]; delete newRow[latKey]; }
+              else if (!latKey) { newRow["Latitude"] = ""; }
+              
+              if (lngKey && lngKey !== "Longitude") { newRow["Longitude"] = row[lngKey]; delete newRow[lngKey]; }
+              else if (!lngKey) { newRow["Longitude"] = ""; }
+
+              if (towerNoKey && towerNoKey !== "Tower_No") { newRow["Tower_No"] = row[towerNoKey]; delete newRow[towerNoKey]; }
+              if (jointBoxKey && jointBoxKey !== "Joint_Box") { 
+                newRow["Joint_Box"] = (row[jointBoxKey] || '').toString().trim().toUpperCase(); 
+                if (jointBoxKey !== "Joint_Box") delete newRow[jointBoxKey]; 
+              }
+              
+              return newRow;
+            });
+            combinedCsvData = Papa.unparse(enriched);
+          }
         }
       }
-    } catch (e) { }
+    } catch (e) {
+      console.warn(`[ENRICHMENT] Failed to fetch/parse raw CSV for "${name}":`, e);
+    }
 
-    // ─── 1. LINE LAYER (Path) ──────────────────────────────────────────
-    const lineLayerId = `${safeBaseName}_line`;
-    const lineWkt = `LINESTRING(${layer.pts.map(p => `${p.lng} ${p.lat}`).join(', ')})`;
-    const lineCsvName = `${safeBaseName}_path.csv`;
-    const lineLabel = name.split(' ')[1] || name.split(' ')[0];
+    if (!combinedCsvData) {
+      // Fallback: Generate basic CSV if raw data fetch failed
+      const fallbackRows = layer.pts.map(p => ({
+        Latitude: p.lat,
+        Longitude: p.lng,
+        Tower_No: p.towerNo || '?',
+        Joint_Box: p.jointBox || ''
+      }));
+      combinedCsvData = Papa.unparse(fallbackRows);
+    }
 
-    dataFolder.file(lineCsvName, `id,WKT,label\n"${id}","${lineWkt}","${lineLabel}"`);
+    const csvName = `${safeBaseName}.csv`;
+    dataFolder.file(csvName, combinedCsvData);
 
-    mapLayersXml.push(`
-    <maplayer simplifyAlgorithm="0" type="vector" geometry="Line">
-      <id>${escapeXml(lineLayerId)}</id>
-      <datasource>file:./data/${lineCsvName}?type=csv&amp;wktField=WKT</datasource>
-      <layername>${escapeXml(name)} (Path)</layername>
-      <provider encoding="UTF-8">delimitedtext</provider>
-      <renderer-v2 forceraster="0" type="singleSymbol">
-        <symbols>
-          <symbol alpha="1" type="line" name="0">
-            <layer pass="0" class="SimpleLine" locked="0">
-              <prop k="line_color" v="${color}"/>
-              <prop k="line_width" v="0.7"/>
-              <prop k="joinstyle" v="round"/>
-            </layer>
-          </symbol>
-        </symbols>
-      </renderer-v2>
-      <labeling type="simple">
-        <settings calloutType="simple">
-          <text-style fontPointSize="8" fontName="Arial" fieldName="label" fontWeight="75" textColor="${hexToRgb(color)}">
-            <text-buffer bufferSize="1" bufferDraw="1" bufferColor="255,255,255,255"/>
-          </text-style>
-          <placement placement="2" dist="1.5" placementFlags="9"/>
-        </settings>
-      </labeling>
-    </maplayer>`);
-
-    // ─── 2. TOWERS LAYER (Points) ───────────────────────────────────────
     const pointLayerId = `${safeBaseName}_towers`;
-    const pointCsvName = `${safeBaseName}_towers.csv`;
-    const pointRows = ["tower_no,lat,lng,joint_box,WKT"];
-    layer.pts.forEach(p => {
-      const cleanedTowerNo = (p.towerNo === '#VALUE!' || !p.towerNo) ? '?' : p.towerNo;
-      pointRows.push(`"${cleanedTowerNo}",${p.lat},${p.lng},"${p.jointBox || ''}","POINT(${p.lng} ${p.lat})"`);
-    });
-    dataFolder.file(pointCsvName, pointRows.join("\n"));
+    const lineLayerId = `${safeBaseName}_line`;
 
+    // ─── 1. TOWERS LAYER (Points) ───────────────────────────────────────
     iconsFolder.file("jb_4w.svg", getSvgText('4W', '#ff00ff'));
     iconsFolder.file("jb_3w.svg", getSvgText('3W', '#00ffff'));
     iconsFolder.file("jb_2w.svg", getSvgText('2W', '#fbbf24'));
 
-
     mapLayersXml.push(`
     <maplayer simplifyAlgorithm="0" type="vector" geometry="Point">
       <id>${escapeXml(pointLayerId)}</id>
-      <datasource>file:./data/${pointCsvName}?type=csv&amp;wktField=WKT</datasource>
+      <datasource>file:./data/${csvName}?type=csv&amp;xField=Longitude&amp;yField=Latitude</datasource>
       <layername>${escapeXml(name)} (Towers)</layername>
+      <crs>
+        <spatialrefsys>
+          <authid>EPSG:4326</authid>
+        </spatialrefsys>
+      </crs>
+      <precision>8</precision>
+      <simplifyDrawingHints>0</simplifyDrawingHints>
+      <simplifyMaxScale>1</simplifyMaxScale>
+      <simplifyLocal>1</simplifyLocal>
+      <simplifyAlgorithm>0</simplifyAlgorithm>
       <provider encoding="UTF-8">delimitedtext</provider>
       <renderer-v2 type="RuleRenderer">
         <rules key="root">
-          <rule filter="&quot;joint_box&quot; = '4W'" symbol="0" label="JB 4W"/>
-          <rule filter="&quot;joint_box&quot; = '3W'" symbol="1" label="JB 3W"/>
-          <rule filter="&quot;joint_box&quot; = '2W'" symbol="2" label="JB 2W"/>
-          <rule filter="&quot;joint_box&quot; IS NULL OR &quot;joint_box&quot; = ''" symbol="3" label="Tower"/>
+          <rule filter="&quot;Joint_Box&quot; = '4W'" symbol="0" label="JB 4W"/>
+          <rule filter="&quot;Joint_Box&quot; = '3W'" symbol="1" label="JB 3W"/>
+          <rule filter="&quot;Joint_Box&quot; = '2W'" symbol="2" label="JB 2W"/>
+          <rule filter="&quot;Joint_Box&quot; IS NULL OR &quot;Joint_Box&quot; = ''" symbol="3" label="Tower"/>
         </rules>
         <symbols>
           <symbol alpha="1" type="marker" name="0">
@@ -523,16 +607,59 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
       </renderer-v2>
       <labeling type="simple">
         <settings calloutType="simple">
-          <text-style fontPointSize="7" fontName="Arial" fieldName="tower_no" textColor="50,50,50,255">
-            <text-buffer bufferSize="0.8" bufferDraw="1" bufferColor="255,255,255,255"/>
+          <text-style fontPointSize="7" fontName="Arial" fieldName="concat($id, '-', &quot;Tower_No&quot;, if(&quot;Joint_Box&quot; != '', concat('-', &quot;Joint_Box&quot;), ''))" isExpression="1" textColor="50,50,50,255">
+            <text-buffer bufferSize="1.5" bufferDraw="1" bufferColor="255,255,255,255"/>
           </text-style>
           <placement placement="0" dist="1.5" quadOffset="2"/>
         </settings>
       </labeling>
     </maplayer>`);
 
-    lotGroups[lotId].pathNodes.push(`      <layer-tree-layer id="${escapeXml(lineLayerId)}" name="${escapeXml(name)} (Path)" checked="Qt::Checked" expanded="0" providerKey="delimitedtext" source="file:./data/${escapeXml(lineCsvName)}?type=csv&amp;wktField=WKT"/>`);
-    lotGroups[lotId].pointNodes.push(`      <layer-tree-layer id="${escapeXml(pointLayerId)}" name="${escapeXml(name)} (Towers)" checked="Qt::Checked" expanded="0" providerKey="delimitedtext" source="file:./data/${escapeXml(pointCsvName)}?type=csv&amp;wktField=WKT"/>`);
+    // ─── 2. DYNAMIC LINE LAYER (Path via Virtual Layer) ────────────────
+    const vQuery = `SELECT MakeLine(MakePoint("Longitude", "Latitude")) AS geometry, '${lineLabel.replace(/'/g, "''")}' AS L FROM "${pointLayerId}"`;
+    // URL encode the query because it's part of the datasource URI string
+    const encodedVQuery = encodeURIComponent(vQuery);
+
+    mapLayersXml.push(`
+    <maplayer simplifyAlgorithm="0" type="vector" geometry="Line">
+      <id>${escapeXml(lineLayerId)}</id>
+      <datasource>?query=${escapeXml(encodedVQuery)}</datasource>
+      <layername>${escapeXml(name)} (Path)</layername>
+      <crs>
+        <spatialrefsys>
+          <authid>EPSG:4326</authid>
+        </spatialrefsys>
+      </crs>
+      <precision>8</precision>
+      <simplifyDrawingHints>0</simplifyDrawingHints>
+      <simplifyMaxScale>1</simplifyMaxScale>
+      <simplifyLocal>1</simplifyLocal>
+      <simplifyAlgorithm>0</simplifyAlgorithm>
+      <provider>virtual</provider>
+      <renderer-v2 forceraster="0" type="singleSymbol">
+        <symbols>
+          <symbol alpha="1" type="line" name="0">
+            <layer pass="0" class="SimpleLine" locked="0">
+              <prop k="line_color" v="${hexToRgb(color)}"/>
+              <prop k="line_width" v="0.7"/>
+              <prop k="joinstyle" v="round"/>
+              <prop k="capstyle" v="round"/>
+            </layer>
+          </symbol>
+        </symbols>
+      </renderer-v2>
+      <labeling type="simple">
+        <settings calloutType="simple">
+          <text-style fontPointSize="8" fontName="Arial" fieldName="L" fontWeight="75" textColor="${hexToRgb(color)}">
+            <text-buffer bufferSize="1.2" bufferDraw="1" bufferColor="255,255,255,255"/>
+          </text-style>
+          <placement placement="2" dist="2" offsetType="0" repeatDistance="0" placementFlags="9"/>
+        </settings>
+      </labeling>
+    </maplayer>`);
+
+    lotGroups[lotId].pathNodes.push(`      <layer-tree-layer id="${escapeXml(lineLayerId)}" name="${escapeXml(name)} (Path)" checked="Qt::Checked" expanded="0" providerKey="virtual" source="?query=${escapeXml(encodedVQuery)}"/>`);
+    lotGroups[lotId].pointNodes.push(`      <layer-tree-layer id="${escapeXml(pointLayerId)}" name="${escapeXml(name)} (Towers)" checked="Qt::Checked" expanded="0" providerKey="delimitedtext" source="file:./data/${csvName}?type=csv&amp;xField=Longitude&amp;yField=Latitude"/>`);
 
     progressCounter++;
     if (onProgress) onProgress(Math.round((progressCounter / totalSteps) * 100));
@@ -610,6 +737,11 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
       <id>all_sub_station</id>
       <datasource>file:./data/All_Sub_Station.csv?type=csv&amp;wktField=wkt_geom</datasource>
       <layername>All Sub Stations</layername>
+      <srs>
+        <spatialrefsys>
+          <authid>EPSG:4326</authid>
+        </spatialrefsys>
+      </srs>
       <provider encoding="UTF-8">delimitedtext</provider>
       <renderer-v2 type="RuleRenderer">
         <rules key="root">${rules.join('\n')}</rules>
@@ -640,6 +772,10 @@ export const exportQGISProject = async (layers, projectName = "survey_project", 
   const xml = `<!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
 <qgis projectname="${escapeXml(projectName)}" version="3.40.4">
   <title>${escapeXml(projectName)}</title>
+  <projectcrs>
+    <authid>EPSG:4326</authid>
+  </projectcrs>
+  ${mapCanvasXml}
   <projectlayers>
     ${mapLayersXml.join('\n')}
   </projectlayers>

@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import JSZip from 'jszip';
 import { processExcelFile } from '../utils/excelUtils';
+import { useNavigate } from 'react-router-dom';
+import { Map, Download, FileCheck, AlertCircle, FileText } from 'lucide-react';
 
 function Convert() {
+    const navigate = useNavigate();
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [processedFiles, setProcessedFiles] = useState([]);
     const [status, setStatus] = useState(null); // { message, type }
@@ -82,6 +85,18 @@ function Convert() {
         document.body.removeChild(link);
 
         updateStatus(`Downloaded single file: ${fileData.csvName}`, 'info');
+    };
+
+    const handleOpenInViewer = (fileData) => {
+        // Save to sessionStorage so LocalView can pick it up
+        const viewerData = JSON.parse(sessionStorage.getItem('viewer_pending_files') || '[]');
+        viewerData.push({
+            name: fileData.csvName,
+            content: fileData.csvContent,
+            timestamp: Date.now()
+        });
+        sessionStorage.setItem('viewer_pending_files', JSON.stringify(viewerData));
+        navigate('/local-view');
     };
 
     const handleDownloadAll = () => {
@@ -168,12 +183,22 @@ function Convert() {
                                     {fileData.success ? (
                                         <>
                                             <span className="text-gray-700 truncate mr-4">{fileData.csvName} ({fileData.coordinatesSystem})</span>
-                                            <button
-                                                onClick={() => handleDownloadSingle(fileData)}
-                                                className="py-1 px-3 bg-primary-blue text-white text-xs font-semibold rounded-full hover:bg-blue-800 transition-colors shadow-sm"
-                                            >
-                                                Download
-                                            </button>
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={() => handleOpenInViewer(fileData)}
+                                                    className="flex items-center gap-1.5 py-1 px-3 bg-emerald-600 text-white text-[10px] font-bold rounded-full hover:bg-emerald-700 transition-colors shadow-sm uppercase tracking-tight"
+                                                >
+                                                    <Map size={12} />
+                                                    Open in Viewer
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDownloadSingle(fileData)}
+                                                    className="flex items-center gap-1.5 py-1 px-3 bg-primary-blue text-white text-[10px] font-bold rounded-full hover:bg-blue-800 transition-colors shadow-sm uppercase tracking-tight"
+                                                >
+                                                    <Download size={12} />
+                                                    Download
+                                                </button>
+                                            </div>
                                         </>
                                     ) : (
                                         <div className="flex flex-col w-full">

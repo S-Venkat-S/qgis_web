@@ -116,57 +116,55 @@ export function swapLatLong(sheetData, col1, col2) {
 }
 
 /**
- * Adds the LINESTRING geometry column using consecutive Lat/Long pairs.
+ * Standardizes headers for Latitude, Longitude, Tower_No and Joint_Box.
+ * Removes any pre-existing geometry columns to ensure the CSV is dynamic and de-duplicated.
  */
 export function addLineGeom(sheetData, latCol, longCol) {
     let blank = 0;
-    const lineGeomCol = LINE_GEOM_INDEX - 1; // 0-based index
 
-    // 1. Ensure the header is set at the specific index
-    if (sheetData[0].length < LINE_GEOM_INDEX) {
-        // Pad the header row if necessary
-        for (let j = sheetData[0].length; j < LINE_GEOM_INDEX; j++) {
-            sheetData[0][j] = '';
-        }
+    // 1. Standardize Headers
+    const headers = sheetData[0];
+    for (let c = 0; c < headers.length; c++) {
+        const h = String(headers[c] || '').toLowerCase().replace(/[^a-z]/g, '');
+        if (h === 'towerno' || h === 'tno') headers[c] = 'Tower_No';
+        if (h === 'jointbox' || h === 'jb') headers[c] = 'Joint_Box';
+        if (h === 'latitude' || h === 'lat') headers[c] = 'Latitude';
+        if (h === 'longitude' || h === 'lng' || h === 'long' || h === 'lon') headers[c] = 'Longitude';
     }
-    sheetData[0][lineGeomCol] = "line_geom";
 
-    // 2. Iterate through data rows and create LINESTRING
+    // 2. Iterate through data rows to clean up and unify
     for (let i = 1; i < Math.min(sheetData.length, MAX_LINES); i++) {
         const row = sheetData[i];
+        const lat = row[latCol - 1];
+        const lng = row[longCol - 1];
 
-        // Ensure row has enough columns
-        if (row.length < LINE_GEOM_INDEX) {
-            for (let j = row.length; j < LINE_GEOM_INDEX; j++) {
-                row[j] = '';
-            }
-        }
-
-        const latFrom = row[latCol - 1];
-        const longFrom = row[longCol - 1];
-
-        if (latFrom && longFrom) {
+        if (lat || lng) {
             blank = 0;
-
-            if (i + 1 < sheetData.length) {
-                const nextRow = sheetData[i + 1];
-                const latTo = nextRow[latCol - 1];
-                const longTo = nextRow[longCol - 1];
-
-                if (latTo && longTo) {
-                    // WKT format: LINESTRING(Lon1 Lat1, Lon2 Lat2)
-                    row[lineGeomCol] = `LINESTRING(${longFrom} ${latFrom}, ${longTo} ${latTo})`;
-                }
-            }
+            // Rows are preserved as a clean coordinate list
         } else {
             blank += 1;
         }
 
-        if (blank >= 5) {
-            break;
-        }
+        if (blank >= 5) break;
     }
-    return sheetData;
+
+    // ─── OPTIMIZATION: Remove entirely empty columns ───────────
+    const numCols = sheetData[0].length;
+    const activeColIndices = [];
+    for (let c = 0; c < numCols; c++) {
+        let hasValue = false;
+        for (let r = 0; r < sheetData.length; r++) {
+            const val = sheetData[r][c];
+            if (val !== null && val !== undefined && String(val).trim() !== "") {
+                hasValue = true;
+                break;
+            }
+        }
+        if (hasValue) activeColIndices.push(c);
+    }
+
+    // Map each row to only include active columns
+    return sheetData.map(row => activeColIndices.map(idx => row[idx]));
 }
 
 /**

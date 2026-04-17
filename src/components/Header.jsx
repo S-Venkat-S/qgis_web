@@ -46,6 +46,20 @@ function Header() {
                         </Link>
 
                         <Link
+                            to="/learn"
+                            className={`text-gray-700 hover:text-primary-blue font-medium transition-colors ${isActive('/learn') ? 'text-primary-blue' : ''}`}
+                        >
+                            Academy
+                        </Link>
+
+                        <Link
+                            to="/local-view"
+                            className={`text-gray-700 hover:text-primary-blue font-medium transition-colors ${isActive('/local-view') ? 'text-primary-blue' : ''}`}
+                        >
+                            Quick Viewer
+                        </Link>
+
+                        <Link
                             to="/convert"
                             className={`text-gray-700 hover:text-primary-blue font-medium transition-colors ${isActive('/convert') ? 'text-primary-blue' : ''}`}
                         >
@@ -57,7 +71,7 @@ function Header() {
                             to="/live"
                             className={`text-gray-700 hover:text-primary-blue font-medium transition-colors ${isActive('/live') ? 'text-primary-blue' : ''}`}
                         >
-                            View
+                            Live Dashboard
                         </Link>
                     </nav>
 
@@ -92,6 +106,20 @@ function Header() {
                             Docs
                         </Link>
                         <Link
+                            to="/learn"
+                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-blue hover:bg-gray-50"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                            Academy
+                        </Link>
+                        <Link
+                            to="/local-view"
+                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-blue hover:bg-gray-50"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                            Quick Viewer
+                        </Link>
+                        <Link
                             to="/convert"
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-blue hover:bg-gray-50"
                             onClick={() => setIsMobileMenuOpen(false)}
@@ -103,7 +131,7 @@ function Header() {
                             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-blue hover:bg-gray-50"
                             onClick={() => setIsMobileMenuOpen(false)}
                         >
-                            View
+                            Live Dashboard
                         </Link>
                     </div>
                 </div>

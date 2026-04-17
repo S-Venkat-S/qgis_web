@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { BookOpen, Map, FileCode } from 'lucide-react';
 import reactLogo from '../assets/react.svg';
 
 function Home() {
@@ -40,10 +42,34 @@ function Home() {
                     LoA No. 999 dt.29.11.2019
                 </div>
 
-                <p className="text-xl md:text-2xl text-gray-600 leading-relaxed font-light">
+                <p className="text-xl md:text-2xl text-gray-600 leading-relaxed font-light mb-10">
                     Design, Engineering, Manufacture, Supply, Erection under live line condition, Testing & Commissioning of 48 Fibres Optical Power Ground Wire (OPGW) with accessories including earthing & Annual Maintenance Contract - under Reliable communication scheme with partial Funding from Power System Development (PSDF)
                     <br className="hidden md:block" />
                 </p>
+
+                <div className="flex flex-wrap justify-center gap-4">
+                    <Link
+                        to="/learn"
+                        className="flex items-center gap-2 px-8 py-3 bg-primary-blue text-white rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 hover:scale-105 active:scale-95"
+                    >
+                        <BookOpen size={20} />
+                        Get Started - Learn Basics
+                    </Link>
+                    <Link
+                        to="/live"
+                        className="flex items-center gap-2 px-8 py-3 bg-white text-gray-700 border border-gray-200 rounded-xl font-bold hover:bg-gray-50 transition-all hover:scale-105 active:scale-95"
+                    >
+                        <Map size={20} className="text-primary-blue" />
+                        View Dashboard
+                    </Link>
+                    <Link
+                        to="/convert"
+                        className="flex items-center gap-2 px-8 py-3 bg-white text-gray-700 border border-gray-200 rounded-xl font-bold hover:bg-gray-50 transition-all hover:scale-105 active:scale-95"
+                    >
+                        <FileCode size={20} className="text-emerald-600" />
+                        Convert Excel
+                    </Link>
+                </div>
             </div>
         </div>
     );
